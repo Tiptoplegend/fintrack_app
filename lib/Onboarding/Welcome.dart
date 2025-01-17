@@ -17,40 +17,42 @@ class _WelcomepageState extends State<Welcomepage> {
           // Logo
           Positioned(
             top: 5, // Adjust this value to move the logo up or down
-            left: MediaQuery.of(context).size.width / 2 - 95, // Center horizontally
+            left: MediaQuery.of(context).size.width / 2 -
+                95, // Center horizontally
             child: _Logo(),
           ),
 
           // Illustration
           Positioned(
-            top: 180, // Adjust this value to move the illustration up or down
-            left: MediaQuery.of(context).size.width / 2 - 180, // Center horizontally
+            top: 150, // Adjust this value to move the illustration up or down
+            left: MediaQuery.of(context).size.width / 2 -
+                180, // Center horizontally
             child: _Illustration(),
           ),
 
           // Title
           Positioned(
-            top: 500, // Adjust this value to move the title up or down
-            left: MediaQuery.of(context).size.width * 0.1, // Add some padding from the left
-            right: MediaQuery.of(context).size.width * 0.1, // Add some padding from the right
+            top: 450, // Adjust this value to move the title up or down
+            left: MediaQuery.of(context).size.width *
+                0.1, // Add some padding from the left
+            right: MediaQuery.of(context).size.width *
+                0.1, // Add some padding from the right
             child: _Title(),
           ),
 
           Positioned(
-            top: 700, // Adjust this value to move the title up or down
-            left: MediaQuery.of(context).size.width * 0.1, // Add some padding from the left
-            right: MediaQuery.of(context).size.width * 0.1, // Add some padding from the right
+            top: 650, // Adjust this value to move the title up or down
+            left: MediaQuery.of(context).size.width *
+                0.1, // Add some padding from the left
+            right: MediaQuery.of(context).size.width *
+                0.1, // Add some padding from the right
             child: _buidButtons(context),
           ),
-          
-          
-          
         ],
       ),
     );
   }
 }
-
 
 Widget _Logo() {
   return Image.asset(
@@ -76,7 +78,7 @@ Widget _Title() {
         "Gain total control of your money",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 38,
+          fontSize: 30,
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -100,42 +102,37 @@ Widget _buidButtons(BuildContext context) {
     child: Column(
       children: [
         ElevatedButton(
-          onPressed: () {
-          },
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green[600],
-            minimumSize: Size(double.infinity,50),
+            minimumSize: Size(double.infinity, 50),
           ),
-          child: const Text('Create an Account',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
+          child: const Text(
+            'Create an Account',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
         ),
-      
-        SizedBox(height: 15,),
-
-      ElevatedButton(
-          onPressed: () {
-          },
+        SizedBox(
+          height: 15,
+        ),
+        ElevatedButton(
+          onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF005341),
-            minimumSize: Size(double.infinity,50),
+            minimumSize: Size(double.infinity, 50),
           ),
-          child: const Text('Sign in',
-        style: TextStyle(
-          fontSize: 20,
-          color: Colors.white,
-        ),
+          child: const Text(
+            'Sign in',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
         ),
-      
-
-],
-
-
+      ],
     ),
   );
 }
-  
