@@ -2,22 +2,23 @@ import 'package:fintrack_app/Onboarding/Welcome.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const FinTrackApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FinTrackApp extends StatelessWidget {
+  const FinTrackApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Fintrack App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const Welcomepage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
