@@ -114,7 +114,7 @@ Widget _buidButtons(BuildContext context) {
           ),
         ),
       
-        SizedBox(height: 10,),
+        SizedBox(height: 15,),
 
       ElevatedButton(
           onPressed: () {
