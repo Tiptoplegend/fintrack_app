@@ -14,8 +14,8 @@ class _LandingpageState extends State<Landingpage> {
       body: Stack(
         children: [
           Positioned(
-            top: 760,
-            left: MediaQuery.of(context).size.width / 2.8 - 80,
+            top: 750,
+            left: MediaQuery.of(context).size.width / 3.7 - 80,
             child: _Navbar(),
           ),
         ],
@@ -25,61 +25,64 @@ class _LandingpageState extends State<Landingpage> {
 }
 
 Widget _Navbar() {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 6),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _NavItem(
-          iconPath: 'assets/images/icons8-home-48.png',
-          label: 'Home',
-          onPressed: () {},
-        ),
-        _NavItem(
-          iconPath: 'assets/images/icons8-analytics-48.png',
-          label: 'Analytics',
-          onPressed: () {},
-        ),
-        _NavItem(
-          iconPath: 'assets/images/icons8-home-48.png',
-          label: 'Add',
-          onPressed: () {},
-        ),
-        _NavItem(
-          iconPath: 'assets/images/icons8-home-48.png',
-          label: 'Goals',
-          onPressed: () {},
-        ),
-        _NavItem(
-          iconPath: 'assets/images/icons8-home-48.png',
-          label: 'Profile',
-          onPressed: () {},
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _NavItem({
-  required String iconPath,
-  required String label,
-  required VoidCallback onPressed,
-}) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
+  return Stack(
     children: [
-      IconButton(
-        onPressed: onPressed,
-        icon: Image.asset(
-          iconPath,
-          width: 38,
-          height: 38,
-        ),
-      ),
-      const SizedBox(height: -1), // Space between icon and text
-      Text(
-        label,
-        style: const TextStyle(fontSize: 12), // Adjust text size as needed
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Home logo
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/images/icons8-home-48.png',
+                width: 38,
+                height: 38,
+              )),
+
+          const SizedBox(width: 12),
+
+          // Analytics
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/images/icons8-analytics-48.png',
+                width: 38,
+                height: 38,
+              )),
+
+          const SizedBox(width: 12),
+
+          // Add
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/images/icons8-add-100.png',
+                width: 80,
+                height: 80,
+              )),
+
+          const SizedBox(width: 12),
+
+          // Goals
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/images/icons8-goals-64.png',
+                width: 38,
+                height: 38,
+              )),
+
+          const SizedBox(width: 12),
+
+          // Budget
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/images/icons8-budget-30.png',
+                width: 38,
+                height: 38,
+              ))
+        ],
       ),
     ],
   );
