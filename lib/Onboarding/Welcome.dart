@@ -75,7 +75,7 @@ Widget _Title() {
         "Gain total control of your money",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 36,
+          fontSize: 35,
           fontFamily: 'Inter',
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ Widget _Title() {
         "Become your own money manager and make every cent count",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 17,
           fontFamily: 'Inter',
           color: Colors.white,
         ),
