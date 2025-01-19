@@ -1,3 +1,6 @@
+// ignore_for_file: unused_label, non_constant_identifier_names
+
+import 'package:fintrack_app/Onboarding/SignUp.dart';
 import 'package:flutter/material.dart';
 
 class Welcomepage extends StatefulWidget {
@@ -16,36 +19,30 @@ class _WelcomepageState extends State<Welcomepage> {
         children: [
           // Logo
           Positioned(
-            top: 5, // Adjust this value to move the logo up or down
-            left: MediaQuery.of(context).size.width / 2 -
-                95, // Center horizontally
+            top: 2,
+            left: MediaQuery.of(context).size.width / 2 - 95,
             child: _Logo(),
           ),
 
           // Illustration
           Positioned(
-            top: 150, // Adjust this value to move the illustration up or down
-            left: MediaQuery.of(context).size.width / 2 -
-                180, // Center horizontally
+            top: 140,
+            left: MediaQuery.of(context).size.width / 2 - 180,
             child: _Illustration(),
           ),
 
           // Title
           Positioned(
-            top: 450, // Adjust this value to move the title up or down
-            left: MediaQuery.of(context).size.width *
-                0.1, // Add some padding from the left
-            right: MediaQuery.of(context).size.width *
-                0.1, // Add some padding from the right
+            top: 450,
+            left: MediaQuery.of(context).size.width * 0.1,
+            right: MediaQuery.of(context).size.width * 0.1,
             child: _Title(),
           ),
 
           Positioned(
-            top: 650, // Adjust this value to move the title up or down
-            left: MediaQuery.of(context).size.width *
-                0.1, // Add some padding from the left
-            right: MediaQuery.of(context).size.width *
-                0.1, // Add some padding from the right
+            top: 650,
+            left: MediaQuery.of(context).size.width * 0.0,
+            right: MediaQuery.of(context).size.width * 0.0,
             child: _buidButtons(context),
           ),
         ],
@@ -57,15 +54,15 @@ class _WelcomepageState extends State<Welcomepage> {
 Widget _Logo() {
   return Image.asset(
     'assets/logo.png',
-    width: 190, // Adjust width as needed
-    height: 200, // Adjust height as needed
+    width: 190,
+    height: 190,
   );
 }
 
 Widget _Illustration() {
   return Image.asset(
     "assets/images/illustration.png",
-    width: 360,
+    width: 350,
     height: 360,
   );
 }
@@ -78,17 +75,19 @@ Widget _Title() {
         "Gain total control of your money",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 30,
+          fontSize: 36,
+          fontFamily: 'Inter',
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
       ),
       SizedBox(height: 10),
       Text(
-        "Become your own money manager make every cent count",
+        "Become your own money manager and make every cent count",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 20,
+          fontFamily: 'Inter',
           color: Colors.white,
         ),
       ),
@@ -102,7 +101,17 @@ Widget _buidButtons(BuildContext context) {
     child: Column(
       children: [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SignUpPage()),
+            );
+            style:
+            ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[600],
+              minimumSize: const Size(double.infinity, 50),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green[600],
             minimumSize: const Size(double.infinity, 50),
@@ -110,12 +119,13 @@ Widget _buidButtons(BuildContext context) {
           child: const Text(
             'Create an Account',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
+              fontFamily: 'Inter',
               color: Colors.white,
             ),
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 15,
         ),
         ElevatedButton(
@@ -127,7 +137,8 @@ Widget _buidButtons(BuildContext context) {
           child: const Text(
             'Sign in',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
+              fontFamily: 'Inter',
               color: Colors.white,
             ),
           ),
