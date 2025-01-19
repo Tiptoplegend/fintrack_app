@@ -105,7 +105,7 @@ Widget _buidButtons(BuildContext context) {
           onPressed: () {},
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green[600],
-            minimumSize: Size(double.infinity, 50),
+            minimumSize: const Size(double.infinity, 50),
           ),
           child: const Text(
             'Create an Account',
@@ -115,14 +115,14 @@ Widget _buidButtons(BuildContext context) {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFF005341),
-            minimumSize: Size(double.infinity, 50),
+            backgroundColor: const Color(0xFF005341),
+            minimumSize: const Size(double.infinity, 50),
           ),
           child: const Text(
             'Sign in',
