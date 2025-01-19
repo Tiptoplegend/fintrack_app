@@ -1,4 +1,4 @@
-import 'package:fintrack_app/Onboarding/Welcome.dart';
+import 'package:fintrack_app/Onboarding/Splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class FinTrackApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Welcomepage(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
