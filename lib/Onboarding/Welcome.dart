@@ -1,5 +1,6 @@
 // ignore_for_file: unused_label, non_constant_identifier_names
 
+import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/SignUp.dart';
 import 'package:flutter/material.dart';
 
@@ -135,7 +136,13 @@ Widget _buidButtons(BuildContext context) {
           height: 20,
         ),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder:
+               (context) => Signin()), 
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF005341),
             minimumSize: const Size(double.infinity, 50),
