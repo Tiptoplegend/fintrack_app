@@ -1,4 +1,4 @@
-import 'package:fintrack_app/Homepage/Landingpage.dart';
+import 'package:fintrack_app/Main%20Screens/Landingpage.dart';
 // import 'package:fintrack_app/Onboarding/Splashscreen.dart';
 import 'package:flutter/material.dart';
 
