@@ -63,6 +63,11 @@ flutter:
     - assets/logo.png
     - assets/images/illustration.png
     - assets/google_icon0.png
+    - assets\images\icons8-home-48.png
+    - assets/images/icons8-analytics-48.png
+    - assets\images\icons8-add-100.png
+    - assets/images/icons8-goals-64.png
+    - assets\images\icons8-budget-30.png
        
   #   
   # 

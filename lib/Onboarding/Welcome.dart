@@ -21,35 +21,29 @@ class _WelcomepageState extends State<Welcomepage> {
           // Logo
           Positioned(
             top: 2,
-            left: MediaQuery.of(context).size.width / 2 -
-                95, 
+            left: MediaQuery.of(context).size.width / 2 - 95,
             child: _Logo(),
           ),
 
           // Illustration
           Positioned(
             top: 140,
-            left: MediaQuery.of(context).size.width / 2 -
-                180,
+            left: MediaQuery.of(context).size.width / 2 - 180,
             child: _Illustration(),
           ),
 
           // Title
           Positioned(
-            top: 450, 
-            left: MediaQuery.of(context).size.width *
-                0.1, 
-            right: MediaQuery.of(context).size.width *
-                0.1, 
+            top: 450,
+            left: MediaQuery.of(context).size.width * 0.1,
+            right: MediaQuery.of(context).size.width * 0.1,
             child: _Title(),
           ),
 
           Positioned(
             top: 650,
-            left: MediaQuery.of(context).size.width *
-                0.0, 
-            right: MediaQuery.of(context).size.width *
-                0.0, 
+            left: MediaQuery.of(context).size.width * 0.0,
+            right: MediaQuery.of(context).size.width * 0.0,
             child: _buidButtons(context),
           ),
         ],
@@ -61,8 +55,8 @@ class _WelcomepageState extends State<Welcomepage> {
 Widget _Logo() {
   return Image.asset(
     'assets/logo.png',
-    width: 190, 
-    height: 190, 
+    width: 190,
+    height: 190,
   );
 }
 
@@ -82,8 +76,8 @@ Widget _Title() {
         "Gain total control of your money",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 36,
-           fontFamily: 'Inter',
+          fontSize: 35,
+          fontFamily: 'Inter',
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -93,8 +87,8 @@ Widget _Title() {
         "Become your own money manager and make every cent count",
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 20,
-           fontFamily: 'Inter',
+          fontSize: 17,
+          fontFamily: 'Inter',
           color: Colors.white,
         ),
       ),
@@ -111,13 +105,13 @@ Widget _buidButtons(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder:
-               (context) => SignUpPage()), 
+              MaterialPageRoute(builder: (context) => SignUpPage()),
             );
-            style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green[600],
-            minimumSize: const Size(double.infinity, 50),
-          );
+            style:
+            ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[600],
+              minimumSize: const Size(double.infinity, 50),
+            );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green[600],
@@ -127,13 +121,13 @@ Widget _buidButtons(BuildContext context) {
             'Create an Account',
             style: TextStyle(
               fontSize: 18,
-               fontFamily: 'Inter',
+              fontFamily: 'Inter',
               color: Colors.white,
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
+        SizedBox(
+          height: 15,
         ),
         ElevatedButton(
           onPressed: () {
@@ -151,7 +145,7 @@ Widget _buidButtons(BuildContext context) {
             'Sign in',
             style: TextStyle(
               fontSize: 18,
-               fontFamily: 'Inter',
+              fontFamily: 'Inter',
               color: Colors.white,
             ),
           ),
