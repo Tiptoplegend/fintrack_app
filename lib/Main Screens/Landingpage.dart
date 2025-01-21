@@ -1,4 +1,5 @@
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
+import 'package:fintrack_app/Main%20Screens/Homepage.dart';
 import 'package:flutter/material.dart';
 
 class Landingpage extends StatefulWidget {
@@ -12,12 +13,12 @@ class _LandingpageState extends State<Landingpage> {
   int currentIndex = 0;
 
   // List of pages or widgets to display based on selected tab
-  static const List<Widget> body = [
-    Icon(Icons.home, size: 50),
-    Icon(Icons.analytics, size: 50),
-    Icon(Icons.add_circle, size: 50),
-    Goals(),
-    Icon(Icons.monetization_on, size: 50),
+  static List<Widget> body = [
+    Homepage(),
+    const Icon(Icons.analytics, size: 50),
+    const Icon(Icons.add_circle, size: 50),
+    const Goals(),
+    const Icon(Icons.monetization_on, size: 50),
   ];
 
   @override
@@ -30,7 +31,7 @@ class _LandingpageState extends State<Landingpage> {
               child: body.elementAt(currentIndex),
             ),
             Positioned(
-              bottom: 10,
+              bottom: 4,
               left: 0,
               right: 0,
               child: buildNavbar(),
@@ -74,7 +75,7 @@ class _LandingpageState extends State<Landingpage> {
           Icon(
             icon,
             size: isSelected ? 40 : 30, // Highlight the selected icon
-            color: isSelected ? Colors.green : Colors.grey,
+            color: isSelected ? Colors.green : Colors.black,
           ),
           const SizedBox(height: 4),
           Text(

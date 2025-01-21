@@ -10,6 +10,8 @@ class Goals extends StatefulWidget {
 class _GoalsState extends State<Goals> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Stack(
+      children: [Text("Testing Mic one two")],
+    );
   }
 }
