@@ -65,11 +65,11 @@ class _SignUpPageState extends State<SignUpPage> {
           
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -100,11 +100,11 @@ class _SignUpPageState extends State<SignUpPage> {
           
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
           
           
@@ -135,12 +135,12 @@ class _SignUpPageState extends State<SignUpPage> {
           
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
           
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.2),
+                    borderSide: BorderSide(width: 0.1),
                   ),
                   
                   focusedBorder: OutlineInputBorder(
@@ -229,34 +229,35 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 30),
           
               // Login Link
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    // Navigate to login screen
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Already have an account? ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "Login",
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle Login click
-                            },
-                        ),
-                      ],
-                    ),
-                  ),
+             Center(
+  child: GestureDetector(
+    onTap: () {
+      // Navigate to login screen
+    },
+    child: RichText(
+      text: TextSpan(
+        text: "Already have an account? ",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+        ),
+        children: [
+          TextSpan(
+            text: "Login",
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline, // Underline the text
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                // Handle Login click
+                 },
                 ),
+               ],
               ),
+             ),
+            ),
+           ),
               SizedBox(height: 30),
           
               // Divider
@@ -287,7 +288,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   backgroundColor: Colors.white,
                   side: BorderSide(
                     color: Colors.grey,
-                    width: 0.2,
+                    width: 0.1,
                     ),
                 ),
                 icon: SizedBox(
