@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Onboarding/SignUp.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -57,8 +58,6 @@ class _SigninState extends State<Signin> {
             _Account_yet(),
             const SizedBox(height: 30),
             _Continue(),
-
-
           ],
         ),
       ),
@@ -66,63 +65,62 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _WelcomeText() {
-  return Align(
-    alignment: Alignment.centerLeft,
-    child: Text(
-      'Welcome Back!',
-      style: TextStyle(
-        fontFamily: 'Inter',
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        'Welcome Back!',
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _Text() {
-  return Align(
-    alignment: Alignment.centerLeft,
-    child: Text(
-      'Let’s get you back to managing your finances.',
-      style: TextStyle(
-        fontFamily: 'Inter',
-        fontSize: 16,
+  Widget _Text() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        'Let’s get you back to managing your finances.',
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 16,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _EmailField() {
-  return TextField(
-    decoration: InputDecoration(
-      labelText: 'Email',
-      filled: true,
-      fillColor: Colors.grey[200],
-      labelStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.black,
+  Widget _EmailField() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'Email',
+        filled: true,
+        fillColor: Colors.grey[200],
+        labelStyle: TextStyle(
+          fontSize: 18,
+          color: Colors.black,
+        ),
+        floatingLabelStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 22,
+          color: Colors.green,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(width: 0.1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(width: 0.1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(width: 0.5, color: Colors.green),
+        ),
       ),
-      floatingLabelStyle: TextStyle(
-        fontFamily: 'Inter',
-        fontSize: 22,
-        color: Colors.green,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide(width: 0.1),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide(width: 0.1),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: BorderSide(width: 0.5, color: Colors.green),
-      ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _Password() {
     return TextField(
@@ -165,114 +163,118 @@ Widget _EmailField() {
       ),
     );
   }
-}
 
-Widget _LoginButton() {
-  return ElevatedButton(
-    onPressed: () {
-      // Handle login logic
-    },
-    style: ElevatedButton.styleFrom(
-      minimumSize: Size(double.infinity, 50),
-      backgroundColor: const Color(0xFF005341),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-    ),
-    child: Text(
-      "Login",
-      style: TextStyle(
-        fontSize: 18,
-        fontFamily: 'Inter',
-        color: Colors.white,
-      ),
-    ),
-  );
-}
-
-Widget _ForgotPassword() {
-  return Align(
-    alignment: Alignment.centerRight,
-    child: TextButton(
+  Widget _LoginButton() {
+    return ElevatedButton(
       onPressed: () {
-        // Handle the forgot password logic
+        // Handle login logic
       },
-      child: RichText(
-        text: TextSpan(
-          text: 'Forgot Password?',
-          style: TextStyle(
-            color: Colors.blue, // Change to your desired color
-            fontFamily: 'Inter',
-            fontSize: 14,
-          ),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              // Handle Forgot Password click
-            },
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(double.infinity, 50),
+        backgroundColor: const Color(0xFF005341),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
         ),
       ),
-    ),
-  );
-}
- 
-Widget _Account_yet() {
-  return Center(
-    child: GestureDetector(
-      onTap: () {
-        // Navigate to login screen
-      },
-      child: RichText(
-        text: TextSpan(
-          text: "Don't have an account yet? ",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-          ),
-          children: [
-            TextSpan(
-              text: "Sign up",
-              style: TextStyle(
-                color: Colors.blue,
-                decoration: TextDecoration.underline, 
-              ),
-              recognizer: TapGestureRecognizer()
-                ..onTap = () {
-                  // Handle Sign up click
-                },
-            ),
-          ],
+      child: Text(
+        "Login",
+        style: TextStyle(
+          fontSize: 18,
+          fontFamily: 'Inter',
+          color: Colors.white,
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _Continue() {
-  // Google Sign-In Button
-  return ElevatedButton.icon(
-    onPressed: () {
-      // Handle Google sign-in logic
-    },
-    style: ElevatedButton.styleFrom(
-      minimumSize: Size(double.infinity, 50),
-      backgroundColor: Colors.white,
-      side: BorderSide(
-        color: Colors.grey,
-        width: 0.1,
+  Widget _ForgotPassword() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+        onPressed: () {
+          // Handle the forgot password logic
+        },
+        child: RichText(
+          text: TextSpan(
+            text: 'Forgot Password?',
+            style: TextStyle(
+              color: Colors.blue, // Change to your desired color
+              fontFamily: 'Inter',
+              fontSize: 14,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                // Handle Forgot Password click
+              },
+          ),
+        ),
       ),
-    ),
-    icon: SizedBox(
-      width: 33,
-      height: 33,
-      child: Image.asset('assets/google_icon0.png'),
-    ),
-    label: Text(
-      "Continue with Google",
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 16,
-        fontFamily: 'Inter',
+    );
+  }
+
+  Widget _Account_yet() {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          // Navigate to login screen
+        },
+        child: RichText(
+          text: TextSpan(
+            text: "Don't have an account yet? ",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+            children: [
+              TextSpan(
+                text: "Sign up",
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // Handle Sign up click
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                    );
+                  },
+              ),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget _Continue() {
+    // Google Sign-In Button
+    return ElevatedButton.icon(
+      onPressed: () {
+        // Handle Google sign-in logic
+      },
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(double.infinity, 50),
+        backgroundColor: Colors.white,
+        side: BorderSide(
+          color: Colors.grey,
+          width: 0.1,
+        ),
+      ),
+      icon: SizedBox(
+        width: 33,
+        height: 33,
+        child: Image.asset('assets/google_icon0.png'),
+      ),
+      label: Text(
+        "Continue with Google",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontFamily: 'Inter',
+        ),
+      ),
+    );
+  }
 }

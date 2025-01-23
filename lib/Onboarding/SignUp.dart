@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -27,19 +28,17 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
         centerTitle: true,
-        elevation: 0, leading: IconButton(
+        elevation: 0,
+        leading: IconButton(
           icon: Icon(
-            Icons.arrow_back, 
-            color: Colors.black, 
+            Icons.arrow_back,
+            color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
           },
-
         ),
       ),
-
-
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
@@ -61,8 +60,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     fontSize: 22,
                     color: Colors.green,
                   ),
-          
-          
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.1),
@@ -73,15 +70,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(
-                      width: 0.5, 
-                      color: Colors.green
-                      ),
+                    borderSide: BorderSide(width: 0.5, color: Colors.green),
                   ),
                 ),
               ),
               SizedBox(height: 30),
-          
+
               // Email Input
               TextField(
                 decoration: InputDecoration(
@@ -97,7 +91,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     fontSize: 22,
                     color: Colors.green,
                   ),
-          
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.1),
@@ -106,8 +99,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.1),
                   ),
-          
-          
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.5, color: Colors.green),
@@ -115,7 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               SizedBox(height: 30),
-          
+
               // Password Input
               TextField(
                 obscureText: !_isPasswordVisible, // Toggle visibility
@@ -132,22 +123,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     fontSize: 22,
                     color: Colors.green,
                   ),
-          
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.1),
                   ),
-          
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.1),
                   ),
-                  
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide(width: 0.5, color: Colors.green),
                   ),
-          
                   suffixIcon: IconButton(
                     icon: Icon(
                       _isPasswordVisible
@@ -163,7 +150,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               SizedBox(height: 30),
-          
+
               // Terms Checkbox
               Row(
                 children: [
@@ -189,8 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             text: "Terms of Service and Privacy Policy",
                             style: TextStyle(
                               color: Colors.blue,
-                              decoration: 
-                              TextDecoration.underline,
+                              decoration: TextDecoration.underline,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
@@ -204,7 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
               SizedBox(height: 30),
-          
+
               // Sign-Up Button
               ElevatedButton(
                 onPressed: () {
@@ -227,39 +213,43 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               SizedBox(height: 30),
-          
+
               // Login Link
-             Center(
-  child: GestureDetector(
-    onTap: () {
-      // Navigate to login screen
-    },
-    child: RichText(
-      text: TextSpan(
-        text: "Already have an account? ",
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
-        ),
-        children: [
-          TextSpan(
-            text: "Login",
-            style: TextStyle(
-              color: Colors.blue,
-              decoration: TextDecoration.underline, // Underline the text
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                // Handle Login click
-                 },
+              Center(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Already have an account? ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: "Login",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            decoration:
+                                TextDecoration.underline, // Underline the text
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // Handle Login click
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Signin()),
+                              );
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-               ],
               ),
-             ),
-            ),
-           ),
               SizedBox(height: 30),
-          
+
               // Divider
               Row(
                 children: [
@@ -277,7 +267,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
               SizedBox(height: 30),
-          
+
               // Google Sign-In Button
               ElevatedButton.icon(
                 onPressed: () {
@@ -289,7 +279,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   side: BorderSide(
                     color: Colors.grey,
                     width: 0.1,
-                    ),
+                  ),
                 ),
                 icon: SizedBox(
                   width: 33,
