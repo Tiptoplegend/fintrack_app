@@ -118,7 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
           
               // Password Input
               TextField(
-                obscureText: !_isPasswordVisible, // Toggle visibility
+                obscureText: !_isPasswordVisible, 
                 decoration: InputDecoration(
                   labelText: 'Password',
                   filled: true,
@@ -145,7 +145,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide(width: 0.5, color: Colors.green),
+                    borderSide: BorderSide(
+                      width: 0.5, color: Colors.green),
                   ),
           
                   suffixIcon: IconButton(
@@ -211,10 +212,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   // Handle sign-up logic
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
-                  backgroundColor: const Color(0xFF005341),
+                  minimumSize: Size(
+                    double.infinity, 50),
+                  backgroundColor: const Color(
+                    0xFF005341),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: 
+                    BorderRadius.circular(15),
                   ),
                 ),
                 child: Text(
@@ -246,7 +250,7 @@ class _SignUpPageState extends State<SignUpPage> {
             text: "Login",
             style: TextStyle(
               color: Colors.blue,
-              decoration: TextDecoration.underline, // Underline the text
+              decoration: TextDecoration.underline, 
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
