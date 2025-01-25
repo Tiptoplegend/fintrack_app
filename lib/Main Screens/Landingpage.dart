@@ -2,6 +2,8 @@ import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
 import 'package:flutter/material.dart';
 
+import 'Budget.dart';
+
 class Landingpage extends StatefulWidget {
   const Landingpage({super.key});
 
@@ -18,7 +20,7 @@ class _LandingpageState extends State<Landingpage> {
     const Icon(Icons.analytics, size: 50),
     const Icon(Icons.add_circle, size: 50),
     const Goals(),
-    const Icon(Icons.monetization_on, size: 50),
+    Budget(),
   ];
 
   @override
