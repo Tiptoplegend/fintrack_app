@@ -14,11 +14,13 @@ class _HomepageState extends State<Homepage> {
       body: Stack(children: [
         _Uppersection(),
         Positioned(
-          left: 35,
-          top: 75,
+          left: 30,
+          top: 110,
           child: _Greetings(),
         ),
-        Positioned(top: 190, left: 55, child: Cardsection())
+        Positioned(top: 190, left: 70, 
+        child: Cardsection()
+        )
       ]),
     );
   }
@@ -34,7 +36,7 @@ Widget _Uppersection() {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xFF009688),
+                 const Color(0xFF005341),
                 Color(0xFF43A047),
               ],
               begin: Alignment.topCenter,
@@ -59,7 +61,7 @@ Widget _Uppersection() {
                   ),
                   const SizedBox(
                     width: 200,
-                    height: 80,
+                    height: 150,
                   ),
                   Icon(
                     Icons.settings,
@@ -68,13 +70,14 @@ Widget _Uppersection() {
                 ],
               ),
               const SizedBox(
-                height: 20,
+                height:30,
               ),
             ],
           ),
         )
       ],
-    )),
+    ),
+    ),
   );
 }
 
@@ -85,14 +88,19 @@ Widget _Greetings() {
       Text(
         'Hi Bamps',
         style: TextStyle(
-          fontSize: 28,
+          fontFamily: 'inter',
+          fontSize: 30,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
       ),
       Text(
         'Welcome, lets manage some money',
-        style: TextStyle(fontSize: 16, color: Colors.white),
+        style: TextStyle(
+          fontFamily: 'inter',
+          fontSize:18, 
+          color: Colors.white
+          ),
       )
     ],
   );
@@ -120,7 +128,11 @@ Widget Cardsection() {
         left: 15,
         child: Text(
           'This Months Spendings',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontSize: 15,
+             fontWeight: FontWeight.bold
+             ),
         ),
       ),
       Positioned(
@@ -131,8 +143,10 @@ Widget Cardsection() {
             style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF009688)),
-          )),
+                color:   Color(0xFF005341)
+                ),
+          ),
+        ),
     ],
   );
 }
