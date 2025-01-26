@@ -11,6 +11,13 @@ class Signin extends StatefulWidget {
 
 class _SigninState extends State<Signin> {
   bool _isPasswordVisible = false; // State for password visibility
+  String email = '';
+  String password = '';
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +99,7 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _EmailField() {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,

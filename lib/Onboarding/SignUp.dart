@@ -1,4 +1,4 @@
-import 'package:fintrack_app/Main%20Screens/Landingpage.dart';
+import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/Welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
           style: TextStyle(fontSize: 18),
         )));
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Landingpage()));
+            context, MaterialPageRoute(builder: (context) => Navigation()));
       } on FirebaseAuthException catch (e) {
         print('Error: ${e.message}'); // Log the error for debugging
 
