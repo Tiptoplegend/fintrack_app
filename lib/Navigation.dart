@@ -1,26 +1,27 @@
+import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
 import 'package:flutter/material.dart';
 
-import 'Budget.dart';
+import 'Main Screens/Budget.dart';
 
-class Landingpage extends StatefulWidget {
-  const Landingpage({super.key});
+class Navigation extends StatefulWidget {
+  const Navigation({super.key});
 
   @override
-  State<Landingpage> createState() => _LandingpageState();
+  State<Navigation> createState() => _NavigationState();
 }
 
-class _LandingpageState extends State<Landingpage> {
+class _NavigationState extends State<Navigation> {
   int currentIndex = 0;
 
   // List of pages or widgets to display based on selected tab
   static List<Widget> body = [
-    Homepage(),
-    const Icon(Icons.analytics, size: 50),
+    const Homepage(),
+    const Analytics(),
     const Icon(Icons.add_circle, size: 50),
     const Goals(),
-    Budget(),
+    const Budget(),
   ];
 
   @override
@@ -48,7 +49,7 @@ class _LandingpageState extends State<Landingpage> {
     return Padding(
       // color: Colors.transparent,
       // elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

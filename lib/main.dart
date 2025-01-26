@@ -1,9 +1,7 @@
-import 'package:fintrack_app/Main%20Screens/Homepage.dart';
-import 'package:fintrack_app/Main%20Screens/Landingpage.dart';
+import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/Splashscreen.dart';
-import 'package:fintrack_app/Onboarding/Welcome.dart';
+// import 'package:fintrack_app/Onboarding/Splashscreen.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
