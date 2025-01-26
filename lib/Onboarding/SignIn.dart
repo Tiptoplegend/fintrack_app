@@ -1,4 +1,6 @@
+import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignUp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +20,37 @@ class _SigninState extends State<Signin> {
   TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  userLogin() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Navigation()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              "No user Found for that Email",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              "No user Found for that Email",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +80,7 @@ class _SigninState extends State<Signin> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
-          key: _formKey, // Assign the form key here
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -103,6 +136,14 @@ class _SigninState extends State<Signin> {
 
   Widget _EmailField() {
     return TextFormField(
+      controller: emailController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please Enter Email';
+        } else {
+          return null;
+        }
+      },
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,
@@ -133,7 +174,16 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _Password() {
-    return TextField(
+    return TextFormField(
+      controller: passwordController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please Enter your Password';
+        } else {
+          return null;
+        }
+      },
+
       obscureText: !_isPasswordVisible, // Toggles password visibility
       decoration: InputDecoration(
         labelText: 'Password',

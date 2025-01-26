@@ -42,13 +42,15 @@ class _SignUpPageState extends State<SignUpPage> {
         print('Error: ${e.message}'); // Log the error for debugging
 
         if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              "Password provided is too weak",
-              style: TextStyle(fontSize: 18),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                "Password provided is too weak",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
-          ));
+          );
         } else if (e.code == "email-already-in-use") {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
