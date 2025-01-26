@@ -26,7 +26,7 @@ class _SigninState extends State<Signin> {
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -35,7 +35,7 @@ class _SigninState extends State<Signin> {
           },
         ),
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           'Login',
           style: TextStyle(
             fontSize: 24,
@@ -46,26 +46,29 @@ class _SigninState extends State<Signin> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 5),
-            _WelcomeText(),
-            const SizedBox(height: 2),
-            _Text(),
-            const SizedBox(height: 30),
-            _EmailField(),
-            const SizedBox(height: 30),
-            _Password(),
-            const SizedBox(height: 30),
-            _LoginButton(),
-            const SizedBox(height: 5),
-            _ForgotPassword(),
-            const SizedBox(height: 20),
-            _Account_yet(),
-            const SizedBox(height: 30),
-            _Continue(),
-          ],
+        child: Form(
+          key: _formKey, // Assign the form key here
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 5),
+              _WelcomeText(),
+              const SizedBox(height: 2),
+              _Text(),
+              const SizedBox(height: 30),
+              _EmailField(),
+              const SizedBox(height: 30),
+              _Password(),
+              const SizedBox(height: 30),
+              _LoginButton(),
+              const SizedBox(height: 5),
+              _ForgotPassword(),
+              const SizedBox(height: 20),
+              _Account_yet(),
+              const SizedBox(height: 30),
+              _Continue(),
+            ],
+          ),
         ),
       ),
     );
