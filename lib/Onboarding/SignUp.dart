@@ -24,12 +24,14 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   registration() async {
-    if (nameController.text.trim() != "" &&
-        emailController.text.trim() != "" &&
-        passwordController.text.trim() != "") {
+    if (nameController.text.trim().isNotEmpty &&
+        emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty) {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
+            .createUserWithEmailAndPassword(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim());
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
