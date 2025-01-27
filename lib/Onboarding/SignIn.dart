@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Forgetpassword.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,7 +44,7 @@ class _SigninState extends State<Signin> {
           SnackBar(
             backgroundColor: Colors.green,
             content: Text(
-              "No user Found for that Email",
+              "Wrong password Provided by user",
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -77,30 +78,32 @@ class _SigninState extends State<Signin> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 5),
-              _WelcomeText(),
-              const SizedBox(height: 2),
-              _Text(),
-              const SizedBox(height: 30),
-              _EmailField(),
-              const SizedBox(height: 30),
-              _Password(),
-              const SizedBox(height: 30),
-              _LoginButton(),
-              const SizedBox(height: 5),
-              _ForgotPassword(),
-              const SizedBox(height: 20),
-              _Account_yet(),
-              const SizedBox(height: 30),
-              _Continue(),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 5),
+                _WelcomeText(),
+                const SizedBox(height: 2),
+                _Text(),
+                const SizedBox(height: 30),
+                _EmailField(),
+                const SizedBox(height: 30),
+                _Password(),
+                const SizedBox(height: 30),
+                _LoginButton(),
+                const SizedBox(height: 5),
+                _ForgotPassword(),
+                const SizedBox(height: 20),
+                _Account_yet(),
+                const SizedBox(height: 30),
+                _Continue(),
+              ],
+            ),
           ),
         ),
       ),
@@ -138,7 +141,7 @@ class _SigninState extends State<Signin> {
     return TextFormField(
       controller: emailController,
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.trim().isEmpty) {
           return 'Please Enter Email';
         } else {
           return null;
@@ -228,6 +231,11 @@ class _SigninState extends State<Signin> {
     return ElevatedButton(
       onPressed: () {
         // Handle login logic
+        if (_formKey.currentState!.validate()) {
+          email = emailController.text;
+          password = passwordController.text;
+          userLogin();
+        }
       },
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
@@ -265,6 +273,11 @@ class _SigninState extends State<Signin> {
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 // Handle Forgot Password click
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Forgetpassword(),
+                    ));
               },
           ),
         ),

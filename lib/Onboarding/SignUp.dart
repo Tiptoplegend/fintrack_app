@@ -153,7 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Email Input
                 TextFormField(
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please Enter your Email';
                     } else {
                       return null;
