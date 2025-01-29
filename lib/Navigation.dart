@@ -2,7 +2,6 @@ import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
 import 'package:flutter/material.dart';
-
 import 'Main Screens/Budget.dart';
 
 class Navigation extends StatefulWidget {
@@ -19,7 +18,7 @@ class _NavigationState extends State<Navigation> {
   static List<Widget> body = [
     const Homepage(),
     const Analytics(),
-    const Icon(Icons.add_circle, size: 50),
+    // const Icon(Icons.add_circle, size: 50),
     const Goals(),
     const Budget(),
   ];
@@ -38,11 +37,36 @@ class _NavigationState extends State<Navigation> {
               left: 0,
               right: 0,
               child: buildNavbar(),
-            )
+            ),
           ],
         ),
       ),
+      floatingActionButton: Transform.translate(
+        offset: const Offset(5, 0), // Shift 20 pixels to the right
+        child: FloatingActionButton(
+          onPressed: () {
+            debugPrint("Floating Button Pressed");
+          },
+          backgroundColor: Colors.green,
+          child: Icon(
+            Icons.add_circle,
+            size: 40,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+    // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    // floatingActionButton: FloatingActionButton(
+    //   onPressed: () {},
+    //   backgroundColor: Colors.green,
+    //   child: const Icon(
+    //     Icons.add_circle,
+    //     color: Colors.black,
+    //     size: 35,
+    //   ),
+    // ));
   }
 
   Widget buildNavbar() {
@@ -55,9 +79,12 @@ class _NavigationState extends State<Navigation> {
         children: [
           _buildNavItem(Icons.home, "Home", 0),
           _buildNavItem(Icons.analytics_outlined, "Analytics", 1),
-          _buildNavItem(Icons.add_circle, "Add", 2),
-          _buildNavItem(Icons.track_changes, "Goals", 3),
-          _buildNavItem(Icons.monetization_on, "Budget", 4),
+          // _buildNavItem(Icons.add_circle, "Add", 2),
+          SizedBox(
+            width: 10,
+          ),
+          _buildNavItem(Icons.track_changes, "Goals", 2),
+          _buildNavItem(Icons.monetization_on, "Budget", 3),
         ],
       ),
     );

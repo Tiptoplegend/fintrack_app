@@ -1,6 +1,7 @@
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/Welcome.dart';
+import 'package:fintrack_app/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -378,6 +379,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Handle Google sign-in logic
+                    AuthMethods().signInwithGoogle(context);
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
