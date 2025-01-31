@@ -8,7 +8,7 @@ class AuthMethods {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   getCurrentUse() async {
-    return await auth.currentUser;
+    return auth.currentUser;
   }
 
   signInwithGoogle(BuildContext context) async {
@@ -26,21 +26,19 @@ class AuthMethods {
     UserCredential result = await firebaseAuth.signInWithCredential(credential);
     User? userDetails = result.user;
 
-    if (result != null) {
-      Map<String, dynamic> userInfoMap = {
-        "email": userDetails!.email,
-        "name": userDetails.displayName,
-        "imgurl": userDetails.photoURL,
-        "id": userDetails.uid,
-      };
-      await DatabaseMethods().addUser(userDetails.uid, userInfoMap).then(
-        (value) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Navigation()),
-          );
-        },
-      );
-    }
+    Map<String, dynamic> userInfoMap = {
+      "email": userDetails!.email,
+      "name": userDetails.displayName,
+      "imgurl": userDetails.photoURL,
+      "id": userDetails.uid,
+    };
+    await DatabaseMethods().addUser(userDetails.uid, userInfoMap).then(
+      (value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Navigation()),
+        );
+      },
+    );
   }
 }
