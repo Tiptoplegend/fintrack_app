@@ -19,6 +19,9 @@ class FirestoreService {
   Future<void> addCategory(String categoryName) {
     return _categoriesCollection.add({
       'name': categoryName,
+      'Timestamp': Timestamp.now(),
     });
   }
+
+  getCategories() {}
 }

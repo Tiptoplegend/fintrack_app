@@ -82,7 +82,7 @@ class _NavigationState extends State<Navigation> {
                         angle: -pi / 6,
                         icon: Icons.category,
                         label: "Categories",
-                        page: const CategoriesPage(),
+                        page: CategoriesPage(),
                       ),
                     ],
                   ),
