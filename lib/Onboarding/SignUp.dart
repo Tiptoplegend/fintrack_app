@@ -1,6 +1,7 @@
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/Welcome.dart';
+import 'package:fintrack_app/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,14 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   registration() async {
-    if (nameController.text.trim() != "" &&
-        emailController.text.trim() != "" &&
-        passwordController.text.trim() != "") {
+    if (nameController.text.trim().isNotEmpty &&
+        emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty) {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
+            .createUserWithEmailAndPassword(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim());
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -153,7 +156,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Email Input
                 TextFormField(
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please Enter your Email';
                     } else {
                       return null;
@@ -376,6 +379,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ElevatedButton.icon(
                   onPressed: () {
                     // Handle Google sign-in logic
+                    AuthMethods().signInwithGoogle(context);
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),

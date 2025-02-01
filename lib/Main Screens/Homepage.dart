@@ -12,25 +12,52 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light.copyWith(
-          statusBarColor: const Color(0xFF005341), // Matches the green gradient
-          statusBarIconBrightness: Brightness.light, // Light icons for contrast
-        ),
-        child: Scaffold(
-          body: Stack(children: [
-            _Uppersection(),
-            Positioned(
-              left: 30,
-              top: 100,
-              child: _Greetings(),
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: const Color(0xFF005341),
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Stack(
+                children: [
+                  _Uppersection(),
+                  const Positioned(
+                    left: 30,
+                    top: 100,
+                    child: _Greetings(),
+                  ),
+                  const Positioned(
+                    top: 210,
+                    left: 60,
+                    child: Cardsection(),
+                  ),
+                  const Positioned(
+                    top: 410,
+                    left: 45,
+                    child: _tips(),
+                  ),
+                  const Positioned(
+                    top: 490,
+                    left: 40,
+                    child: _History(),
+                  ),
+                  Positioned(
+                    top: 520,
+                    left: 20,
+                    right: 20,
+                    child: _Expensecards(),
+                  )
+                ],
+              ),
             ),
-            Positioned(
-              top: 210,
-              left: 60,
-              child: Cardsection(),
-            )
-          ]),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -41,10 +68,10 @@ Widget _Uppersection() {
         children: [
           Container(
             height: 310,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  const Color(0xFF005341),
+                  Color(0xFF005341),
                   Color(0xFF43A047),
                 ],
                 begin: Alignment.topCenter,
@@ -55,31 +82,23 @@ Widget _Uppersection() {
                 bottomRight: Radius.circular(50),
               ),
             ),
-
-            // The settings and User icon Section will be below
-
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 24,
                       backgroundImage: AssetImage("assets/images/user.png"),
                     ),
-                    const SizedBox(
-                      width: 200,
-                      height: 100,
-                    ),
+                    const SizedBox(width: 200, height: 100),
                     Icon(
                       Icons.settings,
                       color: Colors.white,
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
               ],
             ),
           )
@@ -89,32 +108,41 @@ Widget _Uppersection() {
   );
 }
 
-Widget _Greetings() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'Hi Bamps',
-        style: TextStyle(
-          fontFamily: 'inter',
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+class _Greetings extends StatelessWidget {
+  const _Greetings();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Hi Bamps',
+          style: TextStyle(
+            fontFamily: 'inter',
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
-      ),
-      Text(
-        'Welcome, lets manage some money',
-        style:
-            TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
-      )
-    ],
-  );
+        Text(
+          'Welcome, lets manage some money',
+          style:
+              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
+        )
+      ],
+    );
+  }
 }
 
-Widget Cardsection() {
-  return Stack(
-    children: [
-      Container(
+class Cardsection extends StatelessWidget {
+  const Cardsection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
           height: 180,
           width: 300,
           decoration: BoxDecoration(
@@ -127,27 +155,119 @@ Widget Cardsection() {
                 offset: const Offset(0, 4),
               ),
             ],
-          )),
-      Positioned(
-        top: 10,
-        left: 15,
-        child: Text(
-          'This Months Spendings',
-          style: TextStyle(
-              fontFamily: 'inter', fontSize: 15, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      Positioned(
-        top: 25,
-        left: 15,
-        child: Text(
-          'GHC 2,000',
-          style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF005341)),
+        const Positioned(
+          top: 10,
+          left: 15,
+          child: Text(
+            'This Months Spendings',
+            style: TextStyle(
+                fontFamily: 'inter', fontSize: 15, fontWeight: FontWeight.bold),
+          ),
         ),
+        const Positioned(
+          top: 25,
+          left: 15,
+          child: Text(
+            'GHC 2,000',
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF005341)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _tips extends StatelessWidget {
+  const _tips();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 330,
+      height: 70,
+      padding: const EdgeInsets.all(9),
+      decoration: BoxDecoration(
+        color: Colors.green[200],
+        borderRadius: BorderRadius.circular(15),
       ),
-    ],
-  );
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            child: Image.asset(
+              'assets/images/icons8-lightbulb-80.png',
+              width: 60,
+              height: 60,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'TIP OF THE DAY',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Spend less than you earn.',
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _History extends StatelessWidget {
+  const _History();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'History',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+    );
+  }
+}
+
+class _Expensecards extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            width: 380,
+            child: Card(
+              child: ListTile(
+                leading: const Icon(Icons.directions_car),
+                title: const Text("Transportation"),
+                subtitle: const Text("12-Dec-2024"),
+                trailing: const Text("GHC 200"),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

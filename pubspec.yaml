@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^3.0.0
   firebase_auth: ^5.4.1
+  google_sign_in: ^6.2.2
+  cloud_firestore: ^5.6.2
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,7 @@ flutter:
     - assets/images/icons8-add-100.png
     - assets/images/icons8-goals-64.png
     - assets/images/icons8-budget-30.png
+    - assets/images/icons8-lightbulb-80.png
        
   #   
   # 

@@ -1,5 +1,3 @@
-import 'package:fintrack_app/Main%20Screens/Analytics.dart';
-import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/Splashscreen.dart';
 // import 'package:fintrack_app/Onboarding/Splashscreen.dart';
 import 'package:flutter/material.dart';
