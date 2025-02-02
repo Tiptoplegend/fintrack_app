@@ -1,6 +1,7 @@
 import 'package:fintrack_app/Forgetpassword.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignUp.dart';
+import 'package:fintrack_app/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -326,6 +327,7 @@ class _SigninState extends State<Signin> {
     return ElevatedButton.icon(
       onPressed: () {
         // Handle Google sign-in logic
+        AuthMethods().signInwithGoogle(context);
       },
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
