@@ -47,7 +47,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
     });
   }
 
-  // Function to show a dialog to add a new category.
   void _addCategoryDialog() {
     TextEditingController categoryController = TextEditingController();
 
@@ -132,7 +131,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // Only user-created categories get a toggle switch.
+              // Only the user-created categories will get the toggle switch.
               trailing: category.isUserCreated
                   ? Switch(
                       value: category.isEnabled,
