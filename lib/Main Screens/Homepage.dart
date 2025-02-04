@@ -115,7 +115,7 @@ class _Greetings extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Hi",
+          "Hi Name",
           style: const TextStyle(
             fontFamily: 'inter',
             fontSize: 30,
