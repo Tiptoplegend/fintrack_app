@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,7 @@ class Category {
 }
 
 class CategoriesPage extends StatefulWidget {
-  CategoriesPage({super.key});
-
-  final FirestoreService firestoreService = FirestoreService();
+  const CategoriesPage({super.key});
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();
@@ -26,6 +25,7 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage> {
   List<Category> categories = [];
+  final FirestoreService firestoreService = FirestoreService();
 
   @override
   void initState() {
@@ -37,9 +37,30 @@ class _CategoriesPageState extends State<CategoriesPage> {
       Category(name: "Utilities", icon: Icons.home_repair_service),
       Category(name: "Shopping", icon: Icons.shopping_bag),
     ]);
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    final catsSnapshot = await firestoreService.getCategories();
+    if (catsSnapshot != null) {
+      var catsList = catsSnapshot!.map((snap) {
+        var data = snap.data() as Map<String, dynamic>;
+        // log(data.toString());
+        return Category(
+          name: data['name'],
+          isUserCreated: true,
+          isEnabled: true,
+        );
+      }).toList();
+
+      setState(() {
+        categories.addAll(catsList);
+      });
+    }
   }
 
   void _addCategory(String categoryName) {
+    FirestoreService().addCategory(categoryName);
     setState(() {
       categories.add(
         Category(name: categoryName, isUserCreated: true, isEnabled: true),

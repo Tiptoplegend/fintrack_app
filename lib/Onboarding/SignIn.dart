@@ -24,6 +24,14 @@ class _SigninState extends State<Signin> {
   final _formKey = GlobalKey<FormState>();
 
   userLogin() async {
+    // showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return Center(
+    //         child: CircularProgressIndicator(),
+    //       );
+    //     });
+    // Navigator.pop(context);
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
@@ -129,7 +137,7 @@ class _SigninState extends State<Signin> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        'Let’s get you back to managing your finances.',
+        "Let’s get you back to managing your finances.",
         style: TextStyle(
           fontFamily: 'Inter',
           fontSize: 16,
