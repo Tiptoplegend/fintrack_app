@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,10 +32,10 @@ class FirestoreService {
   Future<List<QueryDocumentSnapshot>?> getCategories() async {
     var user = FirebaseAuth.instance.currentUser;
     var userId = user!.uid;
-    final CollectionReference _categoriesCollection =
+    final CollectionReference categoriesCollection =
         FirebaseFirestore.instance.collection('categories');
     var query =
-        await _categoriesCollection.where('userId', isEqualTo: userId).get();
+        await categoriesCollection.where('userId', isEqualTo: userId).get();
     return query.docs;
   }
 }

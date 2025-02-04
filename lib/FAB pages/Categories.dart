@@ -43,7 +43,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
   Future<void> _fetchCategories() async {
     final catsSnapshot = await firestoreService.getCategories();
     if (catsSnapshot != null) {
-      var catsList = catsSnapshot!.map((snap) {
+      var catsList = catsSnapshot.map((snap) {
         var data = snap.data() as Map<String, dynamic>;
         // log(data.toString());
         return Category(

@@ -45,7 +45,7 @@ class _TransactionPageState extends State<TransactionPage> {
 }
 
 Widget _textfield() {
-  return Container(
+  return SizedBox(
     width: 350,
     height: 500,
     child: TextField(
@@ -69,7 +69,7 @@ Widget _textfield() {
 }
 
 Widget _notesection() {
-  return Container(
+  return SizedBox(
     width: 360,
     height: 250,
     child: TextField(
