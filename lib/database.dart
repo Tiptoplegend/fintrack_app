@@ -1,5 +1,6 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fintrack_app/FAB%20pages/Categories.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseMethods {
   Future addUser(String userId, Map<String, dynamic> userInfoMap) {
@@ -16,12 +17,24 @@ class FirestoreService {
   final CollectionReference _categoriesCollection =
       FirebaseFirestore.instance.collection('categories');
 
-  Future<void> addCategory(String categoryName) {
-    return _categoriesCollection.add({
+  Future<DocumentReference<Object?>> addCategory(String categoryName) async {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+    log(userId.toString());
+    return await _categoriesCollection.add({
+      'userId': userId,
       'name': categoryName,
       'Timestamp': Timestamp.now(),
     });
   }
 
-  getCategories() {}
+  Future<List<QueryDocumentSnapshot>?> getCategories() async {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+    final CollectionReference categoriesCollection =
+        FirebaseFirestore.instance.collection('categories');
+    var query =
+        await categoriesCollection.where('userId', isEqualTo: userId).get();
+    return query.docs;
+  }
 }

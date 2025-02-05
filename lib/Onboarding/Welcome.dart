@@ -114,9 +114,11 @@ Widget _buidButtons(BuildContext context) {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green[600],
-            minimumSize: const Size(double.infinity, 50),
-          ),
+              backgroundColor: Colors.green[600],
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              )),
           child: const Text(
             'Create an Account',
             style: TextStyle(
@@ -133,14 +135,19 @@ Widget _buidButtons(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder:
-               (context) => Signin()), 
+              MaterialPageRoute(builder: (context) => Signin()),
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF005341),
-            minimumSize: const Size(double.infinity, 50),
-          ),
+              backgroundColor: Color(0xFF005341),
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: Colors.white,
+                  width: 2,
+                ),
+              )),
           child: const Text(
             'Sign in',
             style: TextStyle(

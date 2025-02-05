@@ -1,14 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+class Homepage extends StatelessWidget {
+  Homepage({super.key});
 
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
+  final user = FirebaseAuth.instance.currentUser!;
 
-class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -116,9 +114,9 @@ class _Greetings extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Hi Bamps',
-          style: TextStyle(
+        Text(
+          "Hi Name",
+          style: const TextStyle(
             fontFamily: 'inter',
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -135,9 +133,14 @@ class _Greetings extends StatelessWidget {
   }
 }
 
-class Cardsection extends StatelessWidget {
-  const Cardsection();
+class Cardsection extends StatefulWidget {
+  const Cardsection({super.key});
 
+  @override
+  State<Cardsection> createState() => _CardsectionState();
+}
+
+class _CardsectionState extends State<Cardsection> {
   @override
   Widget build(BuildContext context) {
     return Stack(

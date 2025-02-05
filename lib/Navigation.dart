@@ -20,7 +20,7 @@ class _NavigationState extends State<Navigation> {
   bool isMenuOpen = false;
 
   static List<Widget> body = [
-    const Homepage(),
+    Homepage(),
     const Analytics(),
     const Goals(),
     const Budget(),

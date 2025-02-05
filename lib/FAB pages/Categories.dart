@@ -16,9 +16,7 @@ class Category {
 }
 
 class CategoriesPage extends StatefulWidget {
-  CategoriesPage({super.key});
-
-  final FirestoreService firestoreService = FirestoreService();
+  const CategoriesPage({super.key});
 
   @override
   State<CategoriesPage> createState() => _CategoriesPageState();
@@ -26,6 +24,7 @@ class CategoriesPage extends StatefulWidget {
 
 class _CategoriesPageState extends State<CategoriesPage> {
   List<Category> categories = [];
+  final FirestoreService firestoreService = FirestoreService();
 
   @override
   void initState() {
@@ -37,9 +36,30 @@ class _CategoriesPageState extends State<CategoriesPage> {
       Category(name: "Utilities", icon: Icons.home_repair_service),
       Category(name: "Shopping", icon: Icons.shopping_bag),
     ]);
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    final catsSnapshot = await firestoreService.getCategories();
+    if (catsSnapshot != null) {
+      var catsList = catsSnapshot.map((snap) {
+        var data = snap.data() as Map<String, dynamic>;
+        // log(data.toString());
+        return Category(
+          name: data['name'],
+          isUserCreated: true,
+          isEnabled: true,
+        );
+      }).toList();
+
+      setState(() {
+        categories.addAll(catsList);
+      });
+    }
   }
 
   void _addCategory(String categoryName) {
+    FirestoreService().addCategory(categoryName);
     setState(() {
       categories.add(
         Category(name: categoryName, isUserCreated: true, isEnabled: true),
@@ -47,7 +67,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
     });
   }
 
-  // Function to show a dialog to add a new category.
   void _addCategoryDialog() {
     TextEditingController categoryController = TextEditingController();
 
@@ -132,7 +151,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // Only user-created categories get a toggle switch.
+              // Only the user-created categories will get the toggle switch.
               trailing: category.isUserCreated
                   ? Switch(
                       value: category.isEnabled,
