@@ -117,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Name Input
                 TextFormField(
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please enter your name';
                     } else {
                       return null;
@@ -195,7 +195,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 // Password Input
                 TextFormField(
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null || value.trim().isEmpty) {
                       return 'Please Enter your Password';
                     } else {
                       return null;

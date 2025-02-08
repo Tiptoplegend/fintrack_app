@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String username = user?.displayName ?? "User";
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: const Color(0xFF005341),
@@ -23,10 +26,10 @@ class Homepage extends StatelessWidget {
               child: Stack(
                 children: [
                   _Uppersection(),
-                  const Positioned(
+                  Positioned(
                     left: 30,
                     top: 100,
-                    child: _Greetings(),
+                    child: _Greetings(username: username),
                   ),
                   const Positioned(
                     top: 210,
@@ -107,7 +110,9 @@ Widget _Uppersection() {
 }
 
 class _Greetings extends StatelessWidget {
-  const _Greetings();
+  final String username;
+
+  const _Greetings({required this.username, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +120,7 @@ class _Greetings extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Hi Name",
+          "Hi $username",
           style: const TextStyle(
             fontFamily: 'inter',
             fontSize: 30,

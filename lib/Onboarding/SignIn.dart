@@ -189,7 +189,7 @@ class _SigninState extends State<Signin> {
     return TextFormField(
       controller: passwordController,
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.trim().isEmpty) {
           return 'Please Enter your Password';
         } else {
           return null;
@@ -241,8 +241,8 @@ class _SigninState extends State<Signin> {
       onPressed: () {
         // Handle login logic
         if (_formKey.currentState!.validate()) {
-          email = emailController.text;
-          password = passwordController.text;
+          email = emailController.text.trim();
+          password = passwordController.text.trim();
           userLogin();
         }
       },

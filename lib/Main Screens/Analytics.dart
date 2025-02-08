@@ -12,6 +12,7 @@ class _AnalyticsState extends State<Analytics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(
           children: [
