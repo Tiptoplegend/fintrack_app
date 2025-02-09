@@ -34,6 +34,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 email: emailController.text.trim(),
                 password: passwordController.text.trim());
 
+        await userCredential.user
+            ?.updateProfile(displayName: nameController.text.trim());
+        await userCredential.user?.reload();
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
           "Registered Successfully",

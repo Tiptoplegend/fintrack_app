@@ -1,5 +1,4 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:fintrack_app/Settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String username = user?.displayName ?? "User";
+    String username = user.displayName ?? "User";
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: const Color(0xFF005341),
@@ -25,7 +24,7 @@ class Homepage extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Stack(
                 children: [
-                  _Uppersection(),
+                  _Uppersection(context: context),
                   Positioned(
                     left: 30,
                     top: 100,
@@ -62,7 +61,7 @@ class Homepage extends StatelessWidget {
   }
 }
 
-Widget _Uppersection() {
+Widget _Uppersection({required BuildContext context}) {
   return Scaffold(
     body: SingleChildScrollView(
       child: Column(
@@ -93,9 +92,17 @@ Widget _Uppersection() {
                       backgroundImage: AssetImage("assets/images/user.png"),
                     ),
                     const SizedBox(width: 200, height: 100),
-                    Icon(
-                      Icons.settings,
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsPage(),
+                            ));
+                      },
+                      icon: Icon(Icons.settings),
                       color: Colors.white,
+                      iconSize: 30,
                     ),
                   ],
                 ),
