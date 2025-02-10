@@ -38,3 +38,7 @@ class FirestoreService {
     return query.docs;
   }
 }
+
+
+// Database for the tips can be found below/ 
+

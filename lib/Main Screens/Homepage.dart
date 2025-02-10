@@ -3,11 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   Homepage({super.key});
 
-  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
 
+class _HomepageState extends State<Homepage> {
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +41,17 @@ class Homepage extends StatelessWidget {
                     child: Cardsection(),
                   ),
                   const Positioned(
-                    top: 410,
+                    top: 400,
                     left: 45,
                     child: _tips(),
                   ),
                   const Positioned(
-                    top: 490,
+                    top: 520,
                     left: 40,
                     child: _History(),
                   ),
                   Positioned(
-                    top: 520,
+                    top: 540,
                     left: 20,
                     right: 20,
                     child: _Expensecards(),
@@ -203,46 +207,62 @@ class _tips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> financialTips = [
+      "Track your spending to know where your money goes.",
+      "Save at least 10% of your income each month.",
+      "Use the 50/30/20 rule: 50% for needs, 30% for wants, and 20% for savings.",
+      "Avoid impulse purchases—wait 24 hours before buying.",
+      "Invest early to take advantage of compound interest and secure your future.",
+      "Always have an emergency fund that covers at least 3-6 months of expenses.",
+    ];
+
+    String getRandomTip() {
+      return (financialTips..shuffle()).first;
+    }
+
     return Container(
       width: 330,
-      height: 70,
       padding: const EdgeInsets.all(9),
       decoration: BoxDecoration(
         color: Colors.green[200],
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start, // Aligns text at the top
         children: [
           Container(
             padding: const EdgeInsets.all(6),
             child: Image.asset(
               'assets/images/icons8-lightbulb-80.png',
-              width: 60,
-              height: 60,
+              width: 50,
+              height: 50,
             ),
           ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'TIP OF THE DAY',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+          const SizedBox(width: 8), // Adds space between image and text
+          Expanded(
+            // Ensures text wraps properly
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'TIP OF THE DAY',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Spend less than you earn.',
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
+                const SizedBox(height: 4),
+                Text(
+                  getRandomTip(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                  softWrap: true, // Ensures text wraps properly
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -269,7 +289,7 @@ class _Expensecards extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.4,
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: 5,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return SizedBox(
             width: 380,
