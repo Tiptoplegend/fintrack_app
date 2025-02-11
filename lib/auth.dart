@@ -11,6 +11,12 @@ class AuthMethods {
     return auth.currentUser;
   }
 
+ String getProfileImage(){
+  var user = auth.currentUser;
+  return user != null && user.photoURL != null
+      ? user.photoURL!
+      : "assets/images/user.png"; 
+}
   signInwithGoogle(BuildContext context) async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     final GoogleSignIn googleSignIn = GoogleSignIn();

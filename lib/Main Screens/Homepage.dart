@@ -16,6 +16,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: const Color(0xFF005341),
@@ -46,7 +47,7 @@ class _HomepageState extends State<Homepage> {
                     child: _tips(),
                   ),
                   const Positioned(
-                    top: 520,
+                    top: 515,
                     left: 40,
                     child: _History(),
                   ),
