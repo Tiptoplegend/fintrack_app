@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+  Homepage({super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -125,7 +125,7 @@ Widget _Uppersection({required BuildContext context}) {
 class _Greetings extends StatelessWidget {
   final String username;
 
-  const _Greetings({required this.username});
+  const _Greetings({required this.username, super.key});
 
   @override
   Widget build(BuildContext context) {
