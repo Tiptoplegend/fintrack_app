@@ -14,8 +14,8 @@ class AppThemes {
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: Colors.black87,
-    scaffoldBackgroundColor: Colors.black87,
+    primaryColor: const Color.fromARGB(66, 96, 92, 92),
+    scaffoldBackgroundColor: const Color.fromARGB(66, 96, 92, 92),
     appBarTheme: AppBarTheme(
       backgroundColor: const Color(0xFF005341),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),

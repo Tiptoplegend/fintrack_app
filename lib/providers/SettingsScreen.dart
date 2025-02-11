@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Onboarding/Welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fintrack_app/providers/theme_provider.dart';
@@ -27,7 +28,7 @@ class ThemeSettingsScreen extends StatelessWidget {
             trailing: Radio<ThemeMode>(
               value: ThemeMode.light,
               groupValue: themeProvider.themeMode,
-              activeColor: Colors.black, // Set radio button color to black
+              activeColor: const Color.fromARGB(255, 55, 53, 53),
               onChanged: (value) => themeProvider.setTheme(ThemeMode.light),
             ),
           ),
@@ -296,6 +297,8 @@ void showLogoutBottomSheet(BuildContext context) {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Welcomepage()),
+                      (route)=>false);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF005341),
