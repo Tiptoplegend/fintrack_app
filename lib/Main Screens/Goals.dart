@@ -10,8 +10,28 @@ class Goals extends StatefulWidget {
 class _GoalsState extends State<Goals> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [Text("Testing Mic one two")],
+    return Scaffold(
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage("assets/images/user.png"),
+              ),
+              const SizedBox(
+                width: 120,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [SizedBox(height: 10), Text('Goals')],
+              )
+            ],
+          )),
+      body: Stack(
+          // widgets will go here
+          ),
     );
   }
 }
