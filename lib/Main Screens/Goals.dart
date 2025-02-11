@@ -143,16 +143,16 @@ Widget _modalbottom(BuildContext context) {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
-              child: Text(
-                'Create Goal',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(Colors.green.value),
                 minimumSize: Size(340, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
+              ),
+              child: Text(
+                'Create Goal',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             )
           ],
