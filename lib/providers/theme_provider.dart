@@ -21,17 +21,13 @@ class ThemeProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? themeString = prefs.getString('themeMode');
 
-    if (themeString != null) {
-      if (themeString.contains('dark')) {
-        _themeMode = ThemeMode.dark;
-      } else if (themeString.contains('light')) {
-        _themeMode = ThemeMode.light;
-      } else {
-        _themeMode = ThemeMode.system;
-      }
+    if (themeString != null && themeString.contains('dark')) {
+      _themeMode = ThemeMode.dark;
+    } else if (themeString != null && themeString.contains('light')) {
+      _themeMode = ThemeMode.light;
     } else {
-      _themeMode = ThemeMode.system; 
+      _themeMode = ThemeMode.system;
     }
-    notifyListeners();
+      notifyListeners();
   }
 }
