@@ -1,40 +1,70 @@
-// ignore_for_file: use_build_context_synchronously
-
-
-import 'package:fintrack_app/Onboarding/Welcome.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:fintrack_app/Onboarding/Welcome.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashscreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashscreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  
   @override
-  Widget build(BuildContext context) {
-    Future.delayed(
-      const Duration(seconds: 2),() {
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: false);
+
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder:
-        (context) => const Welcomepage()
-        ),
+        MaterialPageRoute(builder: (context) => const Welcomepage()),
       );
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF005341),
+      backgroundColor: const Color(0xFF005341),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
+            for (int i = 1; i <= 3; i++)
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Container(
+                    width: 150 * _controller.value * i,
+                    height: 150 * _controller.value * i,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withOpacity(1 - _controller.value),
+                        width: 3,
+                      ),
+                    ),
+                  );
+                },
+              ),
             Image.asset(
               'assets/logo.png',
-              width: 230,
-              height: 230,
+              width: 160,
+              height: 160,
             ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
