@@ -23,7 +23,7 @@ class _NavigationState extends State<Navigation> {
     Homepage(),
     const Analytics(),
     const Goals(),
-    const Budget(),
+    
   ];
 
   @override
