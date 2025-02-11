@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
-import 'package:fintrack_app/Main%20Screens/Budget.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
