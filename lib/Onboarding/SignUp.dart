@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/Welcome.dart';
@@ -33,6 +34,17 @@ class _SignUpPageState extends State<SignUpPage> {
             .createUserWithEmailAndPassword(
                 email: emailController.text.trim(),
                 password: passwordController.text.trim());
+
+        User? user = userCredential.user;
+
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user!.uid)
+            .set({
+          "email": user.email,
+          "name": nameController.text.trim(),
+          "uid": user.uid,
+        });
 
         await userCredential.user
             ?.updateProfile(displayName: nameController.text.trim());
