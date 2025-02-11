@@ -1,4 +1,4 @@
-import 'package:fintrack_app/Settings.dart';
+import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,7 +103,7 @@ Widget _Uppersection({required BuildContext context}) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SettingsPage(),
+                              builder: (context) => const SettingsScreen(),
                             ));
                       },
                       icon: Icon(Icons.settings),
