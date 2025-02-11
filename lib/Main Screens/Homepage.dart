@@ -1,7 +1,7 @@
-import 'package:fintrack_app/Settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../providers/SettingsScreen.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
@@ -89,7 +89,9 @@ Widget _Uppersection({required BuildContext context}) {
                   children: [
                     const CircleAvatar(
                       radius: 24,
-                      backgroundImage: AssetImage("assets/images/user.png"),
+                      backgroundImage: AssetImage(
+                        "assets/images/user.png"
+                        ),
                     ),
                     const SizedBox(width: 200, height: 100),
                     IconButton(
@@ -97,8 +99,9 @@ Widget _Uppersection({required BuildContext context}) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SettingsPage(),
-                            ));
+                              builder: (context) => const SettingsScreen(),
+                            )
+                            );
                       },
                       icon: Icon(Icons.settings),
                       color: Colors.white,
@@ -119,7 +122,7 @@ Widget _Uppersection({required BuildContext context}) {
 class _Greetings extends StatelessWidget {
   final String username;
 
-  const _Greetings({required this.username, super.key});
+  const _Greetings({required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +141,11 @@ class _Greetings extends StatelessWidget {
         Text(
           'Welcome, lets manage some money',
           style:
-              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
+              TextStyle(
+                fontFamily: 'inter', 
+                fontSize: 18, 
+                color: Colors.white
+                ),
         )
       ],
     );
@@ -173,12 +180,16 @@ class _CardsectionState extends State<Cardsection> {
           ),
         ),
         const Positioned(
-          top: 10,
+          top: 5,
           left: 15,
           child: Text(
             'This Months Spendings',
             style: TextStyle(
-                fontFamily: 'inter', fontSize: 15, fontWeight: FontWeight.bold),
+              color: Colors.black,
+                fontFamily: 'inter', 
+                fontSize: 15, 
+                fontWeight: FontWeight.bold
+                ),
           ),
         ),
         const Positioned(
@@ -207,7 +218,7 @@ class _tips extends StatelessWidget {
       height: 70,
       padding: const EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: Colors.green[200],
+        color: Colors.green[300],
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -237,8 +248,8 @@ class _tips extends StatelessWidget {
               Text(
                 'Spend less than you earn.',
                 style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
+                  color: Colors.white,
+                  fontSize: 16,
                 ),
               ),
             ],
