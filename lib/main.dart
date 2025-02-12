@@ -15,12 +15,10 @@ void main() async {
   String? themeString = prefs.getString('themeMode');
   ThemeMode initialTheme = ThemeMode.system;
 
-  if (themeString != null) {
-    if (themeString.contains('dark')) {
-      initialTheme = ThemeMode.dark;
-    } else if (themeString.contains('light')) {
-      initialTheme = ThemeMode.light;
-    }
+  if (themeString != null && themeString.contains('dark')) {
+    initialTheme = ThemeMode.dark;
+  } else if (themeString != null && themeString.contains('light')) {
+    initialTheme = ThemeMode.light;
   }
 
   runApp(FinTrackApp(initialTheme));
