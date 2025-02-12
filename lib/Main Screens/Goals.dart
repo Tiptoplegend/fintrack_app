@@ -132,7 +132,9 @@ Widget _modalbottom(BuildContext context) {
                     keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 18),
                     decoration: InputDecoration(
-                      hintText: 'GHC 0.00',
+                      prefixText: 'GHc',
+                      prefixStyle: TextStyle(color: Colors.grey, fontSize: 18),
+                      hintText: '0.00',
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
                       border: InputBorder.none,
                     ),
@@ -143,16 +145,16 @@ Widget _modalbottom(BuildContext context) {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {},
-              child: Text(
-                'Create Goal',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(Colors.green.value),
                 minimumSize: Size(340, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
+              ),
+              child: Text(
+                'Create Goal',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             )
           ],

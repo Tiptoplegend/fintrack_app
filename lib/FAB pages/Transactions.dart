@@ -52,7 +52,8 @@ Widget _textfield() {
       style: TextStyle(fontSize: 30),
       decoration: InputDecoration(
           suffixIcon: Icon(Icons.attach_money_outlined),
-          hintText: 'GHC 0.00',
+          prefixText: 'GHC ',
+          hintText: '0.00',
           hintStyle: TextStyle(color: Colors.grey, fontSize: 20),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
