@@ -195,7 +195,7 @@ class _SigninState extends State<Signin> {
         }
       },
 
-      obscureText: !_isPasswordVisible, // Toggles password visibility
+      obscureText: !_isPasswordVisible, 
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,

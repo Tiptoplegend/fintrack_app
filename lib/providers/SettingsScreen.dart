@@ -282,11 +282,11 @@ void showLogoutBottomSheet(BuildContext context) {
               style: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 18, 
-                color: Colors.grey[800],
+                color: Colors.grey[700],
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 48),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
