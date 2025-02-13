@@ -65,7 +65,6 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
@@ -77,7 +76,7 @@ class _SigninState extends State<Signin> {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Colors.white,
+        
         title: const Text(
           'Login',
           style: TextStyle(
@@ -86,6 +85,7 @@ class _SigninState extends State<Signin> {
             color: Colors.black,
           ),
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -159,10 +159,9 @@ class _SigninState extends State<Signin> {
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,
-        fillColor: Colors.grey[200],
         labelStyle: TextStyle(
           fontSize: 18,
-          color: Colors.black,
+          color: Colors.green,
         ),
         floatingLabelStyle: TextStyle(
           fontFamily: 'Inter',
@@ -200,10 +199,9 @@ class _SigninState extends State<Signin> {
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
-        fillColor: Colors.grey[200],
         labelStyle: TextStyle(
           fontSize: 18,
-          color: Colors.black,
+          color: Colors.green,
         ),
         floatingLabelStyle: TextStyle(
           fontFamily: 'Inter',
@@ -304,7 +302,7 @@ class _SigninState extends State<Signin> {
           text: TextSpan(
             text: "Don't have an account yet? ",
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.grey,
               fontSize: 16,
             ),
             children: [

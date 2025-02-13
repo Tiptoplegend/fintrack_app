@@ -96,9 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: Text(
           'Sign Up',
           style: TextStyle(
@@ -143,10 +141,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: 'Name',
                     filled: true,
-                    fillColor: Colors.grey[100],
                     labelStyle: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.green,
                     ),
                     floatingLabelStyle: TextStyle(
                       fontFamily: 'inter',
@@ -182,10 +179,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: 'Email',
                     filled: true,
-                    fillColor: Colors.grey[100],
                     labelStyle: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.green,
                     ),
                     floatingLabelStyle: TextStyle(
                       fontFamily: 'inter',
@@ -222,10 +218,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: 'Password',
                     filled: true,
-                    fillColor: Colors.grey[100],
                     labelStyle: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.green,
                     ),
                     floatingLabelStyle: TextStyle(
                       fontFamily: 'inter',
@@ -278,7 +273,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           text: "By signing up, you agree to the ",
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.black,
+                            color: Colors.grey,
                           ),
                           children: [
                             TextSpan(
@@ -345,7 +340,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       text: TextSpan(
                         text: "Already have an account? ",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.grey,
                           fontSize: 16,
                         ),
                         children: [
