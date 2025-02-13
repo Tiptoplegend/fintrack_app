@@ -264,7 +264,7 @@ class _tips extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                   ),
-                  softWrap: true, // Ensures text wraps properly
+                  softWrap: true, 
                 ),
               ],
             ),
