@@ -1,3 +1,4 @@
+import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 
 class Goals extends StatefulWidget {
@@ -75,6 +76,10 @@ Widget _creategoalsbtn(BuildContext context) {
 
 // the menu that shows when you click the creatbtn
 Widget _modalbottom(BuildContext context) {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+
+  final GoalService goalService = GoalService();
   return Padding(
     padding: EdgeInsets.only(
       bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -89,12 +94,12 @@ Widget _modalbottom(BuildContext context) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Add new Goal',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            Text('Add new Goal',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
+            // textfield for title dey here
             TextField(
+              controller: titleController,
               style: TextStyle(fontSize: 18),
               decoration: InputDecoration(
                 hintText: 'Goal Title',
@@ -121,6 +126,7 @@ Widget _modalbottom(BuildContext context) {
                       color: Colors.white60,
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    // textfeild for amount dey here
                     child: Text(
                       'Goal Amount',
                       style: TextStyle(fontSize: 16, color: Colors.grey),
@@ -128,6 +134,7 @@ Widget _modalbottom(BuildContext context) {
                   ),
                   SizedBox(height: 5),
                   TextField(
+                    controller: amountController,
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 18),
@@ -143,8 +150,17 @@ Widget _modalbottom(BuildContext context) {
               ),
             ),
             SizedBox(height: 20),
+             // createbtn dey here
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                String title = titleController.text;
+                double amount = double.parse(amountController.text) ?? 0;
+
+                if (title.isNotEmpty && amount > 0) {
+                  goalService.addGoal(title, amount);
+                  Navigator.pop(context);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(Colors.green.value),
                 minimumSize: Size(340, 50),
@@ -152,6 +168,7 @@ Widget _modalbottom(BuildContext context) {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
+             
               child: Text(
                 'Create Goal',
                 style: TextStyle(fontSize: 16, color: Colors.white),

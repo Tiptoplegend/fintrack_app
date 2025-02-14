@@ -41,10 +41,10 @@ class FirestoreService {
 
 class GoalService {
   final CollectionReference goalsCollection =
-      FirebaseFirestore.instance.collection('goals');
+      FirebaseFirestore.instance.collection('Goals');
 
   // Add Goal
-  Future<void> addGoal(String title, double targetAmount) async {
+  Future<void>addGoal(String title, double targetAmount) async {
     await goalsCollection.add({
       'title': title,
       'targetAmount': targetAmount,
