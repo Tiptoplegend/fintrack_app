@@ -267,15 +267,23 @@ void showLogoutBottomSheet(BuildContext context) {
           children: [
             const Text(
               "Logout?",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 20,
+                 fontWeight: FontWeight.bold
+                 ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               "Are you sure you want to logout?",
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18, 
+                color: Colors.grey[700],
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 48),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -283,11 +291,10 @@ void showLogoutBottomSheet(BuildContext context) {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Cancel",
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Cancel", style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -305,8 +312,7 @@ void showLogoutBottomSheet(BuildContext context) {
                       backgroundColor: const Color(0xFF005341),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Logout",
-                        style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Logout", style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],

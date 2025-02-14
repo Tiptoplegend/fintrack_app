@@ -184,7 +184,11 @@ class _CardsectionState extends State<Cardsection> {
           child: Text(
             'This Months Spendings',
             style: TextStyle(
-                fontFamily: 'inter', fontSize: 15, fontWeight: FontWeight.bold),
+              color: Colors.black,
+                fontFamily: 'inter',
+                 fontSize: 15, 
+                 fontWeight: FontWeight.bold
+                 ),
           ),
         ),
         const Positioned(
@@ -260,7 +264,7 @@ class _tips extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                   ),
-                  softWrap: true, // Ensures text wraps properly
+                  softWrap: true, 
                 ),
               ],
             ),
