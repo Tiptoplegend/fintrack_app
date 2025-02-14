@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fintrack_app/providers/theme_provider.dart';
 
-
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
 
@@ -46,7 +45,7 @@ class ThemeSettingsScreen extends StatelessWidget {
             trailing: Radio<ThemeMode>(
               value: ThemeMode.dark,
               groupValue: themeProvider.themeMode,
-              activeColor: Colors.white, 
+              activeColor: Colors.white,
               onChanged: (value) => themeProvider.setTheme(ThemeMode.dark),
             ),
           ),
@@ -64,7 +63,7 @@ class ThemeSettingsScreen extends StatelessWidget {
             trailing: Radio<ThemeMode>(
               value: ThemeMode.system,
               groupValue: themeProvider.themeMode,
-              activeColor: Colors.white, 
+              activeColor: Colors.white,
               onChanged: (value) => themeProvider.setTheme(ThemeMode.system),
             ),
           ),
@@ -73,7 +72,6 @@ class ThemeSettingsScreen extends StatelessWidget {
     );
   }
 }
-
 
 class NotificationSettingsScreen extends StatelessWidget {
   const NotificationSettingsScreen({super.key});
@@ -117,7 +115,8 @@ class SettingsScreen extends StatelessWidget {
             backgroundColor: Colors.green,
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ThemeSettingsScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const ThemeSettingsScreen()),
             ),
           ),
           SettingsOption(
@@ -138,7 +137,8 @@ class SettingsScreen extends StatelessWidget {
             backgroundColor: Colors.green,
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NotificationSettingsScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsScreen()),
             ),
           ),
           SettingsOption(
@@ -190,15 +190,11 @@ class UserProfileSection extends StatelessWidget {
               children: const [
                 Text(
                   "Iriana Saliha",
-                  style: TextStyle(fontSize: 23,
-                   fontWeight:
-                    FontWeight.bold),
+                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
-                Text("Username", 
-                style: TextStyle(
-                  fontSize: 16, 
-                  color: Colors.white70)),
+                Text("Username",
+                    style: TextStyle(fontSize: 16, color: Colors.white70)),
               ],
             ),
           ),
@@ -249,7 +245,8 @@ class SettingsOption extends StatelessWidget {
           title,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black54),
+        trailing: const Icon(Icons.arrow_forward_ios,
+            size: 16, color: Colors.black54),
         onTap: onTap,
       ),
     );
@@ -289,7 +286,8 @@ void showLogoutBottomSheet(BuildContext context) {
                       backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Cancel", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Cancel",
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -297,14 +295,18 @@ void showLogoutBottomSheet(BuildContext context) {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder:(context)=>const Welcomepage()),
-                      (route)=>false);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Welcomepage()),
+                          (route) => false);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF005341),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Logout", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Logout",
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],
