@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Homepage extends StatefulWidget {
-  Homepage({super.key});
+  const Homepage({super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -125,7 +125,7 @@ Widget _Uppersection({required BuildContext context}) {
 class _Greetings extends StatelessWidget {
   final String username;
 
-  const _Greetings({required this.username, super.key});
+  const _Greetings({required this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +184,11 @@ class _CardsectionState extends State<Cardsection> {
           child: Text(
             'This Months Spendings',
             style: TextStyle(
-                fontFamily: 'inter', fontSize: 15, fontWeight: FontWeight.bold),
+              color: Colors.black,
+                fontFamily: 'inter',
+                 fontSize: 15, 
+                 fontWeight: FontWeight.bold
+                 ),
           ),
         ),
         const Positioned(
@@ -260,7 +264,7 @@ class _tips extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                   ),
-                  softWrap: true, // Ensures text wraps properly
+                  softWrap: true, 
                 ),
               ],
             ),

@@ -1,15 +1,30 @@
 # Uncomment the next line to define a global platform for your project
- platform :ios, '12.0'
+platform :ios, '13.0'
 
+# CocoaPods analytics sends network stats synchronously affecting Flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Define the project settings
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+# Target Runner
 target 'Runner' do
-  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
+  use_modular_headers!
 
-  # Pods for Runner
+  # Add this line to load Flutter dependencies properly
+  eval(File.read(File.join(File.dirname(__FILE__), 'Flutter', 'podhelper.rb')), binding)
+
+  # Firebase dependencies
+  pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
+  pod 'Firebase/Auth'
 
   target 'RunnerTests' do
     inherit! :search_paths
-    # Pods for testing
   end
-
 end
