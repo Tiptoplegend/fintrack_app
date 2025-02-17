@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
+import 'Main Screens/Budget.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -21,20 +22,22 @@ class _NavigationState extends State<Navigation> {
   static List<Widget> body = [
     Homepage(),
     const Analytics(),
-    const Goals(),
-    
+    const Goals(), 
+    const BudgetScreen(),   
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("FinTrack"),
+        backgroundColor: Colors.green,
+      ),
       body: Stack(
         children: [
-          SafeArea(
-            child: IndexedStack(
-              index: currentIndex,
-              children: body,
-            ),
+          IndexedStack(
+            index: currentIndex,
+            children: body,
           ),
           Positioned(
             bottom: 4,
