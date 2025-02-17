@@ -23,7 +23,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         currentMonthIndex--;
       } else {
         currentMonthIndex = 11; // December
-        currentYear--; // Move to previous year
+        currentYear--; 
       }
     });
   }
@@ -35,7 +35,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         currentMonthIndex++;
       } else {
         currentMonthIndex = 0; // January
-        currentYear++; // Move to next year
+        currentYear++; 
       }
     });
   }
@@ -47,7 +47,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       appBar: AppBar(
         backgroundColor: Colors.green.shade800,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 12.0), // Shift profile image to right
+          padding: const EdgeInsets.only(left: 12.0), 
           child: const CircleAvatar(
             radius: 30,
             backgroundImage: AssetImage("assets/images/user.png"), // Ensure this image exists
