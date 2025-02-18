@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:fintrack_app/FAB%20pages/Chatbot.dart';
 import 'package:fintrack_app/FAB%20pages/Transactions.dart';
+import 'package:fintrack_app/Main%20Screens/CreateBudgetPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
@@ -23,16 +24,13 @@ class _NavigationState extends State<Navigation> {
     Homepage(),
     const Analytics(),
     const Goals(), 
-    const BudgetScreen(),   
+    const BudgetScreen(), 
+    const CreateBudgetPage()  
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("FinTrack"),
-        backgroundColor: Colors.green,
-      ),
       body: Stack(
         children: [
           IndexedStack(
