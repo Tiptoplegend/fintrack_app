@@ -1,5 +1,6 @@
 import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
   const Goals({super.key});
@@ -9,6 +10,7 @@ class Goals extends StatefulWidget {
 }
 
 class _GoalsState extends State<Goals> {
+  final FirestoreService firestoreService = FirestoreService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class _GoalsState extends State<Goals> {
           ],
         ),
       ),
-      body: Stack(
+      body: Column(
         children: [
           Positioned(
             top: 580,
@@ -79,7 +81,6 @@ Widget _modalbottom(BuildContext context) {
   TextEditingController titleController = TextEditingController();
   TextEditingController amountController = TextEditingController();
 
-  final GoalService goalService = GoalService();
   return Padding(
     padding: EdgeInsets.only(
       bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -100,6 +101,8 @@ Widget _modalbottom(BuildContext context) {
             // textfield for title dey here
             TextField(
               controller: titleController,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.text,
               style: TextStyle(fontSize: 18),
               decoration: InputDecoration(
                 hintText: 'Goal Title',
@@ -129,7 +132,7 @@ Widget _modalbottom(BuildContext context) {
                     // textfeild for amount dey here
                     child: Text(
                       'Goal Amount',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                   SizedBox(height: 5),
@@ -150,16 +153,21 @@ Widget _modalbottom(BuildContext context) {
               ),
             ),
             SizedBox(height: 20),
-             // createbtn dey here
+            // createbtn dey here
             ElevatedButton(
               onPressed: () {
-                String title = titleController.text;
-                double amount = double.parse(amountController.text) ?? 0;
-
-                if (title.isNotEmpty && amount > 0) {
-                  goalService.addGoal(title, amount);
-                  Navigator.pop(context);
+                if (titleController.text.isEmpty ||
+                    amountController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please fill all fields')));
+                  return;
                 }
+                // the logic that handles the creation of the goals de start from here
+                final newGoal = Goal(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  title: titleController.text,
+                  targetAmount: double.parse(amountController.text),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(Colors.green.value),
@@ -168,7 +176,6 @@ Widget _modalbottom(BuildContext context) {
                   borderRadius: BorderRadius.circular(14),
                 ),
               ),
-             
               child: Text(
                 'Create Goal',
                 style: TextStyle(fontSize: 16, color: Colors.white),
@@ -179,4 +186,63 @@ Widget _modalbottom(BuildContext context) {
       ),
     ),
   );
+}
+
+class Goal {
+  String id;
+  String title;
+  double targetAmount;
+  double savedAmount;
+
+  Goal({
+    required this.id,
+    required this.title,
+    required this.targetAmount,
+    this.savedAmount = 0.0,
+  });
+
+  double get progressPercentage => (savedAmount / targetAmount).clamp(0.0, 1.0);
+}
+
+class Goalcard extends StatelessWidget {
+  final Goal goal;
+  final bool isWide;
+  const Goalcard({super.key, required this.goal, required this.isWide});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            goal.title,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'GHC $goal.targetAmount.toStringAsFixed(2)}',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          SizedBox(height: 10),
+          LinearProgressIndicator(
+            value: goal.progressPercentage,
+            backgroundColor: Colors.grey[300],
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            minHeight: 5,
+          ),
+          SizedBox(height: 8),
+          Text(
+            '${(goal.progressPercentage * 100).toStringAsFixed(0)}% saved',
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -39,17 +37,7 @@ class FirestoreService {
   }
 }
 
-class GoalService {
-  final CollectionReference goalsCollection =
+class Goalsdb {
+  final CollectionReference _goalscollection =
       FirebaseFirestore.instance.collection('Goals');
-
-  // Add Goal
-  Future<void>addGoal(String title, double targetAmount) async {
-    await goalsCollection.add({
-      'title': title,
-      'targetAmount': targetAmount,
-      'savedAmount': 0.0,
-      'createdAt': FieldValue.serverTimestamp(),
-    });
-  }
 }

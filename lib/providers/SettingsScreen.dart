@@ -73,8 +73,17 @@ class ThemeSettingsScreen extends StatelessWidget {
   }
 }
 
-class NotificationSettingsScreen extends StatelessWidget {
+class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
+
+  @override
+  State<NotificationSettingsScreen> createState() =>
+      _NotificationSettingsScreenState();
+}
+
+class _NotificationSettingsScreenState
+    extends State<NotificationSettingsScreen> {
+  bool _isNotificationsEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +91,19 @@ class NotificationSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Notification Settings"),
       ),
-      body: const Center(
-        child: Text("Notification settings content goes here"),
+      body: ListTile(
+        title: const Text('Allow all notifications'),
+        subtitle: const Text(
+          'Get notifications about your daily expense, budget, and reminders',
+        ),
+        trailing: Switch(
+          value: _isNotificationsEnabled,
+          onChanged: (bool newValue) {
+            setState(() {
+              _isNotificationsEnabled = newValue;
+            });
+          },
+        ),
       ),
     );
   }
@@ -138,7 +158,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen()),
+                  builder: (context) => NotificationSettingsScreen()),
             ),
           ),
           SettingsOption(
@@ -268,17 +288,16 @@ void showLogoutBottomSheet(BuildContext context) {
             const Text(
               "Logout?",
               style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 20,
-                 fontWeight: FontWeight.bold
-                 ),
+                  fontFamily: 'Inter',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               "Are you sure you want to logout?",
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 18, 
+                fontSize: 18,
                 color: Colors.grey[700],
               ),
               textAlign: TextAlign.center,
@@ -294,7 +313,8 @@ void showLogoutBottomSheet(BuildContext context) {
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Cancel", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Cancel",
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -312,7 +332,8 @@ void showLogoutBottomSheet(BuildContext context) {
                       backgroundColor: const Color(0xFF005341),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text("Logout", style: TextStyle(fontSize: 16, color: Colors.white)),
+                    child: const Text("Logout",
+                        style: TextStyle(fontSize: 16, color: Colors.white)),
                   ),
                 ),
               ],

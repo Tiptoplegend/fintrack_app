@@ -10,10 +10,13 @@ android {
     namespace = "com.example.fintrack_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+    compileSdkVersion 34
+    ndkVersion "25.2.9519653" 
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -53,7 +56,7 @@ dependencies {
   // When using the BoM, don't specify versions in Firebase dependencies
   implementation 'com.google.firebase:firebase-analytics'
 
-
+coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
   // Add the dependencies for any other desired Firebase products
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
