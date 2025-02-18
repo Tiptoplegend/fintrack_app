@@ -2,10 +2,12 @@ import 'dart:math';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:fintrack_app/FAB%20pages/Chatbot.dart';
 import 'package:fintrack_app/FAB%20pages/Transactions.dart';
+import 'package:fintrack_app/Main%20Screens/CreateBudgetPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Main%20Screens/Homepage.dart';
+import 'Main Screens/Budget.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
@@ -21,8 +23,9 @@ class _NavigationState extends State<Navigation> {
   static List<Widget> body = [
     Homepage(),
     const Analytics(),
-    const Goals(),
-    
+    const Goals(), 
+    const BudgetScreen(), 
+    const CreateBudgetPage()  
   ];
 
   @override
@@ -30,11 +33,9 @@ class _NavigationState extends State<Navigation> {
     return Scaffold(
       body: Stack(
         children: [
-          SafeArea(
-            child: IndexedStack(
-              index: currentIndex,
-              children: body,
-            ),
+          IndexedStack(
+            index: currentIndex,
+            children: body,
           ),
           Positioned(
             bottom: 4,
