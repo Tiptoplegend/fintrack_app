@@ -75,7 +75,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
           color: Colors.white,
           fontSize: 20,
           fontFamily: 'Inter',
-          
+
           ),
         ),
         centerTitle: true,
@@ -85,7 +85,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 200),
+            const SizedBox(height: 300),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
