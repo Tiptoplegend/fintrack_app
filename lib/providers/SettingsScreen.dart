@@ -1,5 +1,6 @@
 import 'package:fintrack_app/Onboarding/Welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:fintrack_app/providers/theme_provider.dart';
 
@@ -74,7 +75,7 @@ class ThemeSettingsScreen extends StatelessWidget {
 }
 
 class NotificationSettingsScreen extends StatefulWidget {
-  const NotificationSettingsScreen({super.key});
+  NotificationSettingsScreen({super.key});
 
   @override
   State<NotificationSettingsScreen> createState() =>
@@ -91,19 +92,24 @@ class _NotificationSettingsScreenState
       appBar: AppBar(
         title: const Text("Notification Settings"),
       ),
-      body: ListTile(
-        title: const Text('Allow all notifications'),
-        subtitle: const Text(
-          'Get notifications about your daily expense, budget, and reminders',
-        ),
-        trailing: Switch(
-          value: _isNotificationsEnabled,
-          onChanged: (bool newValue) {
-            setState(() {
-              _isNotificationsEnabled = newValue;
-            });
-          },
-        ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 16),
+        children: [
+          ListTile(
+            title: const Text('Allow all notifications'),
+            subtitle: const Text(
+              'Get notifications about your daily expense, budget, and reminders',
+            ),
+            trailing: Switch(
+              value: _isNotificationsEnabled,
+              onChanged: (bool newValue) {
+                setState(() {
+                  _isNotificationsEnabled = newValue;
+                });
+              },
+            ),
+          )
+        ],
       ),
     );
   }

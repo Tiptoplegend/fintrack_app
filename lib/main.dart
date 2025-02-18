@@ -1,3 +1,4 @@
+import 'package:fintrack_app/providers/noti_service.dart';
 import 'package:fintrack_app/providers/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +9,7 @@ import 'package:fintrack_app/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotiService().initNotification();
   await Firebase.initializeApp();
 
   // Load theme preference before starting the app
@@ -33,11 +35,10 @@ class FinTrackApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
-  ThemeProvider themeProvider = ThemeProvider();
-  themeProvider.setTheme(initialTheme);
-  return themeProvider;
-},
-
+        ThemeProvider themeProvider = ThemeProvider();
+        themeProvider.setTheme(initialTheme);
+        return themeProvider;
+      },
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
