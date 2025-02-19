@@ -1,4 +1,7 @@
 import 'package:fintrack_app/Onboarding/Welcome.dart';
+import 'package:fintrack_app/database.dart';
+import 'package:fintrack_app/providers/noti_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -85,8 +88,15 @@ class NotificationSettingsScreen extends StatefulWidget {
 class _NotificationSettingsScreenState
     extends State<NotificationSettingsScreen> {
   bool _isNotificationsEnabled = false;
+  final NotiService _notiService = NotiService();
 
   @override
+  void initState() {
+    super.initState();
+    // Initialize notifications when the screen loads.
+    _notiService.initNotification();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -106,6 +116,15 @@ class _NotificationSettingsScreenState
                 setState(() {
                   _isNotificationsEnabled = newValue;
                 });
+                if (newValue) {
+                  _notiService.showNotification(
+                      id: 0,
+                      title: "Notifications Enabled",
+                      body:
+                          "You will receive notifications about your daily expense, budget, and reminders");
+                } else {
+                  _notiService.notificationPlugin.cancelAll();
+                }
               },
             ),
           )
@@ -133,7 +152,7 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const UserProfileSection(),
+          UserProfileSection(),
           const SizedBox(height: 16),
           SettingsOption(
             icon: Icons.color_lens,
@@ -180,10 +199,15 @@ class SettingsScreen extends StatelessWidget {
 }
 
 class UserProfileSection extends StatelessWidget {
-  const UserProfileSection({super.key});
+  UserProfileSection({super.key});
+
+  final user = FirebaseAuth.instance.currentUser!;
+  final userimg = FirebaseAuth.instance.currentUser!.photoURL;
 
   @override
   Widget build(BuildContext context) {
+    String username = user.displayName ?? "User";
+    String userimg = user.photoURL ?? "User";
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -204,18 +228,20 @@ class UserProfileSection extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.purple, width: 2),
             ),
-            child: const CircleAvatar(
+            child: CircleAvatar(
               radius: 32,
-              backgroundImage: AssetImage("assets/images/profile.png"),
+              backgroundImage: user.photoURL != null
+                  ? NetworkImage(user.photoURL!)
+                  : const AssetImage("assets/images/icons8-user-48 (1).png") as ImageProvider,
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "Iriana Saliha",
+                  '$username',
                   style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),

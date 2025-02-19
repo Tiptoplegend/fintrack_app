@@ -12,6 +12,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   final user = FirebaseAuth.instance.currentUser!;
+  final userimg = FirebaseAuth.instance.currentUser!.photoURL;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +69,8 @@ class _HomepageState extends State<Homepage> {
 }
 
 Widget _Uppersection({required BuildContext context}) {
+  final user = FirebaseAuth.instance.currentUser;
+
   return Scaffold(
     body: SingleChildScrollView(
       child: Column(
@@ -93,9 +96,13 @@ Widget _Uppersection({required BuildContext context}) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const CircleAvatar(
-                      radius: 24,
-                      backgroundImage: AssetImage("assets/images/user.png"),
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundImage: user?.photoURL != null
+                          ? NetworkImage(user!.photoURL!)
+                          : const AssetImage(
+                                  "assets/images/icons8-user-48 (1).png")
+                              as ImageProvider,
                     ),
                     const SizedBox(width: 200, height: 100),
                     IconButton(
@@ -184,11 +191,10 @@ class _CardsectionState extends State<Cardsection> {
           child: Text(
             'This Months Spendings',
             style: TextStyle(
-              color: Colors.black,
+                color: Colors.black,
                 fontFamily: 'inter',
-                 fontSize: 15, 
-                 fontWeight: FontWeight.bold
-                 ),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
           ),
         ),
         const Positioned(
@@ -264,7 +270,7 @@ class _tips extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 14,
                   ),
-                  softWrap: true, 
+                  softWrap: true,
                 ),
               ],
             ),

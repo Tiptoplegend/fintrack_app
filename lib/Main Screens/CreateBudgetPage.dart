@@ -72,10 +72,9 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         title: const Text(
           'Create Budget',
           style: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-          fontFamily: 'Inter',
-
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: 'Inter',
           ),
         ),
         centerTitle: true,
@@ -163,15 +162,18 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           ),
                         ),
                         style: const TextStyle(color: Colors.black),
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.black, size: 30),
                         items: categoryIcons.keys.map((category) {
                           return DropdownMenuItem(
                             value: category,
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  backgroundColor: categoryColors[category]!.withOpacity(0.2),
-                                  child: Icon(categoryIcons[category], color: categoryColors[category]),
+                                  backgroundColor: categoryColors[category]!
+                                      .withOpacity(0.2),
+                                  child: Icon(categoryIcons[category],
+                                      color: categoryColors[category]),
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
@@ -213,7 +215,8 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           ),
                         ),
                         style: const TextStyle(color: Colors.black),
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.black, size: 30),
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.black, size: 30),
                         items: const [
                           DropdownMenuItem(
                             value: 'Daily',
