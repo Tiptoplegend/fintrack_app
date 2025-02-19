@@ -198,6 +198,37 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
+void _updatedialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(
+                'Update your Username',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                    labelText: 'New Username',
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green))),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Update'),
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class UserProfileSection extends StatelessWidget {
   UserProfileSection({super.key});
 
@@ -232,7 +263,8 @@ class UserProfileSection extends StatelessWidget {
               radius: 32,
               backgroundImage: user.photoURL != null
                   ? NetworkImage(user.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png") as ImageProvider,
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
             ),
           ),
           const SizedBox(width: 16),
@@ -257,7 +289,7 @@ class UserProfileSection extends StatelessWidget {
             ),
             child: IconButton(
               icon: const Icon(Icons.edit, color: Colors.black),
-              onPressed: () {},
+              onPressed: () => _updatedialog(context),
             ),
           ),
         ],
