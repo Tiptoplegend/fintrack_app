@@ -93,7 +93,6 @@ class _NotificationSettingsScreenState
   @override
   void initState() {
     super.initState();
-    // Initialize notifications when the screen loads.
     _notiService.initNotification();
   }
 
@@ -199,31 +198,66 @@ class SettingsScreen extends StatelessWidget {
 }
 
 void _updatedialog(BuildContext context) {
+  final TextEditingController _usernameController = TextEditingController();
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              Text(
-                'Update your Username',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                    labelText: 'New Username',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.green))),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Update'),
-              )
-            ],
+        insetPadding: EdgeInsets.symmetric(horizontal: 20),
+        content: Container(
+          width: 300,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Update your Username',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300, // Force the TextField to be 300 pixels wide
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'New Username',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
+        actions: [
+          Row(
+            children: [
+              TextButton(
+                  onPressed: () async {
+                    String newName = _usernameController.text;
+                    if (newName.isNotEmpty) {
+                      User? user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        await user.updateDisplayName(newName);
+                        await user.reload();
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Username Updated")));
+                      }
+                    }
+                  },
+                  child: Text('Update')),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        ],
       );
     },
   );

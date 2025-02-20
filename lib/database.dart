@@ -42,6 +42,3 @@ class Goalsdb {
       FirebaseFirestore.instance.collection('Goals');
 }
 
-// Future <void> updatename (String docID, String Newusername) {
-
-// }
