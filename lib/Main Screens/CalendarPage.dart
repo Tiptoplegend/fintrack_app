@@ -20,7 +20,9 @@ class _CalendarPageState extends State<CalendarPage> {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height, // Adjusted height to cover the full screen
+              height: MediaQuery.of(context)
+                  .size
+                  .height, // Adjusted height to cover the full screen
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -68,7 +70,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         onDaySelected: (selectedDay, focusedDay) {
                           setState(() {
                             _selectedDay = selectedDay;
-                            _focusedDay = focusedDay; // update `_focusedDay` here as well
+                            _focusedDay =
+                                focusedDay; // update `_focusedDay` here as well
                           });
                         },
                         calendarFormat: CalendarFormat.month,
@@ -79,8 +82,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           _focusedDay = focusedDay;
                         },
                         calendarStyle: CalendarStyle(
-                          defaultTextStyle: TextStyle(color: Colors.black), 
-                          weekendTextStyle: TextStyle(color: Colors.black), 
+                          defaultTextStyle: TextStyle(color: Colors.black),
+                          weekendTextStyle: TextStyle(color: Colors.black),
                           selectedDecoration: BoxDecoration(
                             color: Colors.green,
                             shape: BoxShape.circle,
@@ -94,25 +97,31 @@ class _CalendarPageState extends State<CalendarPage> {
                           formatButtonVisible: false,
                           titleCentered: true,
                           titleTextStyle: const TextStyle(
-                            color: Colors.black, 
+                            color: Colors.black,
                             fontSize: 16.0,
                           ),
                           leftChevronIcon: const Icon(
                             Icons.chevron_left,
-                            color: Colors.black, 
+                            color: Colors.black,
                           ),
                           rightChevronIcon: const Icon(
                             Icons.chevron_right,
-                            color: Colors.black, 
+                            color: Colors.black,
                           ),
                         ),
                         calendarBuilders: CalendarBuilders(
                           defaultBuilder: (context, day, focusedDay) {
-                            if (_selectedFrequency == 'Weekly' && _selectedDay != null) {
-                              final startOfWeek = _selectedDay!.subtract(Duration(days: _selectedDay!.weekday - 1));
-                              final endOfWeek = startOfWeek.add(Duration(days: 6));
+                            if (_selectedFrequency == 'Weekly' &&
+                                _selectedDay != null) {
+                              final startOfWeek = _selectedDay!.subtract(
+                                  Duration(days: _selectedDay!.weekday - 1));
+                              final endOfWeek =
+                                  startOfWeek.add(Duration(days: 6));
 
-                              if (day.isAfter(startOfWeek.subtract(Duration(days: 1))) && day.isBefore(endOfWeek.add(Duration(days: 1)))) {
+                              if (day.isAfter(startOfWeek
+                                      .subtract(Duration(days: 1))) &&
+                                  day.isBefore(
+                                      endOfWeek.add(Duration(days: 1)))) {
                                 return Container(
                                   margin: const EdgeInsets.all(4.0),
                                   decoration: BoxDecoration(
@@ -162,7 +171,9 @@ Widget _Header() {
   );
 }
 
-Widget _FrequencyDropdown({required String selectedFrequency, required ValueChanged<String?> onChanged}) {
+Widget _FrequencyDropdown(
+    {required String selectedFrequency,
+    required ValueChanged<String?> onChanged}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Row(
@@ -178,8 +189,8 @@ Widget _FrequencyDropdown({required String selectedFrequency, required ValueChan
         ),
         DropdownButton<String>(
           value: selectedFrequency,
-          iconEnabledColor: Colors.black, 
-          dropdownColor: Colors.white, 
+          iconEnabledColor: Colors.black,
+          dropdownColor: Colors.white,
           items: const [
             DropdownMenuItem(
               value: 'Daily',
