@@ -78,7 +78,7 @@ class ThemeSettingsScreen extends StatelessWidget {
 }
 
 class NotificationSettingsScreen extends StatefulWidget {
-  NotificationSettingsScreen({super.key});
+  const NotificationSettingsScreen({super.key});
 
   @override
   State<NotificationSettingsScreen> createState() =>
@@ -96,6 +96,7 @@ class _NotificationSettingsScreenState
     _notiService.initNotification();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -198,14 +199,14 @@ class SettingsScreen extends StatelessWidget {
 }
 
 void _updatedialog(BuildContext context) {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
         insetPadding: EdgeInsets.symmetric(horizontal: 20),
-        content: Container(
+        content: SizedBox(
           width: 300,
           child: SingleChildScrollView(
             child: Column(
@@ -216,7 +217,7 @@ void _updatedialog(BuildContext context) {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: 300, // Force the TextField to be 300 pixels wide
                   child: TextField(
                     decoration: InputDecoration(
@@ -237,7 +238,7 @@ void _updatedialog(BuildContext context) {
             children: [
               TextButton(
                   onPressed: () async {
-                    String newName = _usernameController.text;
+                    String newName = usernameController.text;
                     if (newName.isNotEmpty) {
                       User? user = FirebaseAuth.instance.currentUser;
 
@@ -307,7 +308,7 @@ class UserProfileSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$username',
+                  username,
                   style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),

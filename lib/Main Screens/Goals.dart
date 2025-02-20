@@ -1,6 +1,5 @@
 import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
   const Goals({super.key});
