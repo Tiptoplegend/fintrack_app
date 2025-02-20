@@ -210,10 +210,10 @@ class BudgetContent extends StatelessWidget {
               minimumSize: Size(double.infinity, 50), 
             ),
             onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>  CreateBudgetPage()),
-        );
+            Navigator.push(
+               context,
+              MaterialPageRoute(builder: (context) =>  CreateBudgetPage()),
+            );
             
             },
             child: const Text(
