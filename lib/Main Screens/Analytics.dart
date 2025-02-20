@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Analytics extends StatefulWidget {
@@ -8,6 +9,9 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
+  final user = FirebaseAuth.instance.currentUser!;
+  final userimg = FirebaseAuth.instance.currentUser!.photoURL;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +21,11 @@ class _AnalyticsState extends State<Analytics> {
         title: Row(
           children: [
             CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage("assets/images/user.png"),
+              radius: 27,
+              backgroundImage: user?.photoURL != null
+                  ? NetworkImage(user!.photoURL!)
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
             ),
             const SizedBox(
               width: 100,

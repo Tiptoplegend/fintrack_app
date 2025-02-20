@@ -97,7 +97,7 @@ Widget _Uppersection({required BuildContext context}) {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CircleAvatar(
-                      radius: 32,
+                      radius: 27,
                       backgroundImage: user?.photoURL != null
                           ? NetworkImage(user!.photoURL!)
                           : const AssetImage(

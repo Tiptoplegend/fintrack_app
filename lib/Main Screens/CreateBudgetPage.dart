@@ -115,10 +115,9 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 decoration: InputDecoration(
                   hintText: '₵0',
                   hintStyle: TextStyle(
-                    color:
-                        _selectedCategory != null
-                            ? categoryColors[_selectedCategory] ?? Colors.white
-                            : Colors.white,
+                    color: _selectedCategory != null
+                        ? categoryColors[_selectedCategory] ?? Colors.white
+                        : Colors.white,
                     fontSize: 30,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
@@ -133,7 +132,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 textAlign: TextAlign.start,
               ),
             ),
-            const SizedBox(height: 15), // Spacer
+            const SizedBox(height: 15),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16.0),
@@ -173,33 +172,32 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           color: Colors.black,
                           size: 30,
                         ),
-                        items:
-                            categoryIcons.keys.map((category) {
-                              return DropdownMenuItem(
-                                value: category,
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: categoryColors[category]!
-                                          .withOpacity(0.2),
-                                      child: Icon(
-                                        categoryIcons[category],
-                                        color: categoryColors[category],
-                                        size: 30,
-                                      ), // Increased icon size
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      category,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ],
+                        items: categoryIcons.keys.map((category) {
+                          return DropdownMenuItem(
+                            value: category,
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: categoryColors[category]!
+                                      .withOpacity(0.2),
+                                  child: Icon(
+                                    categoryIcons[category],
+                                    color: categoryColors[category],
+                                    size: 30,
+                                  ), // Increased icon size
                                 ),
-                              );
-                            }).toList(),
+                                const SizedBox(width: 10),
+                                Text(
+                                  category,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                         onChanged: (value) {
                           setState(() {
                             _selectedCategory = value;
@@ -374,24 +372,22 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
-                              builder:
-                                  (context) => DraggableScrollableSheet(
-                                    initialChildSize: 0.5,
-                                    minChildSize: 0.5,
-                                    maxChildSize: 0.9,
-                                    builder:
-                                        (context, scrollController) =>
-                                            Container(
-                                              decoration: const BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(30),
-                                                  topRight: Radius.circular(30),
-                                                ),
-                                              ),
-                                              child: CalendarPage(),
-                                            ),
+                              builder: (context) => DraggableScrollableSheet(
+                                initialChildSize: 0.5,
+                                minChildSize: 0.5,
+                                maxChildSize: 0.9,
+                                builder: (context, scrollController) =>
+                                    Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30),
+                                      topRight: Radius.circular(30),
+                                    ),
                                   ),
+                                  child: CalendarPage(),
+                                ),
+                              ),
                             );
                           },
                           style: ElevatedButton.styleFrom(

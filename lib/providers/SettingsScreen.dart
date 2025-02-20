@@ -78,7 +78,7 @@ class ThemeSettingsScreen extends StatelessWidget {
 }
 
 class NotificationSettingsScreen extends StatefulWidget {
-  NotificationSettingsScreen({super.key});
+  const NotificationSettingsScreen({super.key});
 
   @override
   State<NotificationSettingsScreen> createState() =>
@@ -93,10 +93,10 @@ class _NotificationSettingsScreenState
   @override
   void initState() {
     super.initState();
-    // Initialize notifications when the screen loads.
     _notiService.initNotification();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -198,6 +198,72 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
+void _updatedialog(BuildContext context) {
+  final TextEditingController usernameController = TextEditingController();
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return AlertDialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: 20),
+        content: SizedBox(
+          width: 300,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Update your Username',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: 300, // Force the TextField to be 300 pixels wide
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'New Username',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          Row(
+            children: [
+              TextButton(
+                  onPressed: () async {
+                    String newName = usernameController.text;
+                    if (newName.isNotEmpty) {
+                      User? user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        await user.updateDisplayName(newName);
+                        await user.reload();
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Username Updated")));
+                      }
+                    }
+                  },
+                  child: Text('Update')),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
 class UserProfileSection extends StatelessWidget {
   UserProfileSection({super.key});
 
@@ -232,7 +298,8 @@ class UserProfileSection extends StatelessWidget {
               radius: 32,
               backgroundImage: user.photoURL != null
                   ? NetworkImage(user.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png") as ImageProvider,
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
             ),
           ),
           const SizedBox(width: 16),
@@ -241,7 +308,7 @@ class UserProfileSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$username',
+                  username,
                   style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
@@ -257,7 +324,7 @@ class UserProfileSection extends StatelessWidget {
             ),
             child: IconButton(
               icon: const Icon(Icons.edit, color: Colors.black),
-              onPressed: () {},
+              onPressed: () => _updatedialog(context),
             ),
           ),
         ],

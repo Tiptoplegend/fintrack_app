@@ -1,6 +1,6 @@
 import 'package:fintrack_app/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
   const Goals({super.key});
@@ -11,6 +11,9 @@ class Goals extends StatefulWidget {
 
 class _GoalsState extends State<Goals> {
   final FirestoreService firestoreService = FirestoreService();
+  final user = FirebaseAuth.instance.currentUser!;
+  final userimg = FirebaseAuth.instance.currentUser!.photoURL;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,10 +23,13 @@ class _GoalsState extends State<Goals> {
         title: Row(
           children: [
             CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage("assets/images/user.png"),
+              radius: 25,
+              backgroundImage: user?.photoURL != null
+                  ? NetworkImage(user!.photoURL!)
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
             ),
-            const SizedBox(width: 120),
+            const SizedBox(width: 110),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
