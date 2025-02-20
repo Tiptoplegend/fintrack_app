@@ -79,8 +79,8 @@ class _CalendarPageState extends State<CalendarPage> {
                           _focusedDay = focusedDay;
                         },
                         calendarStyle: CalendarStyle(
-                          defaultTextStyle: TextStyle(color: Colors.black), // Set default text color
-                          weekendTextStyle: TextStyle(color: Colors.black), // Set weekend text color
+                          defaultTextStyle: TextStyle(color: Colors.black), 
+                          weekendTextStyle: TextStyle(color: Colors.black), 
                           selectedDecoration: BoxDecoration(
                             color: Colors.green,
                             shape: BoxShape.circle,
@@ -94,16 +94,16 @@ class _CalendarPageState extends State<CalendarPage> {
                           formatButtonVisible: false,
                           titleCentered: true,
                           titleTextStyle: const TextStyle(
-                            color: Colors.black, // Change the text color to black
+                            color: Colors.black, 
                             fontSize: 16.0,
                           ),
                           leftChevronIcon: const Icon(
                             Icons.chevron_left,
-                            color: Colors.black, // Change the icon color to black
+                            color: Colors.black, 
                           ),
                           rightChevronIcon: const Icon(
                             Icons.chevron_right,
-                            color: Colors.black, // Change the icon color to black
+                            color: Colors.black, 
                           ),
                         ),
                         calendarBuilders: CalendarBuilders(
@@ -227,7 +227,7 @@ Widget _PickStartDateText() {
 
 Widget _SetCycleButton() {
   return Padding(
-    padding: const EdgeInsets.all(90.0),
+    padding: const EdgeInsets.all(50.0),
     child: ElevatedButton(
       onPressed: () {
         // Handle set cycle action
