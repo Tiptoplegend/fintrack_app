@@ -91,7 +91,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 300), // Spacer
+            const SizedBox(height: 250), // Spacer
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
@@ -132,7 +132,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 textAlign: TextAlign.start,
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 19),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(16.0),
@@ -230,109 +230,41 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                         },
                       ),
                       const SizedBox(height: 16), // Spacer
-                      DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          labelText: 'Budget Cycle',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontFamily: 'Inter',
+                      Row(
+                        children: [
+                          const Text(
+                            'Budget Cycle:',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontFamily: 'Inter',
+                            ),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                            borderSide: BorderSide(color: Color(0xFF007D3E)),
-                          ),
-                        ),
-                        style: const TextStyle(color: Colors.black),
-                        icon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'Daily',
+                          const SizedBox(width: 10),
+                          Expanded(
                             child: Text(
-                              'Daily',
-                              style: TextStyle(
-                                color: Colors.white,
+                              _selectedBudgetCycle ?? 'Select Cycle',
+                              style: const TextStyle(
+                                color: Colors.black,
                                 fontSize: 18,
                                 fontFamily: 'Inter',
                               ),
                             ),
                           ),
-                          DropdownMenuItem(
-                            value: 'Weekly',
-                            child: Text(
-                              'Weekly',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: 'Inter',
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Monthly',
-                            child: Text(
-                              'Monthly',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontFamily: 'Inter',
-                              ),
-                            ),
+                          IconButton(
+                            icon: const Icon(Icons.calendar_month,
+                                color: Colors.black, size: 30),
+                            onPressed: () async {
+                              String? selectedCycle =
+                                  await _CalendarModal(context);
+                              if (selectedCycle != null) {
+                                setState(() {
+                                  _selectedBudgetCycle = selectedCycle;
+                                });
+                              }
+                            },
                           ),
                         ],
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedBudgetCycle = value;
-                          });
-                        },
-                        selectedItemBuilder: (BuildContext context) {
-                          return const [
-                            DropdownMenuItem(
-                              value: 'Daily',
-                              child: Text(
-                                'Daily',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Weekly',
-                              child: Text(
-                                'Weekly',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Monthly',
-                              child: Text(
-                                'Monthly',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                            ),
-                          ];
-                        },
                       ),
                       const SizedBox(height: 16), // Spacer
                       SwitchListTile(
@@ -365,30 +297,10 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                       ),
                       const SizedBox(height: 10), // Spacer
                       SizedBox(
-                        width: double.infinity,
+                        width: 350,
                         child: ElevatedButton(
                           onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => DraggableScrollableSheet(
-                                initialChildSize: 0.5,
-                                minChildSize: 0.5,
-                                maxChildSize: 0.9,
-                                builder: (context, scrollController) =>
-                                    Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30),
-                                      topRight: Radius.circular(30),
-                                    ),
-                                  ),
-                                  child: CalendarPage(),
-                                ),
-                              ),
-                            );
+                            _CalendarModal(context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),
@@ -417,4 +329,31 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       ),
     );
   }
+}
+
+Future<String?> _CalendarModal(BuildContext context) {
+  return showModalBottomSheet<String>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 0.9,
+      builder: (context, scrollController) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        child: CalendarPage(
+          onCycleSelected: (cycle) {
+            Navigator.pop(context, cycle);
+          },
+        ),
+      ),
+    ),
+  );
 }
