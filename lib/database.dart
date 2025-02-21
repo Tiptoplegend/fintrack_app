@@ -37,8 +37,3 @@ class FirestoreService {
   }
 }
 
-class Goalsdb {
-  final CollectionReference _goalscollection =
-      FirebaseFirestore.instance.collection('Goals');
-}
-
