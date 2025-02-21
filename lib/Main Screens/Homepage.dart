@@ -24,44 +24,48 @@ class _HomepageState extends State<Homepage> {
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Stack(
-                children: [
-                  _Uppersection(context: context),
-                  Positioned(
-                    left: 30,
-                    top: 100,
-                    child: _Greetings(username: username),
+        body: Stack(
+          children: [
+            _Uppersection(context: context),
+            SafeArea(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 30,
+                        top: 100,
+                        child: _Greetings(username: username),
+                      ),
+                      const Positioned(
+                        top: 210,
+                        left: 60,
+                        child: Cardsection(),
+                      ),
+                      const Positioned(
+                        top: 400,
+                        left: 45,
+                        child: _tips(),
+                      ),
+                      const Positioned(
+                        top: 515,
+                        left: 40,
+                        child: _History(),
+                      ),
+                      Positioned(
+                        top: 540,
+                        left: 20,
+                        right: 20,
+                        child: _Expensecards(),
+                      )
+                    ],
                   ),
-                  const Positioned(
-                    top: 210,
-                    left: 60,
-                    child: Cardsection(),
-                  ),
-                  const Positioned(
-                    top: 400,
-                    left: 45,
-                    child: _tips(),
-                  ),
-                  const Positioned(
-                    top: 515,
-                    left: 40,
-                    child: _History(),
-                  ),
-                  Positioned(
-                    top: 540,
-                    left: 20,
-                    right: 20,
-                    child: _Expensecards(),
-                  )
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -70,61 +74,54 @@ class _HomepageState extends State<Homepage> {
 
 Widget _Uppersection({required BuildContext context}) {
   final user = FirebaseAuth.instance.currentUser;
+  final padding = MediaQuery.of(context).padding;
 
-  return Scaffold(
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            height: 310,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF005341),
-                  Color(0xFF43A047),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      radius: 27,
-                      backgroundImage: user?.photoURL != null
-                          ? NetworkImage(user!.photoURL!)
-                          : const AssetImage(
-                                  "assets/images/icons8-user-48 (1).png")
-                              as ImageProvider,
-                    ),
-                    const SizedBox(width: 200, height: 100),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsScreen(),
-                            ));
-                      },
-                      icon: Icon(Icons.settings),
-                      color: Colors.white,
-                      iconSize: 30,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          )
+  return Container(
+    height: 310 + padding.top,
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFF005341),
+          Color(0xFF43A047),
         ],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       ),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(50),
+        bottomRight: Radius.circular(50),
+      ),
+    ),
+    child: Column(
+      children: [
+        SizedBox(height: padding.top), // Add padding to cover the status bar and notch area
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CircleAvatar(
+              radius: 27,
+              backgroundImage: user?.photoURL != null
+                  ? NetworkImage(user!.photoURL!)
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
+            ),
+            const SizedBox(width: 200, height: 100),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ));
+              },
+              icon: Icon(Icons.settings),
+              color: Colors.white,
+              iconSize: 30,
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+      ],
     ),
   );
 }
@@ -150,8 +147,8 @@ class _Greetings extends StatelessWidget {
         ),
         Text(
           'Welcome, lets manage some money',
-          style:
-              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
+          style: TextStyle(
+              fontFamily: 'inter', fontSize: 18, color: Colors.white),
         )
       ],
     );
