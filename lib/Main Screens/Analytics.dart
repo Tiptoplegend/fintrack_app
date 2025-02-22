@@ -16,14 +16,26 @@ class _AnalyticsState extends State<Analytics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF00A86B),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(
           children: [
             CircleAvatar(
               radius: 27,
-              backgroundImage: user?.photoURL != null
-                  ? NetworkImage(user!.photoURL!)
+              backgroundImage: user.photoURL != null
+                  ? NetworkImage(user.photoURL!)
                   : const AssetImage("assets/images/icons8-user-48 (1).png")
                       as ImageProvider,
             ),

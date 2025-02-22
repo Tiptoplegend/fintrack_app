@@ -28,40 +28,38 @@ class _HomepageState extends State<Homepage> {
           children: [
             _Uppersection(context: context),
             SafeArea(
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 30,
-                        top: 100,
-                        child: _Greetings(username: username),
-                      ),
-                      const Positioned(
-                        top: 210,
-                        left: 60,
-                        child: Cardsection(),
-                      ),
-                      const Positioned(
-                        top: 400,
-                        left: 45,
-                        child: _tips(),
-                      ),
-                      const Positioned(
-                        top: 515,
-                        left: 40,
-                        child: _History(),
-                      ),
-                      Positioned(
-                        top: 540,
-                        left: 20,
-                        right: 20,
-                        child: _Expensecards(),
-                      )
-                    ],
-                  ),
+              top: false, // Allow the container to extend into the status bar and notch area
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 60,
+                      top: 110,
+                      child: _Greetings(username: username),
+                    ),
+                    const Positioned(
+                      top: 210,
+                      left: 60,
+                      child: Cardsection(),
+                    ),
+                    const Positioned(
+                      top: 400,
+                      left: 45,
+                      child: _tips(),
+                    ),
+                    const Positioned(
+                      top: 515,
+                      left: 40,
+                      child: _History(),
+                    ),
+                    Positioned(
+                      top: 540,
+                      left: 20,
+                      right: 20,
+                      child: _Expensecards(),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -84,8 +82,8 @@ Widget _Uppersection({required BuildContext context}) {
           Color(0xFF005341),
           Color(0xFF43A047),
         ],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(50),
@@ -105,16 +103,17 @@ Widget _Uppersection({required BuildContext context}) {
                   : const AssetImage("assets/images/icons8-user-48 (1).png")
                       as ImageProvider,
             ),
-            const SizedBox(width: 200, height: 100),
+            const SizedBox(width: 200, height: 40),
             IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsScreen(),
-                    ));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
               },
-              icon: Icon(Icons.settings),
+              icon: const Icon(Icons.settings),
               color: Colors.white,
               iconSize: 30,
             ),
@@ -140,7 +139,7 @@ class _Greetings extends StatelessWidget {
           "Hi $username",
           style: const TextStyle(
             fontFamily: 'inter',
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -172,7 +171,7 @@ class _CardsectionState extends State<Cardsection> {
           width: 300,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
@@ -277,7 +276,6 @@ class _tips extends StatelessWidget {
     );
   }
 }
-
 class _History extends StatelessWidget {
   const _History();
 
