@@ -66,11 +66,21 @@ class _SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [ Color(0xFF005341),
+                Color(0xFF43A047),],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+        ),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -82,11 +92,12 @@ class _SigninState extends State<Signin> {
           style: TextStyle(
             fontSize: 24,
             fontFamily: 'Inter',
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
       ),
+      // Removed duplicate body parameter
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -246,7 +257,7 @@ class _SigninState extends State<Signin> {
       },
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
-        backgroundColor: const Color(0xFF005341),
+        backgroundColor:Colors.green[600],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),

@@ -97,12 +97,22 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+          colors: [Color(0xFF005341),
+             Color(0xFF43A047)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: Text(
           'Sign Up',
           style: TextStyle(
             fontSize: 24,
             fontFamily: 'inter',
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -110,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.white,
           ),
           onPressed: () {
             Navigator.push(
@@ -316,7 +326,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
-                    backgroundColor: const Color(0xFF005341),
+                    backgroundColor:Colors.green[600],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),

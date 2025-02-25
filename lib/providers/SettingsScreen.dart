@@ -1,9 +1,7 @@
 import 'package:fintrack_app/Onboarding/Welcome.dart';
-import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/providers/noti_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:fintrack_app/providers/theme_provider.dart';
 
@@ -15,7 +13,21 @@ class ThemeSettingsScreen extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Theme")),
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF00A86B),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        
+        title: const Text("Theme")),
       body: Column(
         children: [
           ListTile(
@@ -100,6 +112,18 @@ class _NotificationSettingsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF00A86B),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text("Notification Settings"),
       ),
       body: ListView(
@@ -140,12 +164,28 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Settings",
-          style: TextStyle(
-            color: Colors.white,
-            fontFamily: 'Inter',
+      
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF005341),
+               Color(0xFF00A86B),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          title: const Text(
+            "Settings",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Inter',
+            ),
           ),
         ),
       ),
@@ -277,7 +317,14 @@ class UserProfileSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.green[500],
+     gradient: LinearGradient(
+        colors: [
+          Color(0xFF005341),
+          Color(0xFF43A047),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(

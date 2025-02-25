@@ -71,7 +71,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF007D3E),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -87,7 +86,14 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         centerTitle: true,
       ),
       body: Container(
-        color: const Color(0xFF007D3E),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [ Color(0xFF005341),
+          Color(0xFF43A047),],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -337,9 +343,9 @@ Future<String?> _CalendarModal(BuildContext context) {
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.9,
-      maxChildSize: 0.9,
+      initialChildSize: 0.8,
+      minChildSize: 0.8,
+      maxChildSize: 0.8,
       builder: (context, scrollController) => Container(
         decoration: const BoxDecoration(
           color: Colors.white,
