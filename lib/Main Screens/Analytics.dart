@@ -1,3 +1,5 @@
+import 'package:fintrack_app/Datetime/date_time_helper.dart'; // Ensure this import is correct
+import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -53,4 +55,18 @@ class _AnalyticsState extends State<Analytics> {
   }
 }
 
+Widget _TransactionList() {
+  return Scaffold(
+    body: ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return ListTile(
+          // leading: Category(name: "", icon: icons) ,
+          title: Text('Transaction $index'),
+          trailing: Text('Amount: GHC 100'),
+        );
+      },
+    ),
+  );
+}
 // we would Create the widgets below

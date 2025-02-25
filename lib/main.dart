@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/providers/noti_service.dart';
 import 'package:fintrack_app/providers/theme.dart';
 import 'package:flutter/material.dart';
@@ -53,4 +54,12 @@ class FinTrackApp extends StatelessWidget {
       ),
     );
   }
+}
+
+@override
+Widget build(BuildContext context) {
+  return ChangeNotifierProvider(
+    create: (context) => ExpenseData(),
+    builder: (context, child) => const MaterialApp(),
+  );
 }
