@@ -21,7 +21,9 @@ class _CalendarPageState extends State<CalendarPage> {
       body: Column(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height, // Adjusted height to cover the full screen
+            height: MediaQuery.of(context)
+                .size
+                .height, // Adjusted height to cover the full screen
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
@@ -72,7 +74,8 @@ class _CalendarPageState extends State<CalendarPage> {
                             onDaySelected: (selectedDay, focusedDay) {
                               setState(() {
                                 _selectedDay = selectedDay;
-                                _focusedDay = focusedDay; // update `_focusedDay` here as well
+                                _focusedDay =
+                                    focusedDay; // update `_focusedDay` here as well
                               });
                             },
                             calendarFormat: CalendarFormat.month,
@@ -83,11 +86,16 @@ class _CalendarPageState extends State<CalendarPage> {
                               _focusedDay = focusedDay;
                             },
                             calendarStyle: CalendarStyle(
-                              defaultTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-                              weekendTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-                              outsideTextStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                              todayTextStyle: TextStyle(color: Colors.white, fontSize: 18),
-                              selectedTextStyle: TextStyle(color: Colors.white, fontSize: 18),
+                              defaultTextStyle:
+                                  TextStyle(color: Colors.black, fontSize: 18),
+                              weekendTextStyle:
+                                  TextStyle(color: Colors.black, fontSize: 18),
+                              outsideTextStyle:
+                                  TextStyle(color: Colors.grey, fontSize: 18),
+                              todayTextStyle:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                              selectedTextStyle:
+                                  TextStyle(color: Colors.white, fontSize: 18),
                               selectedDecoration: BoxDecoration(
                                 color: Colors.green,
                                 shape: BoxShape.circle,
@@ -115,18 +123,26 @@ class _CalendarPageState extends State<CalendarPage> {
                             ),
                             calendarBuilders: CalendarBuilders(
                               defaultBuilder: (context, day, focusedDay) {
-                                if (_selectedFrequency == 'Weekly' && _selectedDay != null) {
-                                  final startOfWeek = _selectedDay!.subtract(Duration(days: _selectedDay!.weekday - 1));
-                                  final endOfWeek = startOfWeek.add(Duration(days: 6));
+                                if (_selectedFrequency == 'Weekly' &&
+                                    _selectedDay != null) {
+                                  final startOfWeek = _selectedDay!.subtract(
+                                      Duration(
+                                          days: _selectedDay!.weekday - 1));
+                                  final endOfWeek =
+                                      startOfWeek.add(Duration(days: 6));
 
-                                  if (day.isAfter(startOfWeek.subtract(Duration(days: 1))) &&
-                                      day.isBefore(endOfWeek.add(Duration(days: 1)))) {
-                              return Container(
+                                  if (day.isAfter(startOfWeek
+                                          .subtract(Duration(days: 1))) &&
+                                      day.isBefore(
+                                          endOfWeek.add(Duration(days: 1)))) {
+                                    return Container(
                                       margin: const EdgeInsets.all(4.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.lightGreen.withOpacity(0.5),
+                                        color:
+                                            Colors.lightGreen.withOpacity(0.5),
                                         shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
                                       child: Center(
                                         child: Text(
@@ -141,7 +157,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               },
                             ),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 14),
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
@@ -153,7 +169,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                               ),
                               child: const Text(
                                 'Set cycle',
@@ -195,7 +212,9 @@ Widget _Header() {
   );
 }
 
-Widget _FrequencyDropdown({required String selectedFrequency, required ValueChanged<String?> onChanged}) {
+Widget _FrequencyDropdown(
+    {required String selectedFrequency,
+    required ValueChanged<String?> onChanged}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Row(

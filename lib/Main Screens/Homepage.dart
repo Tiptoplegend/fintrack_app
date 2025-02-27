@@ -20,7 +20,7 @@ class _HomepageState extends State<Homepage> {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: const Color(0xFF005341),
+        // statusBarColor: const Color(0xFF005341),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -28,13 +28,14 @@ class _HomepageState extends State<Homepage> {
           children: [
             _Uppersection(context: context),
             SafeArea(
-              top: false, // Allow the container to extend into the status bar and notch area
+              top:
+                  false, // Allow the container to extend into the status bar and notch area
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Stack(
                   children: [
                     Positioned(
-                      left: 60,
+                      left: 40,
                       top: 110,
                       child: _Greetings(username: username),
                     ),
@@ -54,7 +55,7 @@ class _HomepageState extends State<Homepage> {
                       child: _History(),
                     ),
                     Positioned(
-                      top: 540,
+                      top: 530,
                       left: 20,
                       right: 20,
                       child: _Expensecards(),
@@ -92,7 +93,9 @@ Widget _Uppersection({required BuildContext context}) {
     ),
     child: Column(
       children: [
-        SizedBox(height: padding.top), // Add padding to cover the status bar and notch area
+        SizedBox(
+            height: padding
+                .top), // Add padding to cover the status bar and notch area
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -146,8 +149,8 @@ class _Greetings extends StatelessWidget {
         ),
         Text(
           'Welcome, lets manage some money',
-          style: TextStyle(
-              fontFamily: 'inter', fontSize: 18, color: Colors.white),
+          style:
+              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
         )
       ],
     );
@@ -276,6 +279,7 @@ class _tips extends StatelessWidget {
     );
   }
 }
+
 class _History extends StatelessWidget {
   const _History();
 

@@ -88,8 +88,10 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [ Color(0xFF005341),
-          Color(0xFF43A047),],
+            colors: [
+              Color(0xFF005341),
+              Color(0xFF43A047),
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -337,15 +339,15 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
   }
 }
 
-Future<String?> _CalendarModal(BuildContext context) {
+Future<String?>_CalendarModal(BuildContext context) {
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.8,
-      minChildSize: 0.8,
-      maxChildSize: 0.8,
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 0.9,
       builder: (context, scrollController) => Container(
         decoration: const BoxDecoration(
           color: Colors.white,
