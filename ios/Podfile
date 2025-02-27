@@ -3,6 +3,7 @@ platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting Flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+ENV['COCOAPODS_GIT_URL'] = 'https://github.com'
 
 # Define the project settings
 project 'Runner', {
@@ -20,9 +21,10 @@ target 'Runner' do
   eval(File.read(File.join(File.dirname(__FILE__), 'Flutter', 'podhelper.rb')), binding)
 
   # Firebase dependencies
-  pod 'Firebase/Core'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Auth'
+  pod 'Firebase/CoreOnly', '~> 10.0.0'
+  pod 'Firebase/Firestore', '~> 10.0.0'
+  pod 'Firebase/Auth', '~> 10.0.0'
+  pod 'Firebase/Analytics', '~> 10.0.0'
 
   target 'RunnerTests' do
     inherit! :search_paths
