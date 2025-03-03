@@ -10,14 +10,14 @@ import 'package:fintrack_app/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotiService().initNotification();
   await Firebase.initializeApp();
+  NotiService().initNotification();
 
-  // Load theme preference before starting the app
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
+
+  // Load theme preference
   String? themeString = prefs.getString('themeMode');
   ThemeMode initialTheme = ThemeMode.system;
-
   if (themeString != null && themeString.contains('dark')) {
     initialTheme = ThemeMode.dark;
   } else if (themeString != null && themeString.contains('light')) {
@@ -34,12 +34,12 @@ class FinTrackApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) {
-        ThemeProvider themeProvider = ThemeProvider();
-        themeProvider.setTheme(initialTheme);
-        return themeProvider;
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => ThemeProvider()..setTheme(initialTheme)),
+        ChangeNotifierProvider(create: (_) => ExpenseData()),
+      ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
@@ -54,12 +54,4 @@ class FinTrackApp extends StatelessWidget {
       ),
     );
   }
-}
-
-@override
-Widget build(BuildContext context) {
-  return ChangeNotifierProvider(
-    create: (context) => ExpenseData(),
-    builder: (context, child) => const MaterialApp(),
-  );
 }

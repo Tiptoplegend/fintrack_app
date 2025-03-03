@@ -88,70 +88,55 @@ class ThemeSettingsScreen extends StatelessWidget {
   }
 }
 
-class NotificationSettingsScreen extends StatefulWidget {
-  const NotificationSettingsScreen({super.key});
+class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({super.key});
 
   @override
-  State<NotificationSettingsScreen> createState() =>
-      _NotificationSettingsScreenState();
+  State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationSettingsScreenState
-    extends State<NotificationSettingsScreen> {
+class _NotificationsPageState extends State<NotificationsPage> {
   bool _isNotificationsEnabled = false;
   final NotiService _notiService = NotiService();
 
   @override
   void initState() {
     super.initState();
-    _notiService.initNotification();
+    _notiService.initNotification(); // Ensure notifications are initialized
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF005341),
-                Color(0xFF00A86B),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text("Notification Settings"),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 16),
-        children: [
-          ListTile(
-            title: const Text('Allow all notifications'),
-            subtitle: const Text(
-              'Get notifications about your daily expense, budget, and reminders',
-            ),
+      appBar: AppBar(title: Text("Notification Settings")),
+      body: Padding(
+        padding: EdgeInsets.all(2),
+        child: Material(
+          child: ListTile(
+            title: Text("Allow All Notifications"),
+            subtitle: Text(
+                "Notifications concerning your budget and daily reminders will be enabled once you allow all notifications."),
             trailing: Switch(
               value: _isNotificationsEnabled,
-              onChanged: (bool newValue) {
+              onChanged: (bool newValue) async {
                 setState(() {
                   _isNotificationsEnabled = newValue;
                 });
+
                 if (newValue) {
-                  _notiService.showNotification(
-                      id: 0,
-                      title: "Notifications Enabled",
-                      body:
-                          "You will receive notifications about your daily expense, budget, and reminders");
+                  await _notiService.scheduleNotification(
+                    title: "Notification",
+                    body: "You have enabled notifications",
+                    hour: 14,
+                    minute: 53,
+                  );
                 } else {
-                  _notiService.notificationPlugin.cancelAll();
+                  await _notiService.cancelAllNotifications();
                 }
               },
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
@@ -221,7 +206,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => NotificationSettingsScreen()),
+                  builder: (context) => const NotificationsPage()),
             ),
           ),
           SettingsOption(
