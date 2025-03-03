@@ -127,8 +127,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   await _notiService.scheduleNotification(
                     title: "Notification",
                     body: "You have enabled notifications",
-                    hour: 14,
-                    minute: 53,
+                    hour: 15,
+                    minute: 10,
                   );
                 } else {
                   await _notiService.cancelAllNotifications();
