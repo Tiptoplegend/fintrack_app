@@ -3,18 +3,23 @@ import 'package:fintrack_app/Datetime/date_time_helper.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseData extends ChangeNotifier {
+  // list expense
   List<ExpenseItem> overallExpenseList = [];
-
+// get expense
   List<ExpenseItem> getExpenseList() {
     return overallExpenseList;
   }
 
+// add expense
   void addNewExpense(ExpenseItem newExpense) {
     overallExpenseList.add(newExpense);
+    notifyListeners();
   }
 
+// del the expense
   void deleteExpense(ExpenseItem expense) {
     overallExpenseList.remove(expense);
+    notifyListeners();
   }
 
   String getDayName(DateTime dateTime) {

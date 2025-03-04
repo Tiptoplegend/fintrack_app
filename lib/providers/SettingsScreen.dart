@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fintrack_app/providers/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
@@ -14,20 +15,19 @@ class ThemeSettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF005341),
-                Color(0xFF00A86B),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF005341),
+                  Color(0xFF00A86B),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ),
-        ),
-        
-        title: const Text("Theme")),
+          title: const Text("Theme")),
       body: Column(
         children: [
           ListTile(
@@ -109,29 +109,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF005341),
-                Color(0xFF00A86B),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        title: const Text("Notification Settings"),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.only(top: 16),
-        children: [
-          ListTile(
-            title: const Text('Allow all notifications'),
-            subtitle: const Text(
-              'Get notifications about your daily expense, budget, and reminders',
-            ),
+      appBar: AppBar(title: Text("Notification Settings")),
+      body: Padding(
+        padding: EdgeInsets.all(2),
+        child: Material(
+          child: ListTile(
+            title: Text("Allow All Notifications"),
+            subtitle: Text(
+                "Notifications concerning your budget and daily reminders will be enabled once you allow all notifications."),
             trailing: Switch(
               value: _isNotificationsEnabled,
               onChanged: (bool newValue) async {
@@ -152,7 +137,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               },
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -164,7 +149,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBar(
@@ -173,7 +157,7 @@ class SettingsScreen extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF005341),
-               Color(0xFF00A86B),
+                  Color(0xFF00A86B),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -316,14 +300,14 @@ class UserProfileSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-     gradient: LinearGradient(
-        colors: [
-          Color(0xFF005341),
-          Color(0xFF43A047),
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF005341),
+            Color(0xFF43A047),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(

@@ -18,52 +18,76 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: const Color(0xFF005341),
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            _Uppersection(context: context),
-            SafeArea(
-              top: false, // Allow the container to extend into the status bar and notch area
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 60,
-                      top: 110,
-                      child: _Greetings(username: username),
-                    ),
-                    const Positioned(
-                      top: 210,
-                      left: 60,
-                      child: Cardsection(),
-                    ),
-                    const Positioned(
-                      top: 400,
-                      left: 45,
-                      child: _tips(),
-                    ),
-                    const Positioned(
-                      top: 515,
-                      left: 40,
-                      child: _History(),
-                    ),
-                    Positioned(
-                      top: 540,
-                      left: 20,
-                      right: 20,
-                      child: _Expensecards(),
-                    )
-                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Show exit confirmation dialog
+        bool exitApp = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Exit App?"),
+            content: Text("Do you want to exit the app?"),
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), // Stay in app
+                child: Text("No"),
+              ),
+              TextButton(
+                onPressed: () => SystemNavigator.pop(), // Exit app
+                child: Text("Yes"),
+              ),
+            ],
+          ),
+        );
+
+        return exitApp ?? false;
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              _Uppersection(context: context),
+              SafeArea(
+                top: false,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 40,
+                        top: 110,
+                        child: _Greetings(username: username),
+                      ),
+                      const Positioned(
+                        top: 210,
+                        left: 60,
+                        child: Cardsection(),
+                      ),
+                      const Positioned(
+                        top: 400,
+                        left: 45,
+                        child: _tips(),
+                      ),
+                      const Positioned(
+                        top: 515,
+                        left: 40,
+                        child: _History(),
+                      ),
+                      Positioned(
+                        top: 530,
+                        left: 20,
+                        right: 20,
+                        child: _Expensecards(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -92,7 +116,9 @@ Widget _Uppersection({required BuildContext context}) {
     ),
     child: Column(
       children: [
-        SizedBox(height: padding.top), // Add padding to cover the status bar and notch area
+        SizedBox(
+            height: padding
+                .top), // Add padding to cover the status bar and notch area
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -146,8 +172,8 @@ class _Greetings extends StatelessWidget {
         ),
         Text(
           'Welcome, lets manage some money',
-          style: TextStyle(
-              fontFamily: 'inter', fontSize: 18, color: Colors.white),
+          style:
+              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
         )
       ],
     );
@@ -276,6 +302,7 @@ class _tips extends StatelessWidget {
     );
   }
 }
+
 class _History extends StatelessWidget {
   const _History();
 

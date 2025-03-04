@@ -1,6 +1,8 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
+import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Models/expense_Item.dart';
+import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -214,16 +216,7 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget _Continuebtn() {
     return ElevatedButton(
       onPressed: () {
-        ExpenseItem newExpense = ExpenseItem(
-          expenseAmount:
-              double.tryParse(_amountController.text.replaceAll(',', '')) ??
-                  0.0,
-          expenseDate: DateTime.now(),
-          category: selectedCategory ??
-              Category(name: 'Others', icon: Icons.category),
-        );
-        Provider.of<ExpenseData>(context, listen: false)
-            .addNewExpense(newExpense);
+        _saveExpense();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(Colors.green.value),
@@ -235,6 +228,34 @@ class _TransactionPageState extends State<TransactionPage> {
       child: Text(
         'Continue',
         style: TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    );
+  }
+
+  void _saveExpense() {
+    if (_amountController.text.isEmpty || selectedCategory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter an amount and select a category'),
+        ),
+      );
+      return;
+    }
+
+    ExpenseItem newExpense = ExpenseItem(
+      category: selectedCategory!,
+      expenseAmount: double.parse(_amountController.text.replaceAll(',', '')),
+      expenseDate: DateTime.now(),
+      expenseNote: _NotesController.text,
+    );
+
+    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
+
+    // Navigate back to Navigation page, showing Analytics tab (index 1)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Navigation(selectedIndex: 1),
       ),
     );
   }

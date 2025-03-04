@@ -141,28 +141,21 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
         ),
-        title: Text(
-          'Sign Up',
-          style: TextStyle(
-            fontSize: 24,
-            fontFamily: 'inter',
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Welcomepage()),
-            );
-          },
-        ),
+        if (_isLoading)
+          _LoadingOverlay(), // Show loading overlay when signing up
+      ],
+    );
+  }
+
+  Widget _TextField(TextEditingController controller, String label) {
+    return TextFormField(
+      validator: (value) =>
+          value == null || value.trim().isEmpty ? 'Please enter $label' : null,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
       ),
       body: Stack(
         children: [

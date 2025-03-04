@@ -1,6 +1,7 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -22,7 +23,7 @@ class _AnalyticsState extends State<Analytics> {
             gradient: LinearGradient(
               colors: [
                 Color(0xFF005341),
-                Color(0xFF00A86B),
+                Color(0xFF43A047),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -68,17 +69,26 @@ class _AnalyticsState extends State<Analytics> {
 }
 
 Widget _TransactionList() {
-  return Scaffold(
-    body: ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return ListTile(
-          // leading: Category(name: "", icon: icons) ,
-          title: Text('Transaction $index'),
-          trailing: Text('Amount: GHC 100'),
-        );
-      },
-    ),
+  return Consumer<ExpenseData>(
+    builder: (context, value, child) {
+      return Scaffold(
+        body: ListView.builder(
+          itemCount: value.getExpenseList().length,
+          itemBuilder: (context, index) {
+            final expense = value.getExpenseList()[index];
+            final formattedDate =
+                DateFormat('dd/MM/yyyy').format(expense.expenseDate);
+
+            return ListTile(
+              title: Text(expense.category.name),
+              subtitle: Text(formattedDate), // Updated to use formatted date
+              trailing: Text('GHC${expense.expenseAmount.toStringAsFixed(2)}'),
+            );
+          },
+        ),
+      );
+    },
   );
 }
+
 // we would Create the widgets below

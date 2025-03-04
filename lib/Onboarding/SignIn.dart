@@ -107,15 +107,60 @@ class _SigninState extends State<Signin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [ Color(0xFF005341),
-                Color(0xFF43A047),],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF005341), Color(0xFF43A047)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+            ),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: const Text(
+              'Login',
+              style: TextStyle(
+                  fontSize: 24, fontFamily: 'Inter', color: Colors.white),
+            ),
+            centerTitle: true,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    _WelcomeText(),
+                    const SizedBox(height: 2),
+                    _Text(),
+                    const SizedBox(height: 30),
+                    _EmailField(),
+                    const SizedBox(height: 30),
+                    _Password(),
+                    const SizedBox(height: 30),
+                    _LoginButton(), // Login button
+                    const SizedBox(height: 5),
+                    _ForgotPassword(),
+                    const SizedBox(height: 20),
+                    _Account_yet(),
+                    const SizedBox(height: 30),
+                    _Continue(), // Google Sign-In button
+                  ],
+                ),
+              ),
             ),
           ),
         ),
