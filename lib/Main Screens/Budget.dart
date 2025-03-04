@@ -61,15 +61,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
         child: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-<<<<<<< HEAD
-              colors: [
-                Color(0xFF005341),
-                Color(0xFF43A047),
-              ],
-=======
               colors: [Color(0xFF005341),
                Color(0xFF00A86B)],
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),

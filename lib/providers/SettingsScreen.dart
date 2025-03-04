@@ -14,21 +14,6 @@ class ThemeSettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF005341),
-                  Color(0xFF00A86B),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          title: const Text("Theme")),
-=======
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -43,7 +28,6 @@ class ThemeSettingsScreen extends StatelessWidget {
         ),
         
         title: const Text("Theme")),
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
       body: Column(
         children: [
           ListTile(
@@ -125,16 +109,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-      appBar: AppBar(title: Text("Notification Settings")),
-      body: Padding(
-        padding: EdgeInsets.all(2),
-        child: Material(
-          child: ListTile(
-            title: Text("Allow All Notifications"),
-            subtitle: Text(
-                "Notifications concerning your budget and daily reminders will be enabled once you allow all notifications."),
-=======
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -158,7 +132,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
             subtitle: const Text(
               'Get notifications about your daily expense, budget, and reminders',
             ),
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
             trailing: Switch(
               value: _isNotificationsEnabled,
               onChanged: (bool newValue) async {
@@ -179,7 +152,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               },
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -191,10 +164,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-=======
       
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBar(
@@ -203,11 +173,7 @@ class SettingsScreen extends StatelessWidget {
               gradient: LinearGradient(
                 colors: [
                   Color(0xFF005341),
-<<<<<<< HEAD
-                  Color(0xFF00A86B),
-=======
                Color(0xFF00A86B),
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -347,20 +313,9 @@ class UserProfileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
-    String userimg = user.photoURL ?? "User";
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-<<<<<<< HEAD
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF005341),
-            Color(0xFF43A047),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-=======
      gradient: LinearGradient(
         colors: [
           Color(0xFF005341),
@@ -369,7 +324,6 @@ class UserProfileSection extends StatelessWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(

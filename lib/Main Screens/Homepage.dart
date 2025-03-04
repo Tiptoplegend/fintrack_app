@@ -18,78 +18,6 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
 
-<<<<<<< HEAD
-    return WillPopScope(
-      onWillPop: () async {
-        // Show exit confirmation dialog
-        bool exitApp = await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text("Exit App?"),
-            content: Text("Do you want to exit the app?"),
-            actions: [
-              TextButton(
-                onPressed: () =>
-                    Navigator.of(context).pop(false), // Stay in app
-                child: Text("No"),
-              ),
-              TextButton(
-                onPressed: () => SystemNavigator.pop(), // Exit app
-                child: Text("Yes"),
-              ),
-            ],
-          ),
-        );
-
-        return exitApp ?? false;
-      },
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light.copyWith(
-          statusBarIconBrightness: Brightness.light,
-        ),
-        child: Scaffold(
-          body: Stack(
-            children: [
-              _Uppersection(context: context),
-              SafeArea(
-                top: false,
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: 40,
-                        top: 110,
-                        child: _Greetings(username: username),
-                      ),
-                      const Positioned(
-                        top: 210,
-                        left: 60,
-                        child: Cardsection(),
-                      ),
-                      const Positioned(
-                        top: 400,
-                        left: 45,
-                        child: _tips(),
-                      ),
-                      const Positioned(
-                        top: 515,
-                        left: 40,
-                        child: _History(),
-                      ),
-                      Positioned(
-                        top: 530,
-                        left: 20,
-                        right: 20,
-                        child: _Expensecards(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-=======
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: const Color(0xFF005341),
@@ -136,7 +64,6 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
           ],
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
         ),
       ),
     );
@@ -165,13 +92,7 @@ Widget _Uppersection({required BuildContext context}) {
     ),
     child: Column(
       children: [
-<<<<<<< HEAD
-        SizedBox(
-            height: padding
-                .top), // Add padding to cover the status bar and notch area
-=======
         SizedBox(height: padding.top), // Add padding to cover the status bar and notch area
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

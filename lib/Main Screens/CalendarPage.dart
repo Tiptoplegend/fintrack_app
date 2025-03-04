@@ -259,8 +259,4 @@ Widget _PickStartDateText() {
       ),
     ),
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9

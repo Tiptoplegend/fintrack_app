@@ -25,7 +25,6 @@ class _TransactionPageState extends State<TransactionPage> {
   ];
 
   final TextEditingController _amountController = TextEditingController();
-  final TextEditingController _CategoriesController = TextEditingController();
   final TextEditingController _NotesController = TextEditingController();
   @override
   void initState() {

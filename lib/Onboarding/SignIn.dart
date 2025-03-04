@@ -107,62 +107,6 @@ class _SigninState extends State<Signin> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF005341), Color(0xFF43A047)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-            ),
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: const Text(
-              'Login',
-              style: TextStyle(
-                  fontSize: 24, fontFamily: 'Inter', color: Colors.white),
-            ),
-            centerTitle: true,
-          ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    _WelcomeText(),
-                    const SizedBox(height: 2),
-                    _Text(),
-                    const SizedBox(height: 30),
-                    _EmailField(),
-                    const SizedBox(height: 30),
-                    _Password(),
-                    const SizedBox(height: 30),
-                    _LoginButton(), // Login button
-                    const SizedBox(height: 5),
-                    _ForgotPassword(),
-                    const SizedBox(height: 20),
-                    _Account_yet(),
-                    const SizedBox(height: 30),
-                    _Continue(), // Google Sign-In button
-                  ],
-                ),
-              ),
-=======
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -202,33 +146,36 @@ class _SigninState extends State<Signin> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Form(
             key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                const SizedBox(height: 5),
-                _WelcomeText(),
-                const SizedBox(height: 2),
-                _Text(),
-                const SizedBox(height: 30),
-                _EmailField(),
-                const SizedBox(height: 30),
-                _Password(),
-                const SizedBox(height: 30),
-                _LoginButton(),
-                const SizedBox(height: 5),
-                _ForgotPassword(),
-                const SizedBox(height: 20),
-                _Account_yet(),
-                const SizedBox(height: 30),
-                _Continue(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    _WelcomeText(),
+                    const SizedBox(height: 2),
+                    _Text(),
+                    const SizedBox(height: 30),
+                    _EmailField(),
+                    const SizedBox(height: 30),
+                    _Password(),
+                    const SizedBox(height: 30),
+                    _LoginButton(),
+                    const SizedBox(height: 5),
+                    _ForgotPassword(),
+                    const SizedBox(height: 20),
+                    _Account_yet(),
+                    const SizedBox(height: 30),
+                    _Continue(),
+                  ],
+                ),
+                if (_isLoading)
+                  _LoadingOverlay(), // Show loading overlay when signing in
               ],
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
             ),
           ),
         ),
-        if (_isLoading)
-          _LoadingOverlay(), // Show loading overlay when signing in
-      ],
+    ),
     );
   }
 
@@ -288,40 +235,32 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _LoginButton() {
-    return ElevatedButton(
-      onPressed: _isLoading
-          ? null
-          : () {
-              if (_formKey.currentState!.validate()) {
-                email = emailController.text.trim();
-                password = passwordController.text.trim();
-                userLogin();
-              }
-            },
-      style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, 50),
-<<<<<<< HEAD
-        backgroundColor: Colors.green[600],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-=======
-        backgroundColor:Colors.green[600],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-      ),
-      child: Text(
-        "Login",
-        style: TextStyle(
-          fontSize: 18,
-          fontFamily: 'Inter',
-          color: Colors.white,
-        ),
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
-      ),
-      child: Text("Login",
-          style: TextStyle(
-              fontSize: 18, fontFamily: 'Inter', color: Colors.white)),
-    );
+return ElevatedButton(
+  onPressed: _isLoading
+      ? null
+      : () {
+          if (_formKey.currentState!.validate()) {
+            email = emailController.text.trim();
+            password = passwordController.text.trim();
+            userLogin();
+          }
+        },
+  style: ElevatedButton.styleFrom(
+    minimumSize: Size(double.infinity, 50),
+    backgroundColor: Colors.green[600],
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+  ),
+  child: Text(
+    "Login",
+    style: TextStyle(
+      fontSize: 18,
+      fontFamily: 'Inter',
+      color: Colors.white,
+    ),
+  ),
+);
   }
 
   Widget _ForgotPassword() {

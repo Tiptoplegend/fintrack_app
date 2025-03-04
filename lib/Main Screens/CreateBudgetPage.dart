@@ -88,15 +88,8 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-<<<<<<< HEAD
-            colors: [
-              Color(0xFF005341),
-              Color(0xFF43A047),
-            ],
-=======
             colors: [ Color(0xFF005341),
           Color(0xFF43A047),],
->>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
