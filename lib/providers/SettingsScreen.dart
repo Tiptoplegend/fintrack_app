@@ -312,7 +312,6 @@ class UserProfileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
-    String userimg = user.photoURL ?? "User";
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
