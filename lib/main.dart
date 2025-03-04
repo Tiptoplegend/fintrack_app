@@ -38,7 +38,7 @@ class FinTrackApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
             create: (_) => ThemeProvider()..setTheme(initialTheme)),
-        ChangeNotifierProvider(create: (_) => ExpenseData()),
+        ChangeNotifierProvider(create: (context) => ExpenseData()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {

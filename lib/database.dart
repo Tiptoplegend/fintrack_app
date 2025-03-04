@@ -37,3 +37,7 @@ class FirestoreService {
   }
 }
 
+class Analytics {
+  final CollectionReference _TransactionsCollection =
+      FirebaseFirestore.instance.collection('Transactions');
+}

@@ -10,22 +10,29 @@ import 'package:fintrack_app/Main%20Screens/Homepage.dart';
 import 'Main Screens/Budget.dart';
 
 class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+  final int selectedIndex;
+  const Navigation({super.key, this.selectedIndex = 0}); // Default to Home
 
   @override
   State<Navigation> createState() => _NavigationState();
 }
 
 class _NavigationState extends State<Navigation> {
-  int currentIndex = 0;
+  late int currentIndex;
   bool isMenuOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.selectedIndex; // Start with the selected tab
+  }
 
   static List<Widget> body = [
     Homepage(),
-    const Analytics(),
-    const Goals(), 
-    const BudgetScreen(), 
-    const CreateBudgetPage()  
+    Analytics(),
+    const Goals(),
+    const BudgetScreen(),
+    const CreateBudgetPage(),
   ];
 
   @override
@@ -43,7 +50,6 @@ class _NavigationState extends State<Navigation> {
             right: 0,
             child: buildNavbar(),
           ),
-          // Overlay
           if (isMenuOpen)
             GestureDetector(
               onTap: () => setState(() => isMenuOpen = false),
@@ -53,7 +59,6 @@ class _NavigationState extends State<Navigation> {
                 height: double.infinity,
               ),
             ),
-          // FAB Menu
           if (isMenuOpen)
             Positioned(
               bottom: 20,
