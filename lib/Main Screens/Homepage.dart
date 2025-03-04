@@ -18,6 +18,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
 
+<<<<<<< HEAD
     return WillPopScope(
       onWillPop: () async {
         // Show exit confirmation dialog
@@ -88,6 +89,54 @@ class _HomepageState extends State<Homepage> {
               ),
             ],
           ),
+=======
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: const Color(0xFF005341),
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _Uppersection(context: context),
+            SafeArea(
+              top: false, // Allow the container to extend into the status bar and notch area
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 60,
+                      top: 110,
+                      child: _Greetings(username: username),
+                    ),
+                    const Positioned(
+                      top: 210,
+                      left: 60,
+                      child: Cardsection(),
+                    ),
+                    const Positioned(
+                      top: 400,
+                      left: 45,
+                      child: _tips(),
+                    ),
+                    const Positioned(
+                      top: 515,
+                      left: 40,
+                      child: _History(),
+                    ),
+                    Positioned(
+                      top: 540,
+                      left: 20,
+                      right: 20,
+                      child: _Expensecards(),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+>>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
         ),
       ),
     );
@@ -116,9 +165,13 @@ Widget _Uppersection({required BuildContext context}) {
     ),
     child: Column(
       children: [
+<<<<<<< HEAD
         SizedBox(
             height: padding
                 .top), // Add padding to cover the status bar and notch area
+=======
+        SizedBox(height: padding.top), // Add padding to cover the status bar and notch area
+>>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -172,8 +225,8 @@ class _Greetings extends StatelessWidget {
         ),
         Text(
           'Welcome, lets manage some money',
-          style:
-              TextStyle(fontFamily: 'inter', fontSize: 18, color: Colors.white),
+          style: TextStyle(
+              fontFamily: 'inter', fontSize: 18, color: Colors.white),
         )
       ],
     );
@@ -302,7 +355,6 @@ class _tips extends StatelessWidget {
     );
   }
 }
-
 class _History extends StatelessWidget {
   const _History();
 

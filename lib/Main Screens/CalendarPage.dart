@@ -198,9 +198,7 @@ Widget _Header(BuildContext context) {
   );
 }
 
-Widget _FrequencyDropdown(
-    {required String selectedFrequency,
-    required ValueChanged<String?> onChanged}) {
+Widget _FrequencyDropdown({required String selectedFrequency, required ValueChanged<String?> onChanged}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Row(
@@ -261,4 +259,8 @@ Widget _PickStartDateText() {
       ),
     ),
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9

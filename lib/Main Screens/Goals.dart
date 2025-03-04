@@ -23,8 +23,12 @@ class _GoalsState extends State<Goals> {
             gradient: LinearGradient(
               colors: [
                 Color(0xFF005341),
+<<<<<<< HEAD
                 Color(0xFF43A047),
               ],
+=======
+               Color(0xFF00A86B)],
+>>>>>>> c680b28f40e99f7df6208541655c3eb631184ba9
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
