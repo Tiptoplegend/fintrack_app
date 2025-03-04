@@ -76,21 +76,34 @@ Widget _TransactionList() {
   return Consumer<ExpenseData>(
     builder: (context, value, child) {
       return Scaffold(
-        body: ListView.builder(
-          itemCount: value.getExpenseList().length,
-          itemBuilder: (context, index) {
-            final expense = value.getExpenseList()[index];
-            final formattedDate =
-                DateFormat('dd/MM/yyyy').format(expense.expenseDate);
+          body: ListView(
+        children: [
+          // weekly summary goes here
 
-            return ListTile(
-              title: Text(expense.category.name),
-              subtitle: Text(formattedDate), // Updated to use formatted date
-              trailing: Text('GHC${expense.expenseAmount.toStringAsFixed(2)}'),
-            );
-          },
-        ),
-      );
+          // Expense/Transaction goes here
+
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: value.getExpenseList().length,
+            itemBuilder: (context, index) {
+              final expense = value.getExpenseList()[index];
+              final formattedDate =
+                  DateFormat('dd/MM/yyyy').format(expense.expenseDate);
+
+              return ListTile(
+                leading: Icon(Icons.category),
+                title: Text(expense.category.name),
+                subtitle: Text(formattedDate), // Updated to use formatted date
+                trailing: Text(
+                  'GHC ${expense.expenseAmount.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 15),
+                ),
+              );
+            },
+          ),
+        ],
+      ));
     },
   );
 }
