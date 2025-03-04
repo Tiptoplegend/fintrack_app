@@ -1,5 +1,3 @@
-// Ensure this import is correct
-import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -62,8 +60,6 @@ class _AnalyticsState extends State<Analytics> {
         ),
       ),
       body: Stack(
-        // widgets will go here
-
         children: [
           _TransactionList(),
         ],

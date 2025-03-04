@@ -1,0 +1,2 @@
+/Users/bamps/Desktop/fintrack_app/android/app/.cxx/Debug/613i6k31/x86/CMakeFiles/edit_cache.dir
+/Users/bamps/Desktop/fintrack_app/android/app/.cxx/Debug/613i6k31/x86/CMakeFiles/rebuild_cache.dir
