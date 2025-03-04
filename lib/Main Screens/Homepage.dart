@@ -18,49 +18,75 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: const Color(0xFF005341),
-        statusBarIconBrightness: Brightness.light,
-      ),
-      child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Stack(
-                children: [
-                  _Uppersection(context: context),
-                  Positioned(
-                    left: 30,
-                    top: 100,
-                    child: _Greetings(username: username),
-                  ),
-                  const Positioned(
-                    top: 210,
-                    left: 60,
-                    child: Cardsection(),
-                  ),
-                  const Positioned(
-                    top: 400,
-                    left: 45,
-                    child: _tips(),
-                  ),
-                  const Positioned(
-                    top: 515,
-                    left: 40,
-                    child: _History(),
-                  ),
-                  Positioned(
-                    top: 540,
-                    left: 20,
-                    right: 20,
-                    child: _Expensecards(),
-                  )
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Show exit confirmation dialog
+        bool exitApp = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Exit App?"),
+            content: Text("Do you want to exit the app?"),
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), // Stay in app
+                child: Text("No"),
               ),
-            ),
+              TextButton(
+                onPressed: () => SystemNavigator.pop(), // Exit app
+                child: Text("Yes"),
+              ),
+            ],
+          ),
+        );
+
+        return exitApp ?? false;
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarIconBrightness: Brightness.light,
+        ),
+        child: Scaffold(
+          body: Stack(
+            children: [
+              _Uppersection(context: context),
+              SafeArea(
+                top: false,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 40,
+                        top: 110,
+                        child: _Greetings(username: username),
+                      ),
+                      const Positioned(
+                        top: 210,
+                        left: 60,
+                        child: Cardsection(),
+                      ),
+                      const Positioned(
+                        top: 400,
+                        left: 45,
+                        child: _tips(),
+                      ),
+                      const Positioned(
+                        top: 515,
+                        left: 40,
+                        child: _History(),
+                      ),
+                      Positioned(
+                        top: 530,
+                        left: 20,
+                        right: 20,
+                        child: _Expensecards(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -70,61 +96,57 @@ class _HomepageState extends State<Homepage> {
 
 Widget _Uppersection({required BuildContext context}) {
   final user = FirebaseAuth.instance.currentUser;
+  final padding = MediaQuery.of(context).padding;
 
-  return Scaffold(
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            height: 310,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF005341),
-                  Color(0xFF43A047),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50),
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CircleAvatar(
-                      radius: 27,
-                      backgroundImage: user?.photoURL != null
-                          ? NetworkImage(user!.photoURL!)
-                          : const AssetImage(
-                                  "assets/images/icons8-user-48 (1).png")
-                              as ImageProvider,
-                    ),
-                    const SizedBox(width: 200, height: 100),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingsScreen(),
-                            ));
-                      },
-                      icon: Icon(Icons.settings),
-                      color: Colors.white,
-                      iconSize: 30,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-              ],
-            ),
-          )
+  return Container(
+    height: 310 + padding.top,
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color(0xFF005341),
+          Color(0xFF43A047),
         ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(50),
+        bottomRight: Radius.circular(50),
+      ),
+    ),
+    child: Column(
+      children: [
+        SizedBox(
+            height: padding
+                .top), // Add padding to cover the status bar and notch area
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CircleAvatar(
+              radius: 27,
+              backgroundImage: user?.photoURL != null
+                  ? NetworkImage(user!.photoURL!)
+                  : const AssetImage("assets/images/icons8-user-48 (1).png")
+                      as ImageProvider,
+            ),
+            const SizedBox(width: 200, height: 40),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.settings),
+              color: Colors.white,
+              iconSize: 30,
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+      ],
     ),
   );
 }
@@ -143,7 +165,7 @@ class _Greetings extends StatelessWidget {
           "Hi $username",
           style: const TextStyle(
             fontFamily: 'inter',
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
@@ -175,7 +197,7 @@ class _CardsectionState extends State<Cardsection> {
           width: 300,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),

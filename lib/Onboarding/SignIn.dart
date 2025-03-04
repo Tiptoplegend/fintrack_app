@@ -14,7 +14,8 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  bool _isPasswordVisible = false; // State for password visibility
+  bool _isPasswordVisible = false; // Password visibility state
+  bool _isLoading = false; // Global loading state
   String email = '';
   String password = '';
 
@@ -23,99 +24,149 @@ class _SigninState extends State<Signin> {
 
   final _formKey = GlobalKey<FormState>();
 
-  userLogin() async {
-    // showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     });
-    // Navigator.pop(context);
+  // Start Loading
+  void _startLoading() {
+    setState(() {
+      _isLoading = true;
+    });
+  }
+
+  // Stop Loading
+  void _stopLoading() {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  // Sign in with Email & Password
+  Future<void> userLogin() async {
+    if (!mounted) return;
+    _startLoading(); // Start loading animation
+
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Navigation()));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              "No user Found for that Email",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        );
-      } else if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              "Wrong password Provided by user",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        );
+
+      if (mounted) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Navigation()));
       }
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
+      _stopLoading(); // Stop loading if error occurs
+
+      String errorMessage = "An error occurred, please try again.";
+
+      if (e.code == 'user-not-found') {
+        errorMessage = "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        errorMessage = "Wrong password provided.";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            errorMessage,
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
+    }
+  }
+
+  // Google Sign-In with Unified Loading State
+  Future<void> googleSignIn() async {
+    if (!mounted) return;
+    _startLoading(); // Start loading animation
+
+    try {
+      await AuthMethods().signInwithGoogle(context);
+
+      if (mounted) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Navigation()));
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      _stopLoading(); // Stop loading if error occurs
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            "Google sign-in failed. Please try again.",
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFF005341), Color(0xFF43A047)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+            ),
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: const Text(
+              'Login',
+              style: TextStyle(
+                  fontSize: 24, fontFamily: 'Inter', color: Colors.white),
+            ),
+            centerTitle: true,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        
-        title: const Text(
-          'Login',
-          style: TextStyle(
-            fontSize: 24,
-            fontFamily: 'Inter',
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 5),
-                _WelcomeText(),
-                const SizedBox(height: 2),
-                _Text(),
-                const SizedBox(height: 30),
-                _EmailField(),
-                const SizedBox(height: 30),
-                _Password(),
-                const SizedBox(height: 30),
-                _LoginButton(),
-                const SizedBox(height: 5),
-                _ForgotPassword(),
-                const SizedBox(height: 20),
-                _Account_yet(),
-                const SizedBox(height: 30),
-                _Continue(),
-              ],
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5),
+                    _WelcomeText(),
+                    const SizedBox(height: 2),
+                    _Text(),
+                    const SizedBox(height: 30),
+                    _EmailField(),
+                    const SizedBox(height: 30),
+                    _Password(),
+                    const SizedBox(height: 30),
+                    _LoginButton(), // Login button
+                    const SizedBox(height: 5),
+                    _ForgotPassword(),
+                    const SizedBox(height: 20),
+                    _Account_yet(),
+                    const SizedBox(height: 30),
+                    _Continue(), // Google Sign-In button
+                  ],
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        if (_isLoading)
+          _LoadingOverlay(), // Show loading overlay when signing in
+      ],
     );
   }
 
@@ -125,10 +176,7 @@ class _SigninState extends State<Signin> {
       child: Text(
         'Welcome Back!',
         style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
+            fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -138,10 +186,7 @@ class _SigninState extends State<Signin> {
       alignment: Alignment.centerLeft,
       child: Text(
         "Let’s get you back to managing your finances.",
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 16,
-        ),
+        style: TextStyle(fontFamily: 'Inter', fontSize: 16),
       ),
     );
   }
@@ -149,37 +194,12 @@ class _SigninState extends State<Signin> {
   Widget _EmailField() {
     return TextFormField(
       controller: emailController,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Please Enter Email';
-        } else {
-          return null;
-        }
-      },
+      validator: (value) =>
+          value == null || value.trim().isEmpty ? 'Please Enter Email' : null,
       decoration: InputDecoration(
         labelText: 'Email',
         filled: true,
-        labelStyle: TextStyle(
-          fontSize: 18,
-          color: Colors.green,
-        ),
-        floatingLabelStyle: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 22,
-          color: Colors.green,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.3),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.3),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.5, color: Colors.green),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
       ),
     );
   }
@@ -187,48 +207,19 @@ class _SigninState extends State<Signin> {
   Widget _Password() {
     return TextFormField(
       controller: passwordController,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'Please Enter your Password';
-        } else {
-          return null;
-        }
-      },
-
-      obscureText: !_isPasswordVisible, 
+      validator: (value) => value == null || value.trim().isEmpty
+          ? 'Please Enter your Password'
+          : null,
+      obscureText: !_isPasswordVisible,
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
-        labelStyle: TextStyle(
-          fontSize: 18,
-          color: Colors.green,
-        ),
-        floatingLabelStyle: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 22,
-          color: Colors.green,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.3),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.3),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(width: 0.5, color: Colors.green),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         suffixIcon: IconButton(
           icon: Icon(
-            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
+              _isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+          onPressed: () =>
+              setState(() => _isPasswordVisible = !_isPasswordVisible),
         ),
       ),
     );
@@ -236,29 +227,23 @@ class _SigninState extends State<Signin> {
 
   Widget _LoginButton() {
     return ElevatedButton(
-      onPressed: () {
-        // Handle login logic
-        if (_formKey.currentState!.validate()) {
-          email = emailController.text.trim();
-          password = passwordController.text.trim();
-          userLogin();
-        }
-      },
+      onPressed: _isLoading
+          ? null
+          : () {
+              if (_formKey.currentState!.validate()) {
+                email = emailController.text.trim();
+                password = passwordController.text.trim();
+                userLogin();
+              }
+            },
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
-        backgroundColor: const Color(0xFF005341),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        backgroundColor: Colors.green[600],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       ),
-      child: Text(
-        "Login",
-        style: TextStyle(
-          fontSize: 18,
-          fontFamily: 'Inter',
-          color: Colors.white,
-        ),
-      ),
+      child: Text("Login",
+          style: TextStyle(
+              fontSize: 18, fontFamily: 'Inter', color: Colors.white)),
     );
   }
 
@@ -329,32 +314,25 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _Continue() {
-    // Google Sign-In Button
     return ElevatedButton.icon(
-      onPressed: () {
-        // Handle Google sign-in logic
-        AuthMethods().signInwithGoogle(context);
-      },
+      onPressed: _isLoading ? null : googleSignIn,
       style: ElevatedButton.styleFrom(
         minimumSize: Size(double.infinity, 50),
         backgroundColor: Colors.white,
-        side: BorderSide(
-          color: Colors.grey,
-          width: 0.1,
-        ),
+        side: BorderSide(color: Colors.grey, width: 0.1),
       ),
-      icon: SizedBox(
-        width: 33,
-        height: 33,
-        child: Image.asset('assets/google_icon0.png'),
-      ),
-      label: Text(
-        "Continue with Google",
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
-          fontFamily: 'Inter',
-        ),
+      icon: Image.asset('assets/google_icon0.png', width: 33, height: 33),
+      label: Text("Continue with Google",
+          style: TextStyle(
+              color: Colors.black, fontSize: 16, fontFamily: 'Inter')),
+    );
+  }
+
+  Widget _LoadingOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.6),
+      child: Center(
+        child: CircularProgressIndicator(color: Colors.white),
       ),
     );
   }

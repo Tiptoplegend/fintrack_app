@@ -60,7 +60,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
         preferredSize: const Size.fromHeight(200),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.green.shade800,
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF43A047),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(0),
               bottomRight: Radius.circular(50),
@@ -82,8 +89,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: CircleAvatar(
                     radius: 25,
-                    backgroundImage: user?.photoURL != null
-                        ? NetworkImage(user!.photoURL!)
+                    backgroundImage: user.photoURL != null
+                        ? NetworkImage(user.photoURL!)
                         : const AssetImage(
                                 "assets/images/icons8-user-48 (1).png")
                             as ImageProvider,

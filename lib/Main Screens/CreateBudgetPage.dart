@@ -71,7 +71,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF007D3E),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -87,7 +86,16 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         centerTitle: true,
       ),
       body: Container(
-        color: const Color(0xFF007D3E),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF005341),
+              Color(0xFF43A047),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -331,7 +339,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
   }
 }
 
-Future<String?> _CalendarModal(BuildContext context) {
+Future<String?>_CalendarModal(BuildContext context) {
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
