@@ -104,19 +104,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     super.initState();
     _notiService.initNotification(); // Ensure notifications are initialized
-    _loadNotificationPreference();
-  }
-
-  Future<void> _loadNotificationPreference() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isNotificationsEnabled = prefs.getBool('notifications_enabled') ?? false;
-    });
-  }
-
-  Future<void> _saveNotificationPreference(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('notifications_enabled', value);
   }
 
   @override
@@ -136,15 +123,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 setState(() {
                   _isNotificationsEnabled = newValue;
                 });
-                await _saveNotificationPreference(newValue);
+
                 if (newValue) {
-                  final now = DateTime.now();
                   await _notiService.scheduleNotification(
-                    id: 1,
                     title: "Notification",
                     body: "You have enabled notifications",
-                    hour: 7,
-                    minute: 30,
+                    hour: 15,
+                    minute: 10,
                   );
                 } else {
                   await _notiService.cancelAllNotifications();
@@ -312,7 +297,6 @@ class UserProfileSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = user.displayName ?? "User";
-    String userimg = user.photoURL ?? "User";
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

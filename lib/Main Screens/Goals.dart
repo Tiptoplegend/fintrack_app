@@ -1,4 +1,3 @@
-import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +59,7 @@ class _GoalsState extends State<Goals> {
           Positioned(
             top: 580,
             left: 33,
-            child: _creategoalsbtn(context),
+            child: _creategoalsbtn(context, firestoreService),
           ),
         ],
       ),
@@ -68,7 +67,7 @@ class _GoalsState extends State<Goals> {
   }
 }
 
-Widget _creategoalsbtn(BuildContext context) {
+Widget _creategoalsbtn(BuildContext context, FirestoreService firestoreService) {
   return Padding(
     padding: EdgeInsets.all(3),
     child: ElevatedButton(
@@ -76,7 +75,7 @@ Widget _creategoalsbtn(BuildContext context) {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (BuildContext modalContext) => _modalbottom(modalContext),
+          builder: (BuildContext modalContext) => _modalbottom(modalContext, firestoreService),
         );
       },
       style: ElevatedButton.styleFrom(
@@ -95,7 +94,7 @@ Widget _creategoalsbtn(BuildContext context) {
 }
 
 // the menu that shows when you click the creatbtn
-Widget _modalbottom(BuildContext context) {
+Widget _modalbottom(BuildContext context, FirestoreService firestoreService) {
   TextEditingController titleController = TextEditingController();
   TextEditingController amountController = TextEditingController();
 
@@ -186,6 +185,8 @@ Widget _modalbottom(BuildContext context) {
                   title: titleController.text,
                   targetAmount: double.parse(amountController.text),
                 );
+                firestoreService.addGoal(newGoal);
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(Colors.green.value),
@@ -262,5 +263,13 @@ class Goalcard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class FirestoreService {
+  // existing methods and properties
+
+  Future<void> addGoal(Goal goal) async {
+    // Add your Firestore logic to add a goal here
   }
 }
