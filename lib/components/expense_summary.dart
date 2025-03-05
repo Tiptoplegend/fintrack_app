@@ -4,12 +4,19 @@ import 'package:fintrack_app/bar%20Graph/bar_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ExpenseSummary extends StatelessWidget {
+class ExpenseSummary extends StatefulWidget {
   final DateTime startOfweek;
   const ExpenseSummary({
     super.key,
     required this.startOfweek,
   });
+
+  @override
+  _ExpenseSummaryState createState() => _ExpenseSummaryState();
+}
+
+class _ExpenseSummaryState extends State<ExpenseSummary> {
+  String _selectedFilter = 'Weekly';
 
   double calculateMax(
       ExpenseData value,
@@ -68,42 +75,57 @@ class ExpenseSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String sunday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 0)));
-    String monday = convertDateTimeToString(startOfweek.add(Duration(days: 1)));
-    String tuesday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 2)));
-    String wednesday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 3)));
-    String thursday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 4)));
-    String friday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 5)));
-    String saturday =
-        convertDateTimeToString(startOfweek.add(const Duration(days: 6)));
+    String sunday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 0)));
+    String monday =
+        convertDateTimeToString(widget.startOfweek.add(Duration(days: 1)));
+    String tuesday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 2)));
+    String wednesday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 3)));
+    String thursday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 4)));
+    String friday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 5)));
+    String saturday = convertDateTimeToString(
+        widget.startOfweek.add(const Duration(days: 6)));
 
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Column(
         children: [
-          // week total summary
-          SizedBox(
-            height: 20,
-          ),
           Padding(
-            padding: const EdgeInsets.only(left: 25.0),
+            padding: const EdgeInsets.only(right: 27, top: 5),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
                   'GHC${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
-                
+                const SizedBox(
+                  width: 170,
+                ),
+                DropdownButton<String>(
+                  value: _selectedFilter,
+                  items: <String>['Weekly', 'Monthly', 'Yearly']
+                      .map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedFilter = newValue!;
+                    });
+                  },
+                ),
               ],
             ),
           ),
+          // week total summary
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           SizedBox(
             height: 220,
