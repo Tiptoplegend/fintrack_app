@@ -44,8 +44,8 @@ class ExpenseData extends ChangeNotifier {
   }
 
   // ignore: non_constant_identifier_names
-  DateTime StartOfWeek(DateTime dateTime) {
-    DateTime startOfWeek = DateTime.now(); // Initialize with a default value
+  DateTime StartOfWeekDate() {
+    DateTime? startOfWeek;
 
     DateTime today = DateTime.now();
 
@@ -54,7 +54,7 @@ class ExpenseData extends ChangeNotifier {
         startOfWeek = today.subtract(Duration(days: i));
       }
     }
-    return startOfWeek;
+    return startOfWeek!;
   }
 
   Map<String, double> calculateDailyExpenseSummary() {
@@ -62,7 +62,7 @@ class ExpenseData extends ChangeNotifier {
 
     for (var expense in overallExpenseList) {
       String date = convertDateTimeToString(expense.expenseDate);
-      double amount = double.parse(expense.expenseAmount as String);
+      double amount = (expense.expenseAmount as double);
 
       if (dailyExpenseSummary.containsKey(date)) {
         double currentAmount = dailyExpenseSummary[date]!;
@@ -75,4 +75,6 @@ class ExpenseData extends ChangeNotifier {
 
     return dailyExpenseSummary;
   }
+
+  startOfweekDate() {}
 }

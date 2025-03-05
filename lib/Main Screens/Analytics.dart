@@ -1,5 +1,6 @@
 // Ensure this import is correct
 import 'package:fintrack_app/Data/expense_data.dart';
+import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -79,9 +80,15 @@ Widget _TransactionList() {
           body: ListView(
         children: [
           // weekly summary goes here
+          ExpenseSummary(startOfweek: value.StartOfWeekDate()),
+          SizedBox(height: 20),
 
           // Expense/Transaction goes here
-
+          Text(
+            'Transcation History',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 2),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
