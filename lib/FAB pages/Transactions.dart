@@ -1,6 +1,5 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
-import 'package:fintrack_app/Main%20Screens/Analytics.dart';
 import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';

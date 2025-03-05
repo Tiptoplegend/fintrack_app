@@ -164,63 +164,9 @@ class _SigninState extends State<Signin> {
             ),
           ),
         ),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        
-        title: const Text(
-          'Login',
-          style: TextStyle(
-            fontSize: 24,
-            fontFamily: 'Inter',
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      // Removed duplicate body parameter
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Form(
-            key: _formKey,
-            child: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    _WelcomeText(),
-                    const SizedBox(height: 2),
-                    _Text(),
-                    const SizedBox(height: 30),
-                    _EmailField(),
-                    const SizedBox(height: 30),
-                    _Password(),
-                    const SizedBox(height: 30),
-                    _LoginButton(),
-                    const SizedBox(height: 5),
-                    _ForgotPassword(),
-                    const SizedBox(height: 20),
-                    _Account_yet(),
-                    const SizedBox(height: 30),
-                    _Continue(),
-                  ],
-                ),
-                if (_isLoading)
-                  _LoadingOverlay(), // Show loading overlay when signing in
-              ],
-            ),
-          ),
-        ),
-    ),
+        if (_isLoading)
+          _LoadingOverlay(), // Show loading overlay when signing in
+      ],
     );
   }
 
@@ -280,32 +226,25 @@ class _SigninState extends State<Signin> {
   }
 
   Widget _LoginButton() {
-return ElevatedButton(
-  onPressed: _isLoading
-      ? null
-      : () {
-          if (_formKey.currentState!.validate()) {
-            email = emailController.text.trim();
-            password = passwordController.text.trim();
-            userLogin();
-          }
-        },
-  style: ElevatedButton.styleFrom(
-    minimumSize: Size(double.infinity, 50),
-    backgroundColor: Colors.green[600],
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-  ),
-  child: Text(
-    "Login",
-    style: TextStyle(
-      fontSize: 18,
-      fontFamily: 'Inter',
-      color: Colors.white,
-    ),
-  ),
-);
+    return ElevatedButton(
+      onPressed: _isLoading
+          ? null
+          : () {
+              if (_formKey.currentState!.validate()) {
+                email = emailController.text.trim();
+                password = passwordController.text.trim();
+                userLogin();
+              }
+            },
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(double.infinity, 50),
+        backgroundColor: Colors.green[600],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
+      child: Text("Login",
+          style: TextStyle(
+              fontSize: 18, fontFamily: 'Inter', color: Colors.white)),
+    );
   }
 
   Widget _ForgotPassword() {

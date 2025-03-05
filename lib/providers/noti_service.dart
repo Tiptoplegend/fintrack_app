@@ -10,7 +10,7 @@ class NotiService {
   bool _isInitialized = false;
 
   Future<void> initNotification() async {
-    if (_isInitialized) return; // Prevent multiple initializations
+    if (_isInitialized) return;
     _isInitialized = true;
 
     tz.initializeTimeZones();
@@ -36,10 +36,11 @@ class NotiService {
 
     // Ensure notification channel is created for Android 8.0+
     const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'daily_channel_id', // Must match the channel ID in `AndroidNotificationDetails`
+      'daily_channel_id',
       'Daily Notifications',
       description: 'Channel for daily notifications',
       importance: Importance.high,
+      playSound: true,
     );
 
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
@@ -52,11 +53,13 @@ class NotiService {
   NotificationDetails notificationDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'daily_channel_id', // Must match the channel ID
+        'daily_channel_id',
         'Daily Notifications',
         channelDescription: 'Daily Notification Channel',
         importance: Importance.max,
         priority: Priority.high,
+        playSound: true,
+        enableVibration: true,
         icon: '@mipmap/ic_launcher',
       ),
       iOS: DarwinNotificationDetails(),
@@ -68,24 +71,20 @@ class NotiService {
     required String title,
     required String body,
   }) async {
-    await initNotification(); // Ensure initialization before showing notification
-
-    await notificationPlugin.show(
-      id,
-      title,
-      body,
-      notificationDetails(), // FIX: Include proper notification details
-    );
+    await initNotification();
+    await notificationPlugin.show(id, title, body, notificationDetails());
   }
 
-  Future<void> scheduleNotification(
-      {int id = 1,
-      required String title,
-      required String body,
-      required int hour,
-      required int minute}) async {
-    final now = tz.TZDateTime.now(tz.local);
+  Future<void> scheduleNotification({
+    int id = 1,
+    required String title,
+    required String body,
+    required int hour,
+    required int minute,
+  }) async {
+    await initNotification(); // Ensure notifications are initialized
 
+    final now = tz.TZDateTime.now(tz.local);
     var scheduleDate = tz.TZDateTime(
       tz.local,
       now.year,
@@ -96,21 +95,25 @@ class NotiService {
     );
 
     if (scheduleDate.isBefore(now)) {
-      scheduleDate = scheduleDate.add(Duration(days: 1));
+      scheduleDate =
+          scheduleDate.add(Duration(days: 1)); // Schedule for the next day
     }
+
     await notificationPlugin.zonedSchedule(
       id,
       title,
       body,
       scheduleDate,
-      notificationDetails(),
+      notificationDetails(), // Ensure notification details are passed correctly
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode:
+          AndroidScheduleMode.exactAllowWhileIdle, // Ensure exact scheduling
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print('Notification scheduled for $hour:$minute');
+    print(
+        'Notification scheduled for $hour:$minute at ${scheduleDate.toString()}');
   }
 
   Future<void> cancelAllNotifications() async {
