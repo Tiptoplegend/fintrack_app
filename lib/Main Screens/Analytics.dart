@@ -82,7 +82,7 @@ Widget _TransactionList() {
           // weekly summary goes here
           ExpenseSummary(startOfweek: value.StartOfWeekDate()),
           SizedBox(height: 20),
-
+          
           // Expense/Transaction goes here
           Text(
             'Transcation History',
