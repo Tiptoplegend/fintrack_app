@@ -47,6 +47,7 @@ dependencies:
   table_calendar: ^3.0.0
   timezone: ^0.10.0
   flutter_timezone: ^4.1.0
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
