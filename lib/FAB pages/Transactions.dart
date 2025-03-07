@@ -242,6 +242,7 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     ExpenseItem newExpense = ExpenseItem(
+      id: '',
       category: selectedCategory!,
       expenseAmount: double.parse(_amountController.text.replaceAll(',', '')),
       expenseDate: DateTime.now(),

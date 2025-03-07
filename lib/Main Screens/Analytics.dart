@@ -82,7 +82,7 @@ Widget _TransactionList() {
           // weekly summary goes here
           ExpenseSummary(startOfweek: value.StartOfWeekDate()),
           SizedBox(height: 20),
-          
+
           // Expense/Transaction goes here
           Text(
             'Transcation History',
@@ -101,7 +101,8 @@ Widget _TransactionList() {
               return ListTile(
                 leading: Icon(Icons.category),
                 title: Text(expense.category.name),
-                subtitle: Text(formattedDate), // Updated to use formatted date
+                subtitle: Text(formattedDate,
+                    semanticsLabel: DateTime.now().toString()),
                 trailing: Text(
                   'GHC ${expense.expenseAmount.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 15),

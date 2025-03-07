@@ -94,35 +94,54 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       builder: (context, value, child) => Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 27, top: 5),
+            padding: const EdgeInsets.only(right: 20, top: 10, left: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'GHC${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'GHC ${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
+                      style:
+                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Total expense',
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 170,
-                ),
-                DropdownButton<String>(
-                  value: _selectedFilter,
-                  items: <String>['Weekly', 'Monthly', 'Yearly']
-                      .map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedFilter = newValue!;
-                    });
-                  },
+
+                // Dropdown
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton<String>(
+                    value: _selectedFilter,
+                    underline: SizedBox(),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    items: <String>['Weekly', 'Monthly', 'Yearly']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedFilter = newValue!;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
           ),
+
           // week total summary
           SizedBox(
             height: 10,
