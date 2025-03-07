@@ -90,6 +90,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     String saturday = convertDateTimeToString(
         widget.startOfweek.add(const Duration(days: 6)));
 
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Column(
         children: [
@@ -108,7 +111,10 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     ),
                     Text(
                       'Total expense',
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                   ],
                 ),
@@ -119,11 +125,15 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(10),
+                    color: isDarkMode ? Colors.grey[800] : Colors.white,
                   ),
                   child: DropdownButton<String>(
                     value: _selectedFilter,
                     underline: SizedBox(),
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                    ),
                     items: <String>['Weekly', 'Monthly', 'Yearly']
                         .map((String value) {
                       return DropdownMenuItem<String>(

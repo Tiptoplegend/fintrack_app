@@ -1,4 +1,3 @@
-// Ensure this import is correct
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -95,8 +94,8 @@ Widget _TransactionList() {
             itemCount: value.getExpenseList().length,
             itemBuilder: (context, index) {
               final expense = value.getExpenseList()[index];
-              final formattedDate =
-                  DateFormat('dd/MM/yyyy').format(expense.expenseDate);
+              final formattedDate = DateFormat('dd/MM/yyyy   hh:mm a')
+                  .format(expense.expenseDate);
 
               return ListTile(
                 leading: Icon(Icons.category),
