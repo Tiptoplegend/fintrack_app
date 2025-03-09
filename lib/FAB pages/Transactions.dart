@@ -251,7 +251,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
 
-    // Navigate back to Navigation page, showing Analytics tab (index 1)
+   
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

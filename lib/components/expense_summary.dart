@@ -156,6 +156,37 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
           SizedBox(
             height: 10,
           ),
+
+          // Filter 2
+
+          Container(
+            width: 400,
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: isDarkMode ? Colors.grey[800]! : Colors.white,
+                  width: 3.0),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                    onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new)),
+                SizedBox(width: 100),
+                Text('Date Range'),
+                SizedBox(width: 100),
+                IconButton(
+                    onPressed: () {}, icon: Icon(Icons.arrow_forward_ios)),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: 20,
+          ),
+
+          // Bar Graph
           SizedBox(
             height: 220,
             child: MyBarGraph(

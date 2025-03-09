@@ -1,7 +1,7 @@
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 
 class ExpenseItem {
-  final String id;
+  late final String id;
   final Category category;
   final double expenseAmount;
   DateTime expenseDate;
@@ -20,7 +20,7 @@ class ExpenseItem {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'category': category,
+      'category': category.name,
       'expenseAmount': expenseAmount,
       'expenseDate': expenseDate.millisecondsSinceEpoch,
       'expenseNote': expenseNote,
@@ -30,10 +30,10 @@ class ExpenseItem {
   factory ExpenseItem.fromMap(Map<String, dynamic> map, String documentId) {
     return ExpenseItem(
       id: documentId,
-      category: map['category'],
-      expenseAmount: map['expenseAmount'],
-      expenseDate: DateTime.parse(map['expenseDate']),
-      expenseNote: map['notes'] ?? "",
+      category: Category(name: map['category']),
+      expenseAmount: map['expenseAmount'].toDouble(),
+      expenseDate: DateTime.fromMillisecondsSinceEpoch(map['expenseDate']),
+      expenseNote: map['expenseNote'] ?? "",
     );
   }
 }
