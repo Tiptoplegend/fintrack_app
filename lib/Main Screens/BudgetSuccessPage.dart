@@ -1,4 +1,5 @@
 import 'package:fintrack_app/Main%20Screens/Budget.dart';
+import 'package:fintrack_app/Navigation.dart';
 import 'package:flutter/material.dart';
 
 class BudgetSuccessPage extends StatelessWidget {
@@ -7,7 +8,7 @@ class BudgetSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF005341), 
+      backgroundColor: const Color(0xFF005341),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -15,7 +16,7 @@ class BudgetSuccessPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Image.asset(
-                'assets/images/Illustration_Success.png', 
+                'assets/images/Illustration_Success.png',
                 height: 300,
                 fit: BoxFit.contain,
               ),
@@ -41,7 +42,7 @@ class BudgetSuccessPage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 120), 
+            const SizedBox(height: 120),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: SizedBox(
@@ -50,7 +51,8 @@ class BudgetSuccessPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>  BudgetScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => Navigation(selectedIndex: 3)),
                     );
                   },
                   style: ElevatedButton.styleFrom(
