@@ -40,4 +40,29 @@ class FirestoreService {
 class Analytics {
   final CollectionReference _TransactionsCollection =
       FirebaseFirestore.instance.collection('Transactions');
+
+  Future<DocumentReference<Object?>> addTransaction(
+      String category, double amount, String? notes) async {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+
+    return await _TransactionsCollection.add({
+      'userId': userId,
+      'category': category,
+      'expenseAmount': amount,
+      'expenseDate': Timestamp.now(),
+      'notes': notes ?? "",
+    });
+  }
+
+  Future<List<QueryDocumentSnapshot>?> getTransactions() async {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+
+    var query = await _TransactionsCollection.where('userId', isEqualTo: userId)
+        .orderBy('expenseDate', descending: true)
+        .get();
+
+    return query.docs;
+  }
 }

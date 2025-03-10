@@ -1,5 +1,6 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/Datetime/date_time_helper.dart';
+import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/bar%20Graph/bar_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class ExpenseSummary extends StatefulWidget {
 }
 
 class _ExpenseSummaryState extends State<ExpenseSummary> {
+  DateTime _currentWeekStart = DateTime.now();
   String _selectedFilter = 'Weekly';
 
   double calculateMax(
@@ -90,43 +92,122 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     String saturday = convertDateTimeToString(
         widget.startOfweek.add(const Duration(days: 6)));
 
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
     return Consumer<ExpenseData>(
       builder: (context, value, child) => Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 27, top: 5),
+            padding: const EdgeInsets.only(right: 20, top: 10, left: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'GHC${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'GHC ${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
+                      style:
+                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Total expense',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 170,
-                ),
-                DropdownButton<String>(
-                  value: _selectedFilter,
-                  items: <String>['Weekly', 'Monthly', 'Yearly']
-                      .map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedFilter = newValue!;
-                    });
-                  },
+
+                // Dropdown
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
+                    color: isDarkMode ? Colors.grey[800] : Colors.white,
+                  ),
+                  child: DropdownButton<String>(
+                    value: _selectedFilter,
+                    underline: SizedBox(),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                    ),
+                    items: <String>['Weekly', 'Monthly', 'Yearly']
+                        .map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedFilter = newValue!;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
           ),
+
           // week total summary
           SizedBox(
             height: 10,
           ),
+
+          //  Navigator for the week,month and year
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: isDarkMode ? Colors.grey[800]! : Colors.white,
+                    width: 3.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentWeekStart = _currentWeekStart
+                              .subtract(const Duration(days: 7));
+                        });
+                      },
+                      icon: Icon(Icons.arrow_back_ios_new)),
+                  SizedBox(width: 20), // Adjust the width as needed
+                  Expanded(
+                    child: Text(
+                      getWeekRange(_currentWeekStart),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Adjust the width as needed
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentWeekStart =
+                              _currentWeekStart.add(const Duration(days: 7));
+                        });
+                      },
+                      icon: Icon(Icons.arrow_forward_ios)),
+                ],
+              ),
+            ),
+          ),
+
+          SizedBox(
+            height: 20,
+          ),
+
+          // Bar Graph
           SizedBox(
             height: 220,
             child: MyBarGraph(
@@ -139,10 +220,45 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               thuAmount: value.calculateDailyExpenseSummary()[thursday] ?? 0,
               friAmount: value.calculateDailyExpenseSummary()[friday] ?? 0,
               satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
+              data: {},
             ),
           ),
         ],
       ),
     );
+  }
+
+  // Weekly expense summary
+  String getWeekRange(DateTime startDate) {
+    DateTime endDate = startDate.add(Duration(days: 6));
+    return "${startDate.day} ${_getMonthName(startDate.month)} - ${endDate.day} ${_getMonthName(endDate.month)} ${endDate.year}";
+  }
+
+  String _getMonthName(int month) {
+    List<String> months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    return months[month - 1];
+  }
+
+  List<ExpenseItem> getWeeklyExpenses(List<ExpenseItem> allExpenses) {
+    DateTime weekEnd = _currentWeekStart.add(Duration(days: 6));
+
+    return allExpenses.where((expense) {
+      return expense.expenseDate
+              .isAfter(_currentWeekStart.subtract(Duration(seconds: 1))) &&
+          expense.expenseDate.isBefore(weekEnd.add(Duration(seconds: 1)));
+    }).toList();
   }
 }

@@ -242,6 +242,7 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     ExpenseItem newExpense = ExpenseItem(
+      id: '',
       category: selectedCategory!,
       expenseAmount: double.parse(_amountController.text.replaceAll(',', '')),
       expenseDate: DateTime.now(),
@@ -250,7 +251,7 @@ class _TransactionPageState extends State<TransactionPage> {
 
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
 
-    // Navigate back to Navigation page, showing Analytics tab (index 1)
+   
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
