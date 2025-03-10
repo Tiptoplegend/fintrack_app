@@ -16,6 +16,7 @@ class ExpenseSummary extends StatefulWidget {
 }
 
 class _ExpenseSummaryState extends State<ExpenseSummary> {
+  DateTime _currentWeekStart = DateTime.now();
   String _selectedFilter = 'Weekly';
 
   double calculateMax(
@@ -157,28 +158,47 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
             height: 10,
           ),
 
-          // Filter 2
-
-          Container(
-            width: 400,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: isDarkMode ? Colors.grey[800]! : Colors.white,
-                  width: 3.0),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () {}, icon: Icon(Icons.arrow_back_ios_new)),
-                SizedBox(width: 100),
-                Text('Date Range'),
-                SizedBox(width: 100),
-                IconButton(
-                    onPressed: () {}, icon: Icon(Icons.arrow_forward_ios)),
-              ],
+          //  Navigator for the week,month and year
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: isDarkMode ? Colors.grey[800]! : Colors.white,
+                    width: 3.0),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentWeekStart = _currentWeekStart
+                              .subtract(const Duration(days: 7));
+                        });
+                      },
+                      icon: Icon(Icons.arrow_back_ios_new)),
+                  SizedBox(width: 20), // Adjust the width as needed
+                  Expanded(
+                    child: Text(
+                      getWeekRange(_currentWeekStart),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  SizedBox(width: 20), // Adjust the width as needed
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _currentWeekStart =
+                              _currentWeekStart.add(const Duration(days: 7));
+                        });
+                      },
+                      icon: Icon(Icons.arrow_forward_ios)),
+                ],
+              ),
             ),
           ),
 
@@ -204,5 +224,29 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
         ],
       ),
     );
+  }
+
+  // Weekly expense summary
+  String getWeekRange(DateTime startDate) {
+    DateTime endDate = startDate.add(Duration(days: 6));
+    return "${startDate.day} ${_getMonthName(startDate.month)} - ${endDate.day} ${_getMonthName(endDate.month)} ${endDate.year}";
+  }
+
+  String _getMonthName(int month) {
+    List<String> months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    return months[month - 1];
   }
 }
