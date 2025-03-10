@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:fintrack_app/Main Screens/CalendarPage.dart';
+import 'package:fintrack_app/Main%20Screens/BudgetSuccessPage.dart';
+import 'package:fintrack_app/Main%20Screens/CalendarPage.dart';
 
 class CreateBudgetPage extends StatefulWidget {
   const CreateBudgetPage({super.key});
@@ -174,7 +175,11 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                             borderSide: BorderSide(color: Color(0xFF007D3E)),
                           ),
                         ),
-                        style: const TextStyle(color: Colors.black),
+                        style: const TextStyle(
+                          color: Colors.black, 
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                        ),
                         icon: const Icon(
                           Icons.arrow_drop_down,
                           color: Colors.black,
@@ -192,14 +197,15 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                                     categoryIcons[category],
                                     color: categoryColors[category],
                                     size: 30,
-                                  ), // Increased icon size
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
                                   category,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.white, 
                                     fontSize: 18,
+                                    fontFamily: 'Inter',
                                   ),
                                 ),
                               ],
@@ -222,14 +228,15 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                                     categoryIcons[category],
                                     color: categoryColors[category],
                                     size: 30,
-                                  ), // Increased icon size
+                                  ),
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
                                   category,
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.black, 
                                     fontSize: 18,
+                                    fontFamily: 'Inter',
                                   ),
                                 ),
                               ],
@@ -238,46 +245,55 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                         },
                       ),
                       const SizedBox(height: 16), // Spacer
-                      Row(
-                        children: [
-                          const Text(
-                            'Budget Cycle:',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              _selectedBudgetCycle ?? 'Select Cycle',
-                              style: const TextStyle(
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Cycle:',
+                              style: TextStyle(
                                 color: Colors.black,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 fontFamily: 'Inter',
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.calendar_month,
-                                color: Colors.black, size: 30),
-                            onPressed: () async {
-                              String? selectedCycle =
-                                  await _CalendarModal(context);
-                              if (selectedCycle != null) {
-                                setState(() {
-                                  _selectedBudgetCycle = selectedCycle;
-                                });
-                              }
-                            },
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _selectedBudgetCycle ?? 'Select Cycle',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.calendar_month,
+                                  color: Colors.black, size: 30),
+                              onPressed: () async {
+                                String? selectedCycle =
+                                    await _CalendarModal(context);
+                                if (selectedCycle != null) {
+                                  setState(() {
+                                    _selectedBudgetCycle = selectedCycle;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16), // Spacer
                       SwitchListTile(
                         contentPadding: const EdgeInsets.only(left: 0),
-                        title: Align(
+                        title: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Receive Alert',
@@ -290,11 +306,11 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                         ),
                         value: true,
                         onChanged: (value) {},
-                        activeColor: Color(0xFF007D3E),
+                        activeColor: const Color(0xFF007D3E),
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
+                        child: Text(
                           'Receive alert when it reaches some point',
                           style: TextStyle(
                             fontFamily: 'Inter',
@@ -308,7 +324,71 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                         width: 350,
                         child: ElevatedButton(
                           onPressed: () {
-                            _CalendarModal(context);
+                            // Validate inputs before proceeding
+                            String budgetText = _controller.text
+                                .replaceAll('₵', '')
+                                .replaceAll(',', '');
+                            double? budgetAmount = double.tryParse(budgetText);
+
+                            if (budgetAmount == null || budgetAmount <= 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please enter budget amount.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (_selectedCategory == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please select a category.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (_selectedBudgetCycle == null ||
+                                _selectedBudgetCycle == 'Select Cycle') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please select a budget cycle.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                    
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BudgetSuccessPage(),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),
@@ -337,31 +417,31 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       ),
     );
   }
-}
 
-Future<String?>_CalendarModal(BuildContext context) {
-  return showModalBottomSheet<String>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.9,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+  Future<String?> _CalendarModal(BuildContext context) {
+    return showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.9,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: CalendarPage(
+            onCycleSelected: (cycle) {
+              Navigator.pop(context, cycle);
+            },
           ),
         ),
-        child: CalendarPage(
-          onCycleSelected: (cycle) {
-            Navigator.pop(context, cycle);
-          },
-        ),
       ),
-    ),
-  );
+    );
+  }
 }

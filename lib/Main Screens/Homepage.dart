@@ -40,7 +40,7 @@ class _HomepageState extends State<Homepage> {
           ),
         );
 
-        return exitApp ?? false;
+        return exitApp;
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light.copyWith(

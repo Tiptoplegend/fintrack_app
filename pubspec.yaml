@@ -39,12 +39,12 @@ dependencies:
   firebase_auth: ^5.4.1
   google_sign_in: ^6.2.2
   cloud_firestore: ^5.6.2
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.5.2
   provider: ^6.1.2
   percent_indicator: ^4.2.4
   flutter_local_notifications: ^18.0.1
   intl: ^0.20.2
-  table_calendar: ^3.0.0
+  table_calendar: ^3.2.0
   timezone: ^0.10.0
   flutter_timezone: ^4.1.0
   fl_chart: ^0.70.2
@@ -83,6 +83,9 @@ flutter:
     - assets/images/icons8-budget-30.png
     - assets/images/icons8-lightbulb-80.png
     - assets/images/icons8-user-48 (1).png 
+    - assets/images/Illustration_Success.png
+
+    
   #   
   # 
 
