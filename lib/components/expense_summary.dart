@@ -1,5 +1,6 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/Datetime/date_time_helper.dart';
+import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/bar%20Graph/bar_graph.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -219,6 +220,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               thuAmount: value.calculateDailyExpenseSummary()[thursday] ?? 0,
               friAmount: value.calculateDailyExpenseSummary()[friday] ?? 0,
               satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
+              data: {},
             ),
           ),
         ],
@@ -248,5 +250,15 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       "Dec"
     ];
     return months[month - 1];
+  }
+
+  List<ExpenseItem> getWeeklyExpenses(List<ExpenseItem> allExpenses) {
+    DateTime weekEnd = _currentWeekStart.add(Duration(days: 6));
+
+    return allExpenses.where((expense) {
+      return expense.expenseDate
+              .isAfter(_currentWeekStart.subtract(Duration(seconds: 1))) &&
+          expense.expenseDate.isBefore(weekEnd.add(Duration(seconds: 1)));
+    }).toList();
   }
 }
