@@ -25,7 +25,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     "December"
   ];
 
-  int currentMonthIndex = 4; // May
+  int currentMonthIndex = 2; // March
   int currentYear = DateTime.now().year;
 
   void previousMonth() {
