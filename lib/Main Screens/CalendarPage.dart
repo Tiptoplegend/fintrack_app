@@ -17,7 +17,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? _endDate;
   String _selectedFrequency = 'Daily';
 
-  // Date formatter to display only the date (e.g., "09-03-2025")
+
   final intl.DateFormat _dateFormatter = intl.DateFormat('dd-MM-yyyy');
 
   @override

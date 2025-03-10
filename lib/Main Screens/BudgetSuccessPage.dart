@@ -1,3 +1,4 @@
+import 'package:fintrack_app/Main%20Screens/Budget.dart';
 import 'package:flutter/material.dart';
 
 class BudgetSuccessPage extends StatelessWidget {
@@ -6,12 +7,11 @@ class BudgetSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A3C34), 
+      backgroundColor: const Color(0xFF005341), 
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Image.asset(
@@ -21,49 +21,37 @@ class BudgetSuccessPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24.0),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(10),
+            const Text(
+              'Budget Successfully Created',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Inter',
               ),
-              child: const Column(
-                children: [
-                  Text(
-                    'Budget Successfully Created',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Inter',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Awesome! Your new Monthly Budget is up and running.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 40), 
-          
+            const SizedBox(height: 8),
+            const Text(
+              'Awesome! Your new Monthly Budget is up and running.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontFamily: 'Inter',
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 120), 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  BudgetScreen()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF43A047),

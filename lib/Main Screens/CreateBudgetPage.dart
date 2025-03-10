@@ -335,7 +335,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                                 const SnackBar(
                                   backgroundColor: Colors.white,
                                   content: Text(
-                                    'Please enter a valid budget amount.',
+                                    'Please enter budget amount.',
                                     style: TextStyle(
                                       fontFamily: 'Inter',
                                       fontSize: 18,
@@ -382,7 +382,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               return;
                             }
 
-                            // Navigate to BudgetSuccessPage if all validations pass
+                    
                             Navigator.push(
                               context,
                               MaterialPageRoute(
