@@ -25,15 +25,15 @@ class _BudgetScreenState extends State<BudgetScreen> {
     "December"
   ];
 
-  int currentMonthIndex = 2; // March
+  int currentMonthIndex = 3; // March
   int currentYear = DateTime.now().year;
 
   void previousMonth() {
     setState(() {
-      if (currentMonthIndex > 0) {
+      if (currentMonthIndex > 1) {
         currentMonthIndex--;
       } else {
-        currentMonthIndex = 11; // December
+        currentMonthIndex = 12; // December
         currentYear--;
       }
     });
