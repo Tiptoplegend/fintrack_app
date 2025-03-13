@@ -25,30 +25,30 @@ class _BudgetScreenState extends State<BudgetScreen> {
     "December"
   ];
 
-  int currentMonthIndex = 3; // March
-  int currentYear = DateTime.now().year;
+  int currentMonthIndex = DateTime.now().month - 1; // Initialize to current month (zero-based index)
+ int currentYear = DateTime.now().year;
 
-  void previousMonth() {
-    setState(() {
-      if (currentMonthIndex > 1) {
-        currentMonthIndex--;
-      } else {
-        currentMonthIndex = 12; // December
-        currentYear--;
-      }
-    });
-  }
+void previousMonth() {
+  setState(() {
+    if (currentMonthIndex > 0) {
+      currentMonthIndex--;
+    } else {
+      currentMonthIndex = 11; // December (zero-based index)
+      currentYear--;
+    }
+  });
+}
 
-  void nextMonth() {
-    setState(() {
-      if (currentMonthIndex < 12) {
-        currentMonthIndex++;
-      } else {
-        currentMonthIndex = 0; // January
-        currentYear++;
-      }
-    });
-  }
+void nextMonth() {
+  setState(() {
+    if (currentMonthIndex < 11) {
+      currentMonthIndex++;
+    } else {
+      currentMonthIndex = 0; // January (zero-based index)
+      currentYear++;
+    }
+  });
+}
 
   final user = FirebaseAuth.instance.currentUser!;
   final userimg = FirebaseAuth.instance.currentUser!.photoURL;
