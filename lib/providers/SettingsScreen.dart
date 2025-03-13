@@ -138,7 +138,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 });
                 await _saveNotificationPreference(newValue);
                 if (newValue) {
-                  final now = DateTime.now();
                   await _notiService.scheduleNotification(
                     id: 1,
                     title: "Notification",
