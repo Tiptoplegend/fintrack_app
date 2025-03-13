@@ -41,7 +41,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
   void nextMonth() {
     setState(() {
-      if (currentMonthIndex < 11) {
+      if (currentMonthIndex < 12) {
         currentMonthIndex++;
       } else {
         currentMonthIndex = 0; // January
