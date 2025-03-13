@@ -3,6 +3,7 @@ import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,8 @@ class _TransactionPageState extends State<TransactionPage> {
 
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _NotesController = TextEditingController();
+  final FirestoreService firestoreService = FirestoreService();
+
   @override
   void initState() {
     super.initState();
@@ -214,8 +217,18 @@ class _TransactionPageState extends State<TransactionPage> {
 
   Widget _Continuebtn() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         _saveExpense();
+
+        Map<String, dynamic> expenseInfoMap = {
+          'amount': _amountController.text,
+          'category': selectedCategory!.name,
+          'icon': selectedCategory!.icon?.codePoint,
+          'notes': _NotesController.text,
+          'date': DateTime.now(),
+          'userId': FirebaseAuth.instance.currentUser!.uid,
+        };
+        await Transactionservice().addTransaction(expenseInfoMap);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(Colors.green.value),
@@ -240,18 +253,6 @@ class _TransactionPageState extends State<TransactionPage> {
       );
       return;
     }
-
-    ExpenseItem newExpense = ExpenseItem(
-      id: '',
-      category: selectedCategory!,
-      expenseAmount: double.parse(_amountController.text.replaceAll(',', '')),
-      expenseDate: DateTime.now(),
-      expenseNote: _NotesController.text,
-    );
-
-    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
-
-   
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

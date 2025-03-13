@@ -1,3 +1,5 @@
+import 'package:fintrack_app/FAB%20pages/Categories.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
@@ -14,26 +16,19 @@ class CreateBudgetPage extends StatefulWidget {
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
   final intl.NumberFormat _formatter = intl.NumberFormat("#,##0.##");
+  final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
   bool _isUpdatingText = false;
 
-  final Map<String, IconData> categoryIcons = {
-    'Food': Icons.fastfood,
-    'Transport': Icons.directions_bus,
-    'Entertainment': Icons.movie,
-    'Health': Icons.local_hospital,
-    'Shopping': Icons.shopping_cart,
-  };
-
-  final Map<String, Color> categoryColors = {
-    'Food': Colors.orange,
-    'Transport': Colors.blue,
-    'Entertainment': Colors.purple,
-    'Health': Colors.red,
-    'Shopping': Colors.green,
-  };
-
+  Category? selectedCategory;
+  List<Category> categories = [
+    Category(name: "Food", icon: Icons.fastfood),
+    Category(name: "Transportation", icon: Icons.directions_car),
+    Category(name: "Entertainment", icon: Icons.movie),
+    Category(name: "Utilities", icon: Icons.lightbulb),
+    Category(name: "Shopping", icon: Icons.shopping_cart),
+  ];
   @override
   void initState() {
     super.initState();
@@ -60,6 +55,19 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
 
       _isUpdatingText = false;
     });
+    _fetchCategories();
+  }
+
+  // Fetch the categories from the database
+  void _fetchCategories() async {
+    var userCategories = await FirestoreService().getCategories();
+    if (userCategories != null && mounted) {
+      setState(() {
+        for (var doc in userCategories) {
+          categories.add(Category(name: doc['name'], icon: Icons.category));
+        }
+      });
+    }
   }
 
   @override
@@ -124,9 +132,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 decoration: InputDecoration(
                   hintText: '₵0',
                   hintStyle: TextStyle(
-                    color: _selectedCategory != null
-                        ? categoryColors[_selectedCategory] ?? Colors.white
-                        : Colors.white,
                     fontSize: 30,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
@@ -176,7 +181,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           ),
                         ),
                         style: const TextStyle(
-                          color: Colors.black, 
+                          color: Colors.black,
                           fontSize: 18,
                           fontFamily: 'Inter',
                         ),
@@ -185,64 +190,40 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           color: Colors.black,
                           size: 30,
                         ),
-                        items: categoryIcons.keys.map((category) {
-                          return DropdownMenuItem(
-                            value: category,
+                        items: categories.map((category) {
+                          return DropdownMenuItem<String>(
+                            value: category.name,
                             child: Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: categoryColors[category]!
-                                      .withOpacity(0.2),
-                                  child: Icon(
-                                    categoryIcons[category],
-                                    color: categoryColors[category],
-                                    size: 30,
-                                  ),
-                                ),
+                                Icon(category.icon, color: Colors.white),
                                 const SizedBox(width: 10),
-                                Text(
-                                  category,
-                                  style: const TextStyle(
-                                    color: Colors.white, 
-                                    fontSize: 18,
-                                    fontFamily: 'Inter',
-                                  ),
-                                ),
+                                Text(category.name,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
                               ],
                             ),
                           );
                         }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCategory = value;
-                          });
-                        },
                         selectedItemBuilder: (BuildContext context) {
-                          return categoryIcons.keys.map((category) {
+                          return categories.map((category) {
                             return Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: categoryColors[category]!
-                                      .withOpacity(0.2),
-                                  child: Icon(
-                                    categoryIcons[category],
-                                    color: categoryColors[category],
-                                    size: 30,
-                                  ),
-                                ),
+                                Icon(category.icon, color: Colors.black),
                                 const SizedBox(width: 10),
                                 Text(
-                                  category,
-                                  style: const TextStyle(
-                                    color: Colors.black, 
-                                    fontSize: 18,
-                                    fontFamily: 'Inter',
-                                  ),
+                                  category.name,
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ],
                             );
                           }).toList();
                         },
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCategory = value;
+                          });
+                        },
+                        value: _selectedCategory,
                       ),
                       const SizedBox(height: 16), // Spacer
                       Container(
@@ -323,7 +304,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                       SizedBox(
                         width: 350,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Validate inputs before proceeding
                             String budgetText = _controller.text
                                 .replaceAll('₵', '')
@@ -382,13 +363,20 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               return;
                             }
 
-                    
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const BudgetSuccessPage(),
                               ),
                             );
+
+                            // database mapping for budget
+                            Map<String, dynamic> budgetinfoMap = {
+                              "budgetAmount": _controller.text,
+                              "category": _selectedCategory,
+                              "cycle": _selectedBudgetCycle,
+                            };
+                            await Budgetservice().addbudget(budgetinfoMap);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),

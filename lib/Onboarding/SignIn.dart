@@ -258,7 +258,7 @@ class _SigninState extends State<Signin> {
           text: TextSpan(
             text: 'Forgot Password?',
             style: TextStyle(
-              color: Colors.blue, // Change to your desired color
+              color: Colors.blue, 
               fontFamily: 'Inter',
               fontSize: 14,
             ),
