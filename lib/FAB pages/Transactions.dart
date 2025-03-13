@@ -1,13 +1,10 @@
-import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
-import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
