@@ -188,17 +188,24 @@ class BudgetContent extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "You don’t have a budget.",
-              style: TextStyle(
-                  fontFamily: 'inter', fontSize: 20, color: Colors.grey),
+            Container(
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                ),
+              ),
             ),
-            const SizedBox(height: 5),
-            const Text(
-              "Let’s make one so you are in control.",
-              style: TextStyle(
-                  fontFamily: 'inter', fontSize: 16, color: Colors.grey),
-            ),
+            // const Text(
+            //   "You don’t have a budget.",
+            //   style: TextStyle(
+            //       fontFamily: 'inter', fontSize: 20, color: Colors.grey),
+            // ),
+            // const SizedBox(height: 5),
+            // const Text(
+            //   "Let’s make one so you are in control.",
+            //   style: TextStyle(
+            //       fontFamily: 'inter', fontSize: 16, color: Colors.grey),
+            // ),
             SizedBox(height: 200),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -213,7 +220,8 @@ class BudgetContent extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CreateBudgetPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const CreateBudgetPage()),
                   );
                 },
                 child: const Text(

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/components/expense_summary.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +15,19 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
+  Stream<QuerySnapshot>? expenseStream;
+
+  void getontheload() {
+    expenseStream = Transactionservice().getexpenseDetails();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getontheload();
+    super.initState();
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
   final userimg = FirebaseAuth.instance.currentUser!.photoURL;
 
@@ -61,58 +76,59 @@ class _AnalyticsState extends State<Analytics> {
           ],
         ),
       ),
-      body: Stack(
-        // widgets will go here
-
-        children: [
-          _TransactionList(),
-        ],
-      ),
+      body: _TransactionList(expenseStream),
     );
   }
 }
 
-Widget _TransactionList() {
+Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
   return Consumer<ExpenseData>(
     builder: (context, value, child) {
-      return Scaffold(
-          body: ListView(
+      return ListView(
         children: [
-          // weekly summary goes here
+          // Weekly summary goes here
           ExpenseSummary(startOfweek: value.StartOfWeekDate()),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           // Expense/Transaction goes here
-          Text(
-            'Transcation History',
+          const Text(
+            'Transaction History',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 2),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: value.getExpenseList().length,
-            itemBuilder: (context, index) {
-              final expense = value.getExpenseList()[index];
-              final formattedDate = DateFormat('dd/MM/yyyy   hh:mm a')
-                  .format(expense.expenseDate);
+          const SizedBox(height: 2),
+          StreamBuilder<QuerySnapshot>(
+            stream: expenseStream,
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text('No transactions found.'));
+              }
 
-              return ListTile(
-                leading: Icon(Icons.category),
-                title: Text(expense.category.name),
-                subtitle: Text(formattedDate,
-                    semanticsLabel: DateTime.now().toString()),
-                trailing: Text(
-                  'GHC ${expense.expenseAmount.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 15),
-                ),
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot ds = snapshot.data!.docs[index];
+
+                  return ListTile(
+                    title: Text(ds['category']),
+                    subtitle: Text(
+                      DateFormat.yMMMd().format(ds['date'].toDate()),
+                    ),
+                    trailing: Text(ds['amount'].toString()),
+                  );
+                },
               );
             },
           ),
         ],
-      ));
+      );
     },
   );
 }
-
-// we would Create the widgets below

@@ -37,32 +37,40 @@ class FirestoreService {
   }
 }
 
-class Analytics {
-  final CollectionReference _TransactionsCollection =
-      FirebaseFirestore.instance.collection('Transactions');
+// DATABASE FOR TransactionPage
 
-  Future<DocumentReference<Object?>> addTransaction(
-      String category, double amount, String? notes) async {
+class Transactionservice {
+  // add transaction to db
+  Future addTransaction(Map<String, dynamic> expenseInfoMap) async {
     var user = FirebaseAuth.instance.currentUser;
     var userId = user!.uid;
-
-    return await _TransactionsCollection.add({
-      'userId': userId,
-      'category': category,
-      'expenseAmount': amount,
-      'expenseDate': Timestamp.now(),
-      'notes': notes ?? "",
-    });
+    String docId = FirebaseFirestore.instance.collection('expenses').doc().id;
+    return await FirebaseFirestore.instance
+        .collection('expenses')
+        .doc(docId)
+        .set(expenseInfoMap);
   }
 
-  Future<List<QueryDocumentSnapshot>?> getTransactions() async {
+// get transaction/expense from db
+  Stream<QuerySnapshot> getexpenseDetails() {
     var user = FirebaseAuth.instance.currentUser;
     var userId = user!.uid;
+    return FirebaseFirestore.instance
+        .collection('expenses')
+        .where('userId', isEqualTo: userId)
+        .snapshots();
+  }
+}
 
-    var query = await _TransactionsCollection.where('userId', isEqualTo: userId)
-        .orderBy('expenseDate', descending: true)
-        .get();
+//Database for Budgetpage
 
-    return query.docs;
+class Budgetservice {
+  // add budget to db
+  Future addbudget(Map<String, dynamic> budgetinfoMap) async {
+    String docId = FirebaseFirestore.instance.collection('Budget').doc().id;
+    return await FirebaseFirestore.instance
+        .collection('Budget')
+        .doc(docId)
+        .set(budgetinfoMap);
   }
 }

@@ -16,6 +16,7 @@ class CreateBudgetPage extends StatefulWidget {
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
   final intl.NumberFormat _formatter = intl.NumberFormat("#,##0.##");
+  final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
   bool _isUpdatingText = false;
@@ -303,7 +304,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                       SizedBox(
                         width: 350,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Validate inputs before proceeding
                             String budgetText = _controller.text
                                 .replaceAll('₵', '')
@@ -368,6 +369,14 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                                 builder: (context) => const BudgetSuccessPage(),
                               ),
                             );
+
+                            // database mapping for budget
+                            Map<String, dynamic> budgetinfoMap = {
+                              "budgetAmount": _controller.text,
+                              "category": _selectedCategory,
+                              "cycle": _selectedBudgetCycle,
+                            };
+                            await Budgetservice().addbudget(budgetinfoMap);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),
