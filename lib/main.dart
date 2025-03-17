@@ -1,5 +1,5 @@
+import 'package:fintrack_app/Api/firebase_api.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
-import 'package:fintrack_app/providers/noti_service.dart';
 import 'package:fintrack_app/providers/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,8 +11,7 @@ import 'package:fintrack_app/providers/theme_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  NotiService().initNotification();
-
+  await FirebaseApi().initNotifications();
   final prefs = await SharedPreferences.getInstance();
 
   // Load theme preference

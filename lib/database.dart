@@ -73,4 +73,14 @@ class Budgetservice {
         .doc(docId)
         .set(budgetinfoMap);
   }
+
+  // get budget from db
+  Stream<QuerySnapshot> getbudgetDetails() {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+    return FirebaseFirestore.instance
+        .collection('Budget')
+        .where('userId', isEqualTo: userId)
+        .snapshots();
+  }
 }

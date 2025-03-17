@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/CreateBudgetPage.dart';
@@ -10,6 +12,19 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
+  Stream<QuerySnapshot>? budgetStream;
+
+  void getontheload() {
+    budgetStream = Budgetservice().getbudgetDetails();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getontheload();
+    super.initState();
+  }
+
   final List<String> months = [
     "January",
     "February",
@@ -120,7 +135,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
           ),
         ),
       ),
-      body: BudgetContent(),
+      body: BudgetContent(budgetStream: budgetStream),
     );
   }
 }
@@ -179,64 +194,101 @@ class MonthYearSelector extends StatelessWidget {
 }
 
 class BudgetContent extends StatelessWidget {
-  const BudgetContent({super.key});
+  final Stream<QuerySnapshot>? budgetStream;
+
+  const BudgetContent({super.key, this.budgetStream});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                ),
-              ),
-            ),
-            // const Text(
-            //   "You don’t have a budget.",
-            //   style: TextStyle(
-            //       fontFamily: 'inter', fontSize: 20, color: Colors.grey),
-            // ),
-            // const SizedBox(height: 5),
-            // const Text(
-            //   "Let’s make one so you are in control.",
-            //   style: TextStyle(
-            //       fontFamily: 'inter', fontSize: 16, color: Colors.grey),
-            // ),
-            SizedBox(height: 200),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  minimumSize: Size(double.infinity, 50),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateBudgetPage()),
-                  );
-                },
-                child: const Text(
-                  "Create budget",
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Monthly Budget',
                   style: TextStyle(
-                    fontFamily: 'inter',
-                    color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 10),
+                Row(
+                  children: const [
+                    Icon(Icons.shopping_cart, color: Colors.green),
+                    SizedBox(width: 10),
+                    Text(
+                      'Shopping',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Remaining: \$100',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.red,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                LinearProgressIndicator(
+                  minHeight: 15,
+                  value: 0.5,
+                  backgroundColor: Colors.grey[300],
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  '\$200 of \$300 spent',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 200),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              minimumSize: const Size(double.infinity, 50),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CreateBudgetPage()),
+              );
+            },
+            child: const Text(
+              "Create budget",
+              style: TextStyle(
+                fontFamily: 'inter',
+                color: Colors.white,
+                fontSize: 18,
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
