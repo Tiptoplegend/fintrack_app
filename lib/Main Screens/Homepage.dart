@@ -1,3 +1,4 @@
+import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -122,14 +123,6 @@ Widget _Uppersection({required BuildContext context}) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CircleAvatar(
-              radius: 27,
-              backgroundImage: user?.photoURL != null
-                  ? NetworkImage(user!.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png")
-                      as ImageProvider,
-            ),
-            const SizedBox(width: 200, height: 40),
             IconButton(
               onPressed: () {
                 Navigator.push(
@@ -139,7 +132,25 @@ Widget _Uppersection({required BuildContext context}) {
                   ),
                 );
               },
-              icon: const Icon(Icons.settings),
+              icon: CircleAvatar(
+                radius: 27,
+                backgroundImage: user?.photoURL != null
+                    ? NetworkImage(user!.photoURL!)
+                    : const AssetImage("assets/images/icons8-user-48 (1).png")
+                        as ImageProvider,
+              ),
+            ),
+            const SizedBox(width: 200, height: 40),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Notifications(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.notifications_on_sharp),
               color: Colors.white,
               iconSize: 30,
             ),
