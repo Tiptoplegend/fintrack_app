@@ -14,10 +14,6 @@ class BudgetScreen extends StatefulWidget {
 class _BudgetScreenState extends State<BudgetScreen> {
   Stream<QuerySnapshot>? budgetStream;
 
-  // getontheload() async {
-  //   budgetStream = await Budgetservice().getbudgetDetails();
-  //   setState(() {});
-  // }
   void getontheload() {
     budgetStream = Budgetservice().getbudgetDetails();
   }
@@ -27,12 +23,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
     super.didChangeDependencies();
     getontheload();
   }
-
-  // @override
-  // void initState() {
-  //   getontheload();
-  //   super.initState();
-  // }
 
   final List<String> months = [
     "January",
@@ -202,116 +192,6 @@ class MonthYearSelector extends StatelessWidget {
   }
 }
 
-// Widget budgetdetails(Stream? budgetStream) {
-//   return StreamBuilder(
-//     stream: budgetStream,
-//     builder: (context, AsyncSnapshot snapshot) {
-//       if (snapshot.connectionState == ConnectionState.waiting) {
-//         return const Center(child: CircularProgressIndicator());
-//       }
-
-//       return Expanded(
-//         child: ListView(
-//           padding: const EdgeInsets.all(16),
-//           children: [
-//             if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
-//               const SizedBox(height: 20),
-//               const Center(child: Text("No budgets found.")),
-//               const SizedBox(height: 20),
-//             ],
-
-//             if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
-//               ...snapshot.data.docs.map<Widget>((doc) {
-//                 DocumentSnapshot ds = doc;
-//                 return Card(
-//                   elevation: 4,
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(15),
-//                   ),
-//                   margin: const EdgeInsets.symmetric(vertical: 10),
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(16),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Text(
-//                           'Budget cycle: ${ds['cycle']}',
-//                           style: const TextStyle(
-//                             fontSize: 14,
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                         const SizedBox(height: 10),
-//                         Row(
-//                           children: [
-//                             const Icon(Icons.shopping_cart,
-//                                 color: Colors.green),
-//                             const SizedBox(width: 10),
-//                             Text(ds['category'],
-//                                 style: const TextStyle(fontSize: 14)),
-//                           ],
-//                         ),
-//                         const SizedBox(height: 10),
-//                         const Text(
-//                           'Remaining: \$0',
-//                           style: TextStyle(fontSize: 20, color: Colors.red),
-//                         ),
-//                         const SizedBox(height: 4),
-//                         LinearProgressIndicator(
-//                           minHeight: 15,
-//                           value: 0.5,
-//                           backgroundColor: Colors.grey[300],
-//                           valueColor:
-//                               const AlwaysStoppedAnimation<Color>(Colors.green),
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                         const SizedBox(height: 4),
-//                         Text(
-//                           '\₵0 of ${ds['budgetAmount']} spent',
-//                           style: const TextStyle(fontSize: 16),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 );
-//               }).toList(),
-
-//             const SizedBox(height: 20),
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 30),
-//               child: ElevatedButton(
-//                 style: ElevatedButton.styleFrom(
-//                   backgroundColor: Colors.green,
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(15),
-//                   ),
-//                   minimumSize: const Size(double.infinity, 50),
-//                 ),
-//                 onPressed: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) => const CreateBudgetPage()),
-//                   );
-//                 },
-//                 child: const Text(
-//                   "Create Budget",
-//                   style: TextStyle(
-//                     fontFamily: 'inter',
-//                     color: Colors.white,
-//                     fontSize: 18,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             const SizedBox(height: 30), // Extra space at the bottom
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
-
 Widget budgetdetails(Stream? budgetStream) {
   return StreamBuilder(
     stream: budgetStream,
@@ -322,8 +202,7 @@ Widget budgetdetails(Stream? budgetStream) {
 
       return Expanded(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(
-              bottom: 100), // 🔥 Extra space to avoid navbar issue
+          padding: const EdgeInsets.only(bottom: 100),
           child: Column(
             children: [
               if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
@@ -331,7 +210,6 @@ Widget budgetdetails(Stream? budgetStream) {
                 const Center(child: Text("No budgets found.")),
                 const SizedBox(height: 20),
               ],
-
               if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
                 ...snapshot.data.docs.map<Widget>((doc) {
                   DocumentSnapshot ds = doc;
@@ -388,8 +266,6 @@ Widget budgetdetails(Stream? budgetStream) {
                     ),
                   );
                 }).toList(),
-
-              // 🔥 Move "Create Budget" button inside the scrollable list with extra padding
               const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -418,7 +294,6 @@ Widget budgetdetails(Stream? budgetStream) {
                   ),
                 ),
               ),
-
               const SizedBox(height: 60),
             ],
           ),
