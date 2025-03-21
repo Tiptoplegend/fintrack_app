@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/CreateBudgetPage.dart';
@@ -10,6 +12,28 @@ class BudgetScreen extends StatefulWidget {
 }
 
 class _BudgetScreenState extends State<BudgetScreen> {
+  Stream<QuerySnapshot>? budgetStream;
+
+  // getontheload() async {
+  //   budgetStream = await Budgetservice().getbudgetDetails();
+  //   setState(() {});
+  // }
+  void getontheload() {
+    budgetStream = Budgetservice().getbudgetDetails();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getontheload();
+  }
+
+  // @override
+  // void initState() {
+  //   getontheload();
+  //   super.initState();
+  // }
+
   final List<String> months = [
     "January",
     "February",
@@ -120,7 +144,7 @@ void nextMonth() {
           ),
         ),
       ),
-      body: BudgetContent(),
+      body: budgetdetails(budgetStream),
     );
   }
 }
@@ -178,65 +202,228 @@ class MonthYearSelector extends StatelessWidget {
   }
 }
 
-class BudgetContent extends StatelessWidget {
-  const BudgetContent({super.key});
+// Widget budgetdetails(Stream? budgetStream) {
+//   return StreamBuilder(
+//     stream: budgetStream,
+//     builder: (context, AsyncSnapshot snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return const Center(child: CircularProgressIndicator());
+//       }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                ),
-              ),
-            ),
-            // const Text(
-            //   "You don’t have a budget.",
-            //   style: TextStyle(
-            //       fontFamily: 'inter', fontSize: 20, color: Colors.grey),
-            // ),
-            // const SizedBox(height: 5),
-            // const Text(
-            //   "Let’s make one so you are in control.",
-            //   style: TextStyle(
-            //       fontFamily: 'inter', fontSize: 16, color: Colors.grey),
-            // ),
-            SizedBox(height: 200),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  minimumSize: Size(double.infinity, 50),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateBudgetPage()),
+//       return Expanded(
+//         child: ListView(
+//           padding: const EdgeInsets.all(16),
+//           children: [
+//             if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
+//               const SizedBox(height: 20),
+//               const Center(child: Text("No budgets found.")),
+//               const SizedBox(height: 20),
+//             ],
+
+//             if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
+//               ...snapshot.data.docs.map<Widget>((doc) {
+//                 DocumentSnapshot ds = doc;
+//                 return Card(
+//                   elevation: 4,
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(15),
+//                   ),
+//                   margin: const EdgeInsets.symmetric(vertical: 10),
+//                   child: Padding(
+//                     padding: const EdgeInsets.all(16),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           'Budget cycle: ${ds['cycle']}',
+//                           style: const TextStyle(
+//                             fontSize: 14,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+//                         const SizedBox(height: 10),
+//                         Row(
+//                           children: [
+//                             const Icon(Icons.shopping_cart,
+//                                 color: Colors.green),
+//                             const SizedBox(width: 10),
+//                             Text(ds['category'],
+//                                 style: const TextStyle(fontSize: 14)),
+//                           ],
+//                         ),
+//                         const SizedBox(height: 10),
+//                         const Text(
+//                           'Remaining: \$0',
+//                           style: TextStyle(fontSize: 20, color: Colors.red),
+//                         ),
+//                         const SizedBox(height: 4),
+//                         LinearProgressIndicator(
+//                           minHeight: 15,
+//                           value: 0.5,
+//                           backgroundColor: Colors.grey[300],
+//                           valueColor:
+//                               const AlwaysStoppedAnimation<Color>(Colors.green),
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                         const SizedBox(height: 4),
+//                         Text(
+//                           '\₵0 of ${ds['budgetAmount']} spent',
+//                           style: const TextStyle(fontSize: 16),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 );
+//               }).toList(),
+
+//             const SizedBox(height: 20),
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 30),
+//               child: ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: Colors.green,
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(15),
+//                   ),
+//                   minimumSize: const Size(double.infinity, 50),
+//                 ),
+//                 onPressed: () {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                         builder: (context) => const CreateBudgetPage()),
+//                   );
+//                 },
+//                 child: const Text(
+//                   "Create Budget",
+//                   style: TextStyle(
+//                     fontFamily: 'inter',
+//                     color: Colors.white,
+//                     fontSize: 18,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             const SizedBox(height: 30), // Extra space at the bottom
+//           ],
+//         ),
+//       );
+//     },
+//   );
+// }
+
+Widget budgetdetails(Stream? budgetStream) {
+  return StreamBuilder(
+    stream: budgetStream,
+    builder: (context, AsyncSnapshot snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return Expanded(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(
+              bottom: 100), // 🔥 Extra space to avoid navbar issue
+          child: Column(
+            children: [
+              if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
+                const SizedBox(height: 20),
+                const Center(child: Text("No budgets found.")),
+                const SizedBox(height: 20),
+              ],
+
+              if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
+                ...snapshot.data.docs.map<Widget>((doc) {
+                  DocumentSnapshot ds = doc;
+                  return Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Budget cycle: ${ds['cycle']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.shopping_cart,
+                                  color: Colors.green),
+                              const SizedBox(width: 10),
+                              Text(ds['category'],
+                                  style: const TextStyle(fontSize: 14)),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Remaining: \$0',
+                            style: TextStyle(fontSize: 20, color: Colors.red),
+                          ),
+                          const SizedBox(height: 4),
+                          LinearProgressIndicator(
+                            minHeight: 15,
+                            value: 0.5,
+                            backgroundColor: Colors.grey[300],
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Colors.green),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '\₵0 of ${ds['budgetAmount']} spent',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
-                },
-                child: const Text(
-                  "Create budget",
-                  style: TextStyle(
-                    fontFamily: 'inter',
-                    color: Colors.white,
-                    fontSize: 18,
+                }).toList(),
+
+              // 🔥 Move "Create Budget" button inside the scrollable list with extra padding
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CreateBudgetPage()),
+                    );
+                  },
+                  child: const Text(
+                    "Create Budget",
+                    style: TextStyle(
+                      fontFamily: 'inter',
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 60),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }

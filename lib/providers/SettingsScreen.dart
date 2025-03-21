@@ -1,5 +1,4 @@
 import 'package:fintrack_app/Onboarding/Welcome.dart';
-import 'package:fintrack_app/providers/noti_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,12 +97,10 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   bool _isNotificationsEnabled = false;
-  final NotiService _notiService = NotiService();
 
   @override
   void initState() {
     super.initState();
-    _notiService.initNotification(); // Ensure notifications are initialized
     _loadNotificationPreference();
   }
 
@@ -112,11 +109,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
     setState(() {
       _isNotificationsEnabled = prefs.getBool('notifications_enabled') ?? false;
     });
-  }
-
-  Future<void> _saveNotificationPreference(bool value) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('notifications_enabled', value);
   }
 
   @override
@@ -136,18 +128,21 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 setState(() {
                   _isNotificationsEnabled = newValue;
                 });
-                await _saveNotificationPreference(newValue);
-                if (newValue) {
-                  await _notiService.scheduleNotification(
-                    id: 1,
-                    title: "Notification",
-                    body: "You have enabled notifications",
-                    hour: 7,
-                    minute: 30,
-                  );
-                } else {
-                  await _notiService.cancelAllNotifications();
-                }
+// <<<<<<< main
+// =======
+//                 await _saveNotificationPreference(newValue);
+//                 if (newValue) {
+//                   await _notiService.scheduleNotification(
+//                     id: 1,
+//                     title: "Notification",
+//                     body: "You have enabled notifications",
+//                     hour: 7,
+//                     minute: 30,
+//                   );
+//                 } else {
+//                   await _notiService.cancelAllNotifications();
+//                 }
+// >>>>>>> main
               },
             ),
           ),

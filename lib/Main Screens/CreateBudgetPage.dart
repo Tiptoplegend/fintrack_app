@@ -1,5 +1,6 @@
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
@@ -371,7 +372,10 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                             );
 
                             // database mapping for budget
+                            String userId =
+                                FirebaseAuth.instance.currentUser!.uid;
                             Map<String, dynamic> budgetinfoMap = {
+                              "userId": userId,
                               "budgetAmount": _controller.text,
                               "category": _selectedCategory,
                               "cycle": _selectedBudgetCycle,
