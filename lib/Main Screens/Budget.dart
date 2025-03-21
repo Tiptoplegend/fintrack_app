@@ -258,7 +258,7 @@ Widget budgetdetails(Stream? budgetStream) {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '\₵0 of ${ds['budgetAmount']} spent',
+                            '₵0 of ${ds['budgetAmount']} spent',
                             style: const TextStyle(fontSize: 16),
                           ),
                         ],
