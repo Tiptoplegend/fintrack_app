@@ -128,6 +128,21 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 setState(() {
                   _isNotificationsEnabled = newValue;
                 });
+// <<<<<<< main
+// =======
+//                 await _saveNotificationPreference(newValue);
+//                 if (newValue) {
+//                   await _notiService.scheduleNotification(
+//                     id: 1,
+//                     title: "Notification",
+//                     body: "You have enabled notifications",
+//                     hour: 7,
+//                     minute: 30,
+//                   );
+//                 } else {
+//                   await _notiService.cancelAllNotifications();
+//                 }
+// >>>>>>> main
               },
             ),
           ),
