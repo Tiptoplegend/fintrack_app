@@ -117,6 +117,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                   DocumentSnapshot ds = snapshot.data!.docs[index];
 
                   return ListTile(
+                    leading: CircleAvatar(child: Icon(Icons.grade)),
                     title: Text(ds['category']),
                     subtitle: Text(
                       DateFormat.yMMMd().format(ds['date'].toDate()),

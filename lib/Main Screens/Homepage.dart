@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -234,7 +236,7 @@ class _CardsectionState extends State<Cardsection> {
           top: 25,
           left: 15,
           child: Text(
-            'GHC 2,000',
+            'GHC 0',
             style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -329,25 +331,42 @@ class _History extends StatelessWidget {
 class _Expensecards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.4,
-      child: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: 380,
-            child: Card(
-              child: ListTile(
-                leading: const Icon(Icons.directions_car),
-                title: const Text("Transportation"),
-                subtitle: const Text("12-Dec-2024"),
-                trailing: const Text("GHC 200"),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+    Stream? expensestream;
+
+    return StreamBuilder(
+        stream: expensestream,
+        builder: (context, AsyncSnapshot snapshot) {
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot ds = snapshot.data.docs[index];
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: 3,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            width: 380,
+                            child: Card(
+                              child: ListTile(
+                                leading: const Icon(Icons.directions_car),
+                                title: Text(ds['category']),
+                                subtitle: Text(
+                                  DateFormat.yMMMd()
+                                      .format(ds['date'].toDate()),
+                                ),
+                                trailing: Text(ds['amount']),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                )
+              : Container();
+        });
   }
 }
