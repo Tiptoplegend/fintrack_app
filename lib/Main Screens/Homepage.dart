@@ -66,7 +66,7 @@ class _HomepageState extends State<Homepage> {
                       ),
                       const Positioned(
                         top: 210,
-                        left: 60,
+                        left: 56,
                         child: Cardsection(),
                       ),
                       const Positioned(
@@ -216,7 +216,7 @@ class _CardsectionState extends State<Cardsection> {
     return Stack(
       children: [
         Container(
-          height: 180,
+          height: 170,
           width: 300,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -243,7 +243,7 @@ class _CardsectionState extends State<Cardsection> {
           ),
         ),
         const Positioned(
-          top: 25,
+          top: 27,
           left: 15,
           child: Text(
             'GHC 0',
@@ -254,7 +254,7 @@ class _CardsectionState extends State<Cardsection> {
           ),
         ),
         Positioned(
-          top: 25,
+          top: 50,
           left: 15,
           child: StreamBuilder(
             stream: budgetStream,
@@ -278,6 +278,7 @@ class _CardsectionState extends State<Cardsection> {
               }
 
               return Container(
+                alignment: Alignment.centerLeft,
                 width: 300,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
@@ -285,22 +286,60 @@ class _CardsectionState extends State<Cardsection> {
                   itemCount: 1,
                   itemBuilder: (context, index) {
                     DocumentSnapshot ds = snapshot.data.docs[index];
-                    return Column(
-                      children: [
-                        Text(ds['category']),
-                        LinearProgressIndicator(
-                          minHeight: 15,
-                          value: 0.5,
-                          backgroundColor: Colors.grey[300],
-                          valueColor:
-                              const AlwaysStoppedAnimation<Color>(Colors.green),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        Text(
-                          '₵0 of ${ds['budgetAmount']} spent',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  ds['category'],
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 7),
+                          SizedBox(
+                            width: 270,
+                            child: LinearProgressIndicator(
+                              minHeight: 14,
+                              value: 0.1,
+                              backgroundColor: Colors.grey[300],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.green),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '₵0 of ${ds['budgetAmount']} spent',
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.grey),
+                          ),
+                        ],
+                      ),
                     );
                   },
                 ),
