@@ -58,6 +58,7 @@ class Transactionservice {
     return FirebaseFirestore.instance
         .collection('expenses')
         .where('userId', isEqualTo: userId)
+        .orderBy('date', descending: true)
         .snapshots();
   }
 }

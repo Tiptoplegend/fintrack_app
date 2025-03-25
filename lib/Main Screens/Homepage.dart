@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -29,12 +32,11 @@ class _HomepageState extends State<Homepage> {
             content: Text("Do you want to exit the app?"),
             actions: [
               TextButton(
-                onPressed: () =>
-                    Navigator.of(context).pop(false), // Stay in app
+                onPressed: () => Navigator.of(context).pop(false),
                 child: Text("No"),
               ),
               TextButton(
-                onPressed: () => SystemNavigator.pop(), // Exit app
+                onPressed: () => SystemNavigator.pop(),
                 child: Text("Yes"),
               ),
             ],
@@ -64,11 +66,11 @@ class _HomepageState extends State<Homepage> {
                       ),
                       const Positioned(
                         top: 210,
-                        left: 60,
+                        left: 56,
                         child: Cardsection(),
                       ),
                       const Positioned(
-                        top: 400,
+                        top: 405,
                         left: 45,
                         child: _tips(),
                       ),
@@ -78,7 +80,7 @@ class _HomepageState extends State<Homepage> {
                         child: _History(),
                       ),
                       Positioned(
-                        top: 530,
+                        top: 510,
                         left: 20,
                         right: 20,
                         child: _Expensecards(),
@@ -199,12 +201,22 @@ class Cardsection extends StatefulWidget {
 }
 
 class _CardsectionState extends State<Cardsection> {
+  Stream? budgetStream;
+  void getontheload() {
+    budgetStream = Budgetservice().getbudgetDetails();
+  }
+
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getontheload();
+  }
+
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
-          height: 180,
+          height: 170,
           width: 300,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -231,14 +243,108 @@ class _CardsectionState extends State<Cardsection> {
           ),
         ),
         const Positioned(
-          top: 25,
+          top: 27,
           left: 15,
           child: Text(
-            'GHC 2,000',
+            'GHC 0',
             style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF005341)),
+          ),
+        ),
+        Positioned(
+          top: 50,
+          left: 15,
+          child: StreamBuilder(
+            stream: budgetStream,
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 45, bottom: 45),
+                    child: Text(
+                      "Oops! It looks like you haven't set a budget yet. Start by creating one",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+
+              return Container(
+                alignment: Alignment.centerLeft,
+                width: 300,
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot ds = snapshot.data.docs[index];
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  ds['category'],
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 7),
+                          SizedBox(
+                            width: 270,
+                            child: LinearProgressIndicator(
+                              minHeight: 14,
+                              value: 0.1,
+                              backgroundColor: Colors.grey[300],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.green),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '₵0 of ${ds['budgetAmount']} spent',
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ),
       ],
@@ -326,28 +432,84 @@ class _History extends StatelessWidget {
   }
 }
 
-class _Expensecards extends StatelessWidget {
+class _Expensecards extends StatefulWidget {
+  @override
+  _ExpensecardsState createState() => _ExpensecardsState();
+}
+
+class _ExpensecardsState extends State<_Expensecards> {
+  Stream? expensestream;
+
+  @override
+  void initState() {
+    super.initState();
+    getontheload();
+  }
+
+  getontheload() async {
+    expensestream = Transactionservice().getexpenseDetails();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.4,
-      child: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return SizedBox(
-            width: 380,
-            child: Card(
-              child: ListTile(
-                leading: const Icon(Icons.directions_car),
-                title: const Text("Transportation"),
-                subtitle: const Text("12-Dec-2024"),
-                trailing: const Text("GHC 200"),
+    return StreamBuilder(
+      stream: expensestream,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 45, bottom: 45),
+              child: Text(
+                "No Transaction/Expense History",
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey),
               ),
             ),
-          );
-        },
-      ),
+          ); // Show fallback message if no data
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            DocumentSnapshot ds = snapshot.data.docs[index];
+            return SizedBox(
+              width: 380,
+              child: Card(
+                elevation: 3,
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                child: ListTile(
+                  leading: const Icon(Icons.attach_money, color: Colors.green),
+                  title: Text(
+                    ds['category'],
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    DateFormat('MMM-d-yyyy     hh:mm a')
+                        .format(ds['date'].toDate()),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  trailing: Text(
+                    "GHC ${ds['amount']}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                        fontSize: 14),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
