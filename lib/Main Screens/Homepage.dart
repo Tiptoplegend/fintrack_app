@@ -267,7 +267,7 @@ class _CardsectionState extends State<Cardsection> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 45, bottom: 45),
                     child: Text(
-                      "Oops! It looks like you haven't set a budget yet. Start by creating one",
+                      "Oops! It looks like you haven't set a budget yet Start by creating one",
                       style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
