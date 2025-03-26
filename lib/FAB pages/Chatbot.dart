@@ -10,6 +10,13 @@ class ChatbotPage extends StatefulWidget {
 class _ChatbotPageState extends State<ChatbotPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chatbot'),
+      ),
+      body: Center(
+        child: Text('Chatbot Page'),
+      ),
+    );
   }
 }
