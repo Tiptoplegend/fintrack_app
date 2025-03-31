@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
+import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,28 @@ class _AnalyticsState extends State<Analytics> {
     expenseStream = Transactionservice().getexpenseDetails();
     setState(() {});
   }
+
+  // void getontheload() async {
+  //   expenseStream = Transactionservice().getexpenseDetails();
+
+  //   // Load existing expenses from Firestore into ExpenseData provider
+  //   expenseStream!.listen((snapshot) {
+  //     final expenseProvider = Provider.of<ExpenseData>(context, listen: false);
+  //     expenseProvider.overallExpenseList.clear(); // Clear old data
+
+  //     for (var doc in snapshot.docs) {
+  //       expenseProvider.addNewExpense(ExpenseItem(
+  //         category: doc['category'],
+  //         expenseAmount: doc['amount'],
+  //         expenseDate: doc['date'].toDate(),
+  //         expenseNote: '',
+  //         id: '',
+  //       ));
+  //     }
+  //   });
+
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
