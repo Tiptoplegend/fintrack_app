@@ -202,9 +202,6 @@ class Cardsection extends StatefulWidget {
 
 class _CardsectionState extends State<Cardsection> {
   Stream? budgetStream;
-  void getontheload() {
-    budgetStream = Budgetservice().getbudgetDetails();
-  }
 
   @override
   void didChangeDependencies() {
@@ -212,142 +209,134 @@ class _CardsectionState extends State<Cardsection> {
     getontheload();
   }
 
+  void getontheload() {
+    budgetStream = Budgetservice().getbudgetDetails();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 170,
-          width: 300,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Container(
+      height: 170,
+      width: 300,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
-        ),
-        const Positioned(
-          top: 10,
-          left: 15,
-          child: Text(
-            'This Months Spendings',
-            style: TextStyle(
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, top: 10, right: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'This Months Spendings',
+              style: TextStyle(
                 color: Colors.black,
                 fontFamily: 'inter',
                 fontSize: 15,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        const Positioned(
-          top: 27,
-          left: 15,
-          child: Text(
-            'GHC 0',
-            style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Text(
+              'GHC 0',
+              style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF005341)),
-          ),
-        ),
-        Positioned(
-          top: 50,
-          left: 15,
-          child: StreamBuilder(
-            stream: budgetStream,
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 45, bottom: 45),
-                    child: Text(
-                      "Oops! It looks like you haven't set a budget yet Start by creating one",
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey),
-                    ),
-                  ),
-                );
-              }
-
-              return Container(
-                alignment: Alignment.centerLeft,
-                width: 300,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data.docs[index];
-                    return Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.green,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  ds['category'],
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                              ],
-                            ),
+                color: Color(0xFF005341),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: StreamBuilder(
+                stream: budgetStream,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          "Oops! No budget set yet",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
                           ),
-                          SizedBox(height: 7),
-                          SizedBox(
-                            width: 270,
-                            child: LinearProgressIndicator(
-                              minHeight: 14,
-                              value: 0.1,
-                              backgroundColor: Colors.grey[300],
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  Colors.green),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            '₵0 of ${ds['budgetAmount']} spent',
-                            style: const TextStyle(
-                                fontSize: 13, color: Colors.grey),
-                          ),
-                        ],
+                        ),
                       ),
                     );
-                  },
-                ),
-              );
-            },
-          ),
+                  }
+
+                  DocumentSnapshot ds = snapshot.data.docs[0];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.green,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              ds['category'],
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SizedBox(
+                        width: 270,
+                        child: LinearProgressIndicator(
+                          minHeight: 14,
+                          value: 0.1,
+                          backgroundColor: Colors.grey[300],
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.green),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        '₵0 of ${ds['budgetAmount']} spent',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -472,7 +461,7 @@ class _ExpensecardsState extends State<_Expensecards> {
                     color: Colors.grey),
               ),
             ),
-          ); // Show fallback message if no data
+          ); // Show message if no data
         }
 
         return ListView.builder(
