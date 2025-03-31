@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatbotPage extends StatefulWidget {
@@ -10,10 +11,14 @@ class ChatbotPage extends StatefulWidget {
 }
 
 class _ChatbotPageState extends State<ChatbotPage> {
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
+    String username = user.displayName ?? "User";
+
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Ensures the keyboard pushes the content up
+      resizeToAvoidBottomInset:
+          true, // Ensures the keyboard pushes the content up
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
@@ -53,9 +58,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
                         width: 150,
                         height: 150,
                       ),
-                      SizedBox(height: 10), // Adjust spacing between image and text
+                      SizedBox(
+                          height: 10), // Adjust spacing between image and text
                       Text(
-                        'Hello, Bamps!\nI Am Ready To Help You',
+                        'Hello, $username!\nI Am Ready To Help You',
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -78,45 +84,45 @@ class _ChatbotPageState extends State<ChatbotPage> {
             ),
             // Scrollable content: TextField
             Align(
-  alignment: Alignment.bottomCenter,
-  child: SingleChildScrollView(
-    reverse: true, // Ensures the TextField stays visible when the keyboard opens
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Type your message here...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide(color: Colors.white),
+              alignment: Alignment.bottomCenter,
+              child: SingleChildScrollView(
+                reverse:
+                    true, // Ensures the TextField stays visible when the keyboard opens
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: 'Type your message here...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            filled: true,
+                            fillColor: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: () {},
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black,
+                          child: Icon(
+                            Icons.send,
+                            color: Colors.lightGreen,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                filled: true,
-                fillColor: Colors.black,
               ),
             ),
-          ),
-          SizedBox(width: 10), 
-          GestureDetector(
-            onTap: () {
-              
-            },
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Icon(
-                Icons.send,
-                color: Colors.lightGreen,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  ),
-),
           ],
         ),
       ),
