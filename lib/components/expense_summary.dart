@@ -17,8 +17,16 @@ class ExpenseSummary extends StatefulWidget {
 }
 
 class _ExpenseSummaryState extends State<ExpenseSummary> {
-  DateTime _currentWeekStart = DateTime.now();
+  // DateTime _currentWeekStart = DateTime.now();
+  late DateTime _currentWeekStart;
   String _selectedFilter = 'Weekly';
+
+  @override
+  void initState() {
+    super.initState();
+    _currentWeekStart =
+        widget.startOfweek; // Initialize with the provided startOfweek
+  }
 
   double calculateMax(
       ExpenseData value,
@@ -206,7 +214,6 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
           SizedBox(
             height: 20,
           ),
-
           // Bar Graph
           SizedBox(
             height: 220,

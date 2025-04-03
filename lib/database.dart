@@ -85,3 +85,15 @@ class Budgetservice {
         .snapshots();
   }
 }
+
+// Database for Goals
+class Goalsservice {
+  // add goal to db
+  Future addGoal(Map<String, dynamic> budgetinfoMap) async {
+    String docId = FirebaseFirestore.instance.collection('Goals').doc().id;
+    return await FirebaseFirestore.instance
+        .collection('Goals')
+        .doc(docId)
+        .set(budgetinfoMap);
+  }
+}

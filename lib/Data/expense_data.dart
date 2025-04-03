@@ -44,17 +44,28 @@ class ExpenseData extends ChangeNotifier {
   }
 
   // ignore: non_constant_identifier_names
+  // DateTime StartOfWeekDate() {
+  //   DateTime? startOfWeek;
+
+  //   DateTime today = DateTime.now();
+
+  //   for (int i = 0; i < 7; i++) {
+  //     if (getDayName(today.subtract(Duration(days: i))) == 'Sun') {
+  //       startOfWeek = today.subtract(Duration(days: i));
+  //     }
+  //   }
+  //   return startOfWeek!;
+  // }
+
   DateTime StartOfWeekDate() {
-    DateTime? startOfWeek;
-
     DateTime today = DateTime.now();
-
     for (int i = 0; i < 7; i++) {
-      if (getDayName(today.subtract(Duration(days: i))) == 'Sun') {
-        startOfWeek = today.subtract(Duration(days: i));
+      DateTime candidate = today.subtract(Duration(days: i));
+      if (getDayName(candidate) == 'Sun') {
+        return candidate;
       }
     }
-    return startOfWeek!;
+    return today; // Fallback (should never reach here)
   }
 
   Map<String, double> calculateDailyExpenseSummary() {

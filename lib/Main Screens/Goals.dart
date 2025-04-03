@@ -160,9 +160,9 @@ Widget _modalbottom(BuildContext context, FirestoreService firestoreService) {
                     style: TextStyle(fontSize: 18),
                     decoration: InputDecoration(
                       prefixText: 'GHc',
-                      prefixStyle: TextStyle(color: Colors.grey, fontSize: 18),
+                      prefixStyle: TextStyle(color: Colors.grey ?? Colors.black, fontSize: 18),
                       hintText: '0.00',
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+                      hintStyle: TextStyle(color: Colors.grey ?? Colors.black, fontSize: 18),
                       border: InputBorder.none,
                     ),
                   ),

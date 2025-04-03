@@ -80,10 +80,13 @@ class _HomepageState extends State<Homepage> {
                         child: _History(),
                       ),
                       Positioned(
-                        top: 510,
+                        top: 530,
                         left: 20,
                         right: 20,
-                        child: _Expensecards(),
+                        child: SizedBox(
+                          height: 250,
+                          child: _Expensecards(),
+                        ),
                       ),
                     ],
                   ),
