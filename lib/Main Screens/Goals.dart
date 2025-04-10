@@ -36,8 +36,21 @@ class _GoalsState extends State<Goals> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-            return const Center(
-                child: Text("No goals found, Kindly Create one"));
+            return Column(
+              children: [
+                SizedBox(
+                  height: 120,
+                ),
+                Center(
+                  child: Image.asset('assets/images/Goals.png',
+                      width: 270, height: 270),
+                ),
+                Text(
+                  "No Goals Have been Added",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                ),
+              ],
+            );
           }
 
           final docs = snapshot.data.docs;
