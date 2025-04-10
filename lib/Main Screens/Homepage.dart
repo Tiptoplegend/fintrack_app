@@ -75,15 +75,18 @@ class _HomepageState extends State<Homepage> {
                         child: _tips(),
                       ),
                       const Positioned(
-                        top: 515,
+                        top: 517,
                         left: 40,
                         child: _History(),
                       ),
                       Positioned(
-                        top: 510,
+                        top: 530,
                         left: 20,
                         right: 20,
-                        child: _Expensecards(),
+                        child: SizedBox(
+                          height: 250,
+                          child: _Expensecards(),
+                        ),
                       ),
                     ],
                   ),
@@ -450,18 +453,24 @@ class _ExpensecardsState extends State<_Expensecards> {
         }
 
         if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 45, bottom: 45),
-              child: Text(
-                "No Transaction/Expense History",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey),
-              ),
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset(
+                    'assets/images/No transactions.png',
+                    width: 200,
+                    height: 200,
+                  ),
+                ),
+                Text(
+                  "No Transaction/Expense History",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
             ),
-          ); // Show message if no data
+          );
         }
 
         return ListView.builder(
