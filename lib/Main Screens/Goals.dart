@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
   const Goals({super.key});
@@ -9,9 +13,183 @@ class Goals extends StatefulWidget {
 }
 
 class _GoalsState extends State<Goals> {
-  final FirestoreService firestoreService = FirestoreService();
+  Stream? Goalstream;
+  void getontheload() {
+    Goalstream = GoalsService().getGoalsDetails();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getontheload();
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
   final userimg = FirebaseAuth.instance.currentUser!.photoURL;
+
+  Widget GoalsDetails() {
+    return Expanded(
+      child: StreamBuilder(
+        stream: Goalstream,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+            return const Center(
+                child: Text("No goals found, Kindly Create one"));
+          }
+
+          final docs = snapshot.data.docs;
+          final firstGoal = docs[0];
+          final remainingGoals = docs.length > 1 ? docs.sublist(1) : [];
+
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Full-width first goal
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: SingleChildScrollView(
+                          // Add this
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircularPercentIndicator(
+                                radius: 100,
+                                animationDuration: 1000,
+                                lineWidth: 15,
+                                percent: 0.7, // 70%
+                                animation: true,
+                                circularStrokeCap: CircularStrokeCap.round,
+                                backgroundColor: Colors.grey,
+                                progressColor: Colors.green,
+                                center: Column(
+                                  children: [
+                                    const SizedBox(height: 30),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.grey,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          firstGoal['title'],
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '\₵${(firstGoal['amount'])}',
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                arcType: ArcType.HALF,
+                                arcBackgroundColor: Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Wrap for remaining goals
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: remainingGoals.map<Widget>((doc) {
+                      DocumentSnapshot ds = doc;
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width / 2 - 24,
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      ds['title'],
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  '\₵${ds['amount']}',
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: LinearProgressIndicator(
+                                    minHeight: 14,
+                                    value: 0.5,
+                                    backgroundColor: Colors.grey[300],
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text('0% Saved'),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,220 +234,162 @@ class _GoalsState extends State<Goals> {
       ),
       body: Column(
         children: [
-          Positioned(
-            top: 580,
-            left: 33,
-            child: _creategoalsbtn(context, firestoreService),
-          ),
+          GoalsDetails(),
+          _CreateGoalbtn(context),
+          const SizedBox(height: 100),
         ],
       ),
     );
   }
 }
 
-Widget _creategoalsbtn(BuildContext context, FirestoreService firestoreService) {
-  return Padding(
-    padding: EdgeInsets.all(3),
-    child: ElevatedButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext modalContext) => _modalbottom(modalContext, firestoreService),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color(Colors.green.value),
-        minimumSize: Size(340, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+Widget _CreateGoalbtn(BuildContext context) {
+  TextEditingController TitleController = TextEditingController();
+  TextEditingController AmountController = TextEditingController();
+  return Center(
+    child: SizedBox(
+      width: 350,
+      child: ElevatedButton(
+        onPressed: () {
+          // Code for modal will be here
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: SizedBox(
+                    height: 400,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        // Title of the modal
+                        const Text(
+                          'Add New Goal',
+                          style: TextStyle(fontSize: 18),
+                        ),
+
+                        // Goal title
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 20, left: 20, right: 20),
+                          child: TextField(
+                            controller: TitleController,
+                            keyboardType: TextInputType.text, // Text keyboard
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                  width: 2,
+                                ),
+                              ),
+                              hintText: 'Goal Title (eg. Car, House)',
+                              hintStyle: TextStyle(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                        // Goal amount title
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Text(
+                            'Goal Amount',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        // TextField for amount
+                        //
+                        Container(
+                          padding: const EdgeInsets.only(
+                              top: 20, left: 20, right: 20),
+                          child: TextField(
+                            controller: AmountController,
+                            keyboardType:
+                                TextInputType.number, // Numeric keyboard
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                  width: 2,
+                                ),
+                              ),
+                              hintText: 'Enter the amount',
+                              hintStyle: TextStyle(
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: 350,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // Code to add goal will be here
+                              Map<String, dynamic> goalsInfoMap = {
+                                'userId':
+                                    FirebaseAuth.instance.currentUser!.uid,
+                                'title': TitleController.text,
+                                'amount': AmountController.text,
+                                // 'timestamp': FieldValue.serverTimestamp(),
+                              };
+                              await GoalsService().addGoals(goalsInfoMap);
+
+                              Navigator.pop(context); // Close the modal
+                              // Clear the text fields after adding the goal
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                              backgroundColor: Colors.green[600],
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                            ),
+                            child: const Text(
+                              'Add Goal',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 50),
+          backgroundColor: Colors.green[600],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
         ),
-      ),
-      child: Text(
-        'Create New Goal',
-        style: TextStyle(fontSize: 16, color: Colors.white),
+        child: const Text(
+          'Create Goal',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     ),
   );
-}
-
-// the menu that shows when you click the creatbtn
-Widget _modalbottom(BuildContext context, FirestoreService firestoreService) {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
-
-  return Padding(
-    padding: EdgeInsets.only(
-      bottom: MediaQuery.of(context).viewInsets.bottom,
-    ),
-    child: SingleChildScrollView(
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Add new Goal',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            // textfield for title dey here
-            TextField(
-              controller: titleController,
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.text,
-              style: TextStyle(fontSize: 18),
-              decoration: InputDecoration(
-                hintText: 'Goal Title',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white60,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    // textfeild for amount dey here
-                    child: Text(
-                      'Goal Amount',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  TextField(
-                    controller: amountController,
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(fontSize: 18),
-                    decoration: InputDecoration(
-                      prefixText: 'GHc',
-                      prefixStyle: TextStyle(color: Colors.grey ?? Colors.black, fontSize: 18),
-                      hintText: '0.00',
-                      hintStyle: TextStyle(color: Colors.grey ?? Colors.black, fontSize: 18),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            // createbtn dey here
-            ElevatedButton(
-              onPressed: () {
-                if (titleController.text.isEmpty ||
-                    amountController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please fill all fields')));
-                  return;
-                }
-                // the logic that handles the creation of the goals de start from here
-                final newGoal = Goal(
-                  id: DateTime.now().millisecondsSinceEpoch.toString(),
-                  title: titleController.text,
-                  targetAmount: double.parse(amountController.text),
-                );
-                firestoreService.addGoal(newGoal);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(Colors.green.value),
-                minimumSize: Size(340, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              child: Text(
-                'Create Goal',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-class Goal {
-  String id;
-  String title;
-  double targetAmount;
-  double savedAmount;
-
-  Goal({
-    required this.id,
-    required this.title,
-    required this.targetAmount,
-    this.savedAmount = 0.0,
-  });
-
-  double get progressPercentage => (savedAmount / targetAmount).clamp(0.0, 1.0);
-}
-
-class Goalcard extends StatelessWidget {
-  final Goal goal;
-  final bool isWide;
-  const Goalcard({super.key, required this.goal, required this.isWide});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            goal.title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          Text(
-            'GHC $goal.targetAmount.toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 16, color: Colors.grey),
-          ),
-          SizedBox(height: 10),
-          LinearProgressIndicator(
-            value: goal.progressPercentage,
-            backgroundColor: Colors.grey[300],
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-            minHeight: 5,
-          ),
-          SizedBox(height: 8),
-          Text(
-            '${(goal.progressPercentage * 100).toStringAsFixed(0)}% saved',
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FirestoreService {
-  // existing methods and properties
-
-  Future<void> addGoal(Goal goal) async {
-    // Add your Firestore logic to add a goal here
-  }
 }
