@@ -85,3 +85,26 @@ class Budgetservice {
         .snapshots();
   }
 }
+
+// Database for Goals
+class GoalsService {
+  // add goals to db
+  Future addGoals(Map<String, dynamic> goalsInfoMap) async {
+    String docId = FirebaseFirestore.instance.collection('Goals').doc().id;
+    return await FirebaseFirestore.instance
+        .collection('Goals')
+        .doc(docId)
+        .set(goalsInfoMap);
+  }
+
+  // Read data from db
+  Stream<QuerySnapshot> getGoalsDetails() {
+    var user = FirebaseAuth.instance.currentUser;
+    var userId = user!.uid;
+    return FirebaseFirestore.instance
+        .collection('Goals')
+        .where('userId', isEqualTo: userId)
+        // .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+}
