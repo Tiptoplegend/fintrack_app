@@ -111,7 +111,7 @@ class _GoalsState extends State<Goals> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      '\₵${(firstGoal['amount'])}',
+                                      '₵${(firstGoal['amount'])}',
                                       style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -169,7 +169,7 @@ class _GoalsState extends State<Goals> {
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
-                                  '\₵${ds['amount']}',
+                                  '₵${ds['amount']}',
                                   style: const TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold),
