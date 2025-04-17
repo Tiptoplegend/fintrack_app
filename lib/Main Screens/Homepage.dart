@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/notifications.dart';
@@ -185,6 +187,7 @@ class _Greetings extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
+          softWrap: true,
         ),
         Text(
           'Welcome, lets manage some money',
@@ -476,7 +479,7 @@ class _ExpensecardsState extends State<_Expensecards> {
         return ListView.builder(
           shrinkWrap: true,
           physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: 3,
+          itemCount: min(snapshot.data.docs.length, 3),
           itemBuilder: (context, index) {
             DocumentSnapshot ds = snapshot.data.docs[index];
             return SizedBox(

@@ -21,7 +21,8 @@ class MyBarGraph extends StatelessWidget {
     required this.wedAmount,
     required this.thuAmount,
     required this.friAmount,
-    required this.satAmount, required Map<int, double> data,
+    required this.satAmount,
+    required Map<int, double> data,
   });
 
   @override

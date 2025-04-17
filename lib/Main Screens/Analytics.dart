@@ -23,28 +23,6 @@ class _AnalyticsState extends State<Analytics> {
     setState(() {});
   }
 
-  // void getontheload() async {
-  //   expenseStream = Transactionservice().getexpenseDetails();
-
-  //   // Load existing expenses from Firestore into ExpenseData provider
-  //   expenseStream!.listen((snapshot) {
-  //     final expenseProvider = Provider.of<ExpenseData>(context, listen: false);
-  //     expenseProvider.overallExpenseList.clear(); // Clear old data
-
-  //     for (var doc in snapshot.docs) {
-  //       expenseProvider.addNewExpense(ExpenseItem(
-  //         category: doc['category'],
-  //         expenseAmount: doc['amount'],
-  //         expenseDate: doc['date'].toDate(),
-  //         expenseNote: '',
-  //         id: '',
-  //       ));
-  //     }
-  //   });
-
-  //   setState(() {});
-  // }
-
   @override
   void initState() {
     getontheload();
@@ -104,55 +82,134 @@ class _AnalyticsState extends State<Analytics> {
   }
 }
 
+// Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
+//   return Consumer<ExpenseData>(
+//     builder: (context, expenseData, child) {
+//       return StreamBuilder<QuerySnapshot>(
+//         stream: expenseStream,
+//         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//           if (snapshot.connectionState == ConnectionState.waiting) {
+//             return const Center(child: CircularProgressIndicator());
+//           }
+//           if (snapshot.hasError) {
+//             return Center(child: Text('Error: ${snapshot.error}'));
+//           }
+//           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//             return const Center(child: Text('No transactions found.'));
+//           }
+
+//           // Schedule updates AFTER the current build phase
+//           WidgetsBinding.instance.addPostFrameCallback((_) {
+//             expenseData.overallExpenseList.clear();
+//             for (var doc in snapshot.data!.docs) {
+//               ExpenseItem expense = ExpenseItem.fromMap(
+//                 doc.data() as Map<String, dynamic>,
+//                 doc.id,
+//               );
+//               expenseData.addNewExpense(expense);
+//             }
+//           });
+
+//           return ListView(
+//             children: [
+//               ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
+//               const SizedBox(height: 20),
+//               const Text(
+//                 'Transaction History',
+//                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+//               ),
+//               const SizedBox(height: 2),
+//               ListView.builder(
+//                 shrinkWrap: true,
+//                 physics: const NeverScrollableScrollPhysics(),
+//                 itemCount: snapshot.data!.docs.length,
+//                 itemBuilder: (context, index) {
+//                   DocumentSnapshot ds = snapshot.data!.docs[index];
+//                   return ListTile(
+//                     leading: const CircleAvatar(child: Icon(Icons.grade)),
+//                     title: Text(ds['category']),
+//                     subtitle: Text(
+//                       DateFormat('MMM d yyyy     hh:mm a')
+//                           .format(ds['date'].toDate()),
+//                     ),
+//                     trailing: Text(ds['amount'].toString()),
+//                   );
+//                 },
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
+
 Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
   return Consumer<ExpenseData>(
-    builder: (context, value, child) {
-      return ListView(
-        children: [
-          // Weekly summary goes here
-          ExpenseSummary(startOfweek: value.StartOfWeekDate()),
-          const SizedBox(height: 20),
+    builder: (context, expenseData, child) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: expenseStream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-          // Expense/Transaction goes here
-          const Text(
-            'Transaction History',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 2),
-          StreamBuilder<QuerySnapshot>(
-            stream: expenseStream,
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+          // Process data after build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            expenseData.overallExpenseList.clear();
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+              for (var doc in snapshot.data!.docs) {
+                ExpenseItem expense = ExpenseItem.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                  doc.id,
+                );
+                expenseData.addNewExpense(expense);
               }
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
-              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No transactions found.'));
-              }
+            }
+            // Notify listeners even when list is cleared
+            expenseData.notifyListeners();
+          });
 
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data!.docs[index];
-
-                  return ListTile(
-                    leading: CircleAvatar(child: Icon(Icons.grade)),
-                    title: Text(ds['category']),
-                    subtitle: Text(
-                      DateFormat('MMM d yyyy     hh:mm a')
-                          .format(ds['date'].toDate()),
+          return ListView(
+            children: [
+              ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
+              const SizedBox(height: 20),
+              const Text(
+                'Transaction History',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 2),
+              // Check if there are transactions
+              (snapshot.hasData && snapshot.data!.docs.isNotEmpty)
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data!.docs[index];
+                        return ListTile(
+                          leading: const CircleAvatar(child: Icon(Icons.grade)),
+                          title: Text(ds['category']),
+                          subtitle: Text(
+                            DateFormat('MMM d yyyy     hh:mm a')
+                                .format(ds['date'].toDate()),
+                          ),
+                          trailing: Text(ds['amount'].toString()),
+                        );
+                      },
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: Center(
+                        child: Text('No Transactions/ History'),
+                      ),
                     ),
-                    trailing: Text(ds['amount'].toString()),
-                  );
-                },
-              );
-            },
-          ),
-        ],
+            ],
+          );
+        },
       );
     },
   );
