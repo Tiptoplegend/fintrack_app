@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
 
 class ExpenseItem {
@@ -21,18 +22,25 @@ class ExpenseItem {
     return {
       'id': id,
       'category': category.name,
-      'expenseAmount': expenseAmount,
-      'expenseDate': expenseDate.millisecondsSinceEpoch,
+      'amount': expenseAmount,
+      'Date': expenseDate.millisecondsSinceEpoch,
       'expenseNote': expenseNote,
     };
+  }
+
+  static DateTime parseDate(dynamic value) {
+    if (value is Timestamp) return value.toDate();
+    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+    return DateTime.now(); // fallback
   }
 
   factory ExpenseItem.fromMap(Map<String, dynamic> map, String documentId) {
     return ExpenseItem(
       id: documentId,
-      category: Category(name: map['category']),
-      expenseAmount: map['expenseAmount'].toDouble(),
-      expenseDate: DateTime.fromMillisecondsSinceEpoch(map['expenseDate']),
+      category: Category(name: map['category'] ?? 'Unknown'),
+      expenseAmount: double.tryParse(map['amount'].toString()) ??
+          0.0, // Safely parse to double
+      expenseDate: parseDate(map['Date']),
       expenseNote: map['expenseNote'] ?? "",
     );
   }
