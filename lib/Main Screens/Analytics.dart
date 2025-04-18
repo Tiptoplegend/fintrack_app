@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
+import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,8 +169,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                 expenseData.addNewExpense(expense);
               }
             }
-            // Notify listeners even when list is cleared
-            expenseData.notifyListeners();
+            // Notify listeners is not needed here as Consumer listens to changes
           });
 
           return ListView(
