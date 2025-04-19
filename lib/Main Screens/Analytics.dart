@@ -82,67 +82,7 @@ class _AnalyticsState extends State<Analytics> {
   }
 }
 
-// Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
-//   return Consumer<ExpenseData>(
-//     builder: (context, expenseData, child) {
-//       return StreamBuilder<QuerySnapshot>(
-//         stream: expenseStream,
-//         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//           if (snapshot.hasError) {
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           }
-//           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-//             return const Center(child: Text('No transactions found.'));
-//           }
 
-//           // Schedule updates AFTER the current build phase
-//           WidgetsBinding.instance.addPostFrameCallback((_) {
-//             expenseData.overallExpenseList.clear();
-//             for (var doc in snapshot.data!.docs) {
-//               ExpenseItem expense = ExpenseItem.fromMap(
-//                 doc.data() as Map<String, dynamic>,
-//                 doc.id,
-//               );
-//               expenseData.addNewExpense(expense);
-//             }
-//           });
-
-//           return ListView(
-//             children: [
-//               ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
-//               const SizedBox(height: 20),
-//               const Text(
-//                 'Transaction History',
-//                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-//               ),
-//               const SizedBox(height: 2),
-//               ListView.builder(
-//                 shrinkWrap: true,
-//                 physics: const NeverScrollableScrollPhysics(),
-//                 itemCount: snapshot.data!.docs.length,
-//                 itemBuilder: (context, index) {
-//                   DocumentSnapshot ds = snapshot.data!.docs[index];
-//                   return ListTile(
-//                     leading: const CircleAvatar(child: Icon(Icons.grade)),
-//                     title: Text(ds['category']),
-//                     subtitle: Text(
-//                       DateFormat('MMM d yyyy     hh:mm a')
-//                           .format(ds['date'].toDate()),
-//                     ),
-//                     trailing: Text(ds['amount'].toString()),
-//                   );
-//                 },
-//               ),
-//             ],
-//           );
-//         },
-//       );
-//     },
-//   );
-// }
 
 Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
   return Consumer<ExpenseData>(
