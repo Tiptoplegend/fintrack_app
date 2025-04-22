@@ -3,8 +3,10 @@ import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -52,15 +54,25 @@ class _AnalyticsState extends State<Analytics> {
         elevation: 0,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 27,
-              backgroundImage: user.photoURL != null
-                  ? NetworkImage(user.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png")
-                      as ImageProvider,
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ));
+              },
+              icon: CircleAvatar(
+                radius: 24,
+                backgroundImage: user.photoURL != null
+                    ? NetworkImage(user.photoURL!)
+                    : const AssetImage("assets/images/icons8-user-48 (1).png")
+                        as ImageProvider,
+              ),
             ),
+
             const SizedBox(
-              width: 100,
+              width: 80,
             ), // To create spacing if needed on the left
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,8 +93,6 @@ class _AnalyticsState extends State<Analytics> {
     );
   }
 }
-
-
 
 Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
   return Consumer<ExpenseData>(
@@ -130,14 +140,27 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         DocumentSnapshot ds = snapshot.data!.docs[index];
-                        return ListTile(
-                          leading: const CircleAvatar(child: Icon(Icons.grade)),
-                          title: Text(ds['category']),
-                          subtitle: Text(
-                            DateFormat('MMM d yyyy     hh:mm a')
-                                .format(ds['date'].toDate()),
+                        return Slidable(
+                          endActionPane:
+                              ActionPane(motion: StretchMotion(), children: [
+                            SlidableAction(
+                              onPressed: ((context) {
+                                // delete expense
+                              }),
+                              icon: Icons.delete,
+                              backgroundColor: Colors.red,
+                            ),
+                          ]),
+                          child: ListTile(
+                            leading:
+                                const CircleAvatar(child: Icon(Icons.grade)),
+                            title: Text(ds['category']),
+                            subtitle: Text(
+                              DateFormat('MMM d yyyy     hh:mm a')
+                                  .format(ds['date'].toDate()),
+                            ),
+                            trailing: Text(ds['amount'].toString()),
                           ),
-                          trailing: Text(ds['amount'].toString()),
                         );
                       },
                     )
