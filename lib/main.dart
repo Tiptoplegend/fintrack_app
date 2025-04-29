@@ -12,7 +12,7 @@ import 'package:fintrack_app/providers/theme_provider.dart';
 
 final navigatorkey = GlobalKey<NavigatorState>();
 void main() async {
-  await dotenv.load(fileName: ".env");
+  // await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
