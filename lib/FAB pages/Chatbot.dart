@@ -11,7 +11,7 @@ class ChatbotPage extends StatefulWidget {
 
 class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
-
+  final OpenaiService _chatService = OpenaiService();
 
   List<Map<String, String>> _messages = []; // role: user/bot, message
   bool _isLoading = false;
