@@ -95,7 +95,7 @@ flutter:
     - assets/images/No transactions.png
     - assets/images/personal-goals-concept-illustration.png
     - assets/images/Goals.png
-    - .env
+    # - .env
 
 
 
