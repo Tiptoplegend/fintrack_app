@@ -99,39 +99,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
           ),
           child: Column(
             children: [
-              // AppBar(
-              //   backgroundColor: Colors.transparent,
-              //   elevation: 0,
-              //   leading: Padding(
-              //     padding: const EdgeInsets.only(left: 10.0),
-              //     child: IconButton(
-              //       onPressed: () {
-              //         Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) => const SettingsScreen(),
-              //           ),
-              //         );
-              //       },
-              //       icon: CircleAvatar(
-              //         radius: 27,
-              //         backgroundImage: user?.photoURL != null
-              //             ? NetworkImage(user!.photoURL!)
-              //             : const AssetImage(
-              //                     "assets/images/icons8-user-48 (1).png")
-              //                 as ImageProvider,
-              //       ),
-              //     ),
-              //   ),
-              //   title: const Text(
-              //     'Budget',
-              //     style: TextStyle(
-              //       fontFamily: 'inter',
-              //       fontSize: 20,
-              //     ),
-              //   ),
-              //   centerTitle: true,
-              // ),
               AppBar(
                 flexibleSpace: Container(
                   decoration: const BoxDecoration(),
@@ -275,8 +242,13 @@ Widget budgetdetails(Stream? budgetStream) {
                       motion: StretchMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: ((context) {
+                          onPressed: ((context) async {
                             // delete budget
+                            await Budgetservice().deleteBudget(ds.id);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(' Budget Succesfully deleted')),
+                            );
                           }),
                           icon: Icons.delete,
                           backgroundColor: Colors.red,

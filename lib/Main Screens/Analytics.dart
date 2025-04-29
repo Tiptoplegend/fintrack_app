@@ -144,8 +144,10 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                           endActionPane:
                               ActionPane(motion: StretchMotion(), children: [
                             SlidableAction(
-                              onPressed: ((context) {
+                              onPressed: ((context) async {
                                 // delete expense
+                                await Transactionservice()
+                                    .deleteTransaction(ds.id);
                               }),
                               icon: Icons.delete,
                               backgroundColor: Colors.red,

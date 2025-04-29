@@ -254,7 +254,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       "Sep",
       "Oct",
       "Nov",
-      "Dec"
+      "Dec",
     ];
     return months[month - 1];
   }

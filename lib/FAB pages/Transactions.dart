@@ -86,7 +86,7 @@ class _TransactionPageState extends State<TransactionPage> {
                         setState(() {
                           selectedCategory = categories[index];
                         });
-                        Navigator.pop(context); // Close modal
+                        Navigator.pop(context);
                       },
                     );
                   },
@@ -97,6 +97,28 @@ class _TransactionPageState extends State<TransactionPage> {
         );
       },
     );
+  }
+
+// modal to show goals
+  void showgoalmodal() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.all(16),
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: MediaQuery.of(context).size.width * 1.0,
+            child: Column(
+              children: [
+                Text(
+                  'Select Goals',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                )
+
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -181,7 +203,9 @@ class _TransactionPageState extends State<TransactionPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            showgoalmodal();
+          },
           style: ElevatedButton.styleFrom(
             minimumSize: Size(150, 60),
             shape: RoundedRectangleBorder(
@@ -215,7 +239,7 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget _Continuebtn() {
     return ElevatedButton(
       onPressed: () async {
-        _saveExpense(); 
+        _saveExpense();
 
         Map<String, dynamic> expenseInfoMap = {
           'amount': _amountController.text,
