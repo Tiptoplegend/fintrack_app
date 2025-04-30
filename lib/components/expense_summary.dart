@@ -17,15 +17,13 @@ class ExpenseSummary extends StatefulWidget {
 }
 
 class _ExpenseSummaryState extends State<ExpenseSummary> {
-  // DateTime _currentWeekStart = DateTime.now();
   late DateTime _currentWeekStart;
   String _selectedFilter = 'Weekly';
 
   @override
   void initState() {
     super.initState();
-    _currentWeekStart =
-        widget.startOfweek; // Initialize with the provided startOfweek
+    _currentWeekStart = widget.startOfweek;
   }
 
   double calculateMax(
@@ -37,7 +35,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       String thursday,
       String friday,
       String saturday) {
-    double? max = 100;
+    double max = 100;
 
     List<double> values = [
       value.calculateDailyExpenseSummary()[sunday] ?? 0,
@@ -50,13 +48,12 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     ];
 
     values.sort();
-
     max = values.last * 1.1;
 
     return max == 0 ? 100 : max;
   }
 
-  String calculateweekTotal(
+  String calculateWeekTotal(
     ExpenseData value,
     String sunday,
     String monday,
@@ -76,29 +73,26 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       value.calculateDailyExpenseSummary()[saturday] ?? 0,
     ];
 
-    double total = 0;
-    for (int i = 0; i < values.length; i++) {
-      total += values[i];
-    }
+    double total = values.reduce((a, b) => a + b);
     return total.toStringAsFixed(2);
   }
 
   @override
   Widget build(BuildContext context) {
-    String sunday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 0)));
+    // Use _currentWeekStart instead of widget.startOfweek
+    String sunday = convertDateTimeToString(_currentWeekStart);
     String monday =
-        convertDateTimeToString(widget.startOfweek.add(Duration(days: 1)));
-    String tuesday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 2)));
-    String wednesday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 3)));
-    String thursday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 4)));
-    String friday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 5)));
-    String saturday = convertDateTimeToString(
-        widget.startOfweek.add(const Duration(days: 6)));
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 1)));
+    String tuesday =
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 2)));
+    String wednesday =
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 3)));
+    String thursday =
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 4)));
+    String friday =
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 5)));
+    String saturday =
+        convertDateTimeToString(_currentWeekStart.add(const Duration(days: 6)));
 
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
@@ -115,9 +109,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'GHC ${calculateweekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
-                      style:
-                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                      'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
+                      style: const TextStyle(
+                          fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Total expense',
@@ -128,10 +122,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     ),
                   ],
                 ),
-
-                // Dropdown
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(10),
@@ -139,7 +132,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   ),
                   child: DropdownButton<String>(
                     value: _selectedFilter,
-                    underline: SizedBox(),
+                    underline: const SizedBox(),
                     style: TextStyle(
                       fontSize: 16,
                       color: isDarkMode ? Colors.white : Colors.black,
@@ -161,60 +154,53 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               ],
             ),
           ),
-
-          // week total summary
-          SizedBox(
-            height: 10,
-          ),
-
-          //  Navigator for the week,month and year
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 border: Border.all(
-                    color: isDarkMode ? Colors.grey[800]! : Colors.white,
-                    width: 3.0),
+                  color: isDarkMode ? Colors.grey[800]! : Colors.white,
+                  width: 3.0,
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _currentWeekStart = _currentWeekStart
-                              .subtract(const Duration(days: 7));
-                        });
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new)),
-                  SizedBox(width: 20), // Adjust the width as needed
+                    onPressed: () {
+                      setState(() {
+                        _currentWeekStart =
+                            _currentWeekStart.subtract(const Duration(days: 7));
+                      });
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new),
+                  ),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: Text(
                       getWeekRange(_currentWeekStart),
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
-                  SizedBox(width: 20), // Adjust the width as needed
+                  const SizedBox(width: 20),
                   IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _currentWeekStart =
-                              _currentWeekStart.add(const Duration(days: 7));
-                        });
-                      },
-                      icon: Icon(Icons.arrow_forward_ios)),
+                    onPressed: () {
+                      setState(() {
+                        _currentWeekStart =
+                            _currentWeekStart.add(const Duration(days: 7));
+                      });
+                    },
+                    icon: const Icon(Icons.arrow_forward_ios),
+                  ),
                 ],
               ),
             ),
           ),
-
-          SizedBox(
-            height: 20,
-          ),
-          // Bar Graph
+          const SizedBox(height: 20),
           SizedBox(
             height: 220,
             child: MyBarGraph(
@@ -227,7 +213,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               thuAmount: value.calculateDailyExpenseSummary()[thursday] ?? 0,
               friAmount: value.calculateDailyExpenseSummary()[friday] ?? 0,
               satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
-              data: {},
+              data: {}, // Update if needed based on MyBarGraph implementation
             ),
           ),
         ],
@@ -235,14 +221,13 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     );
   }
 
-  // Weekly expense summary
   String getWeekRange(DateTime startDate) {
-    DateTime endDate = startDate.add(Duration(days: 6));
+    DateTime endDate = startDate.add(const Duration(days: 6));
     return "${startDate.day} ${_getMonthName(startDate.month)} - ${endDate.day} ${_getMonthName(endDate.month)} ${endDate.year}";
   }
 
   String _getMonthName(int month) {
-    List<String> months = [
+    const months = [
       "Jan",
       "Feb",
       "Mar",
@@ -257,15 +242,5 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       "Dec",
     ];
     return months[month - 1];
-  }
-
-  List<ExpenseItem> getWeeklyExpenses(List<ExpenseItem> allExpenses) {
-    DateTime weekEnd = _currentWeekStart.add(Duration(days: 6));
-
-    return allExpenses.where((expense) {
-      return expense.expenseDate
-              .isAfter(_currentWeekStart.subtract(Duration(seconds: 1))) &&
-          expense.expenseDate.isBefore(weekEnd.add(Duration(seconds: 1)));
-    }).toList();
   }
 }
