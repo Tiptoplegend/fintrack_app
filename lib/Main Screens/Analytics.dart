@@ -125,6 +125,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
           return ListView(
             children: [
               ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
+
               const SizedBox(height: 20),
               const Text(
                 'Transaction History',

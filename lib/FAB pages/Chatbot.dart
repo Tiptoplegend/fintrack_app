@@ -13,8 +13,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
   // final OpenaiService _chatService = OpenaiService();
 
-  List<Map<String, String>> _messages = []; // role: user/bot, message
-  bool _isLoading = false;
+  final List<Map<String, String>> _messages = []; // role: user/bot, message
+  final bool _isLoading = false;
   bool hasStartedChat = false;
 
   final user = FirebaseAuth.instance.currentUser!;
