@@ -4,6 +4,7 @@ import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fintrack_app/Onboarding/Splashscreen.dart';
@@ -11,6 +12,7 @@ import 'package:fintrack_app/providers/theme_provider.dart';
 
 final navigatorkey = GlobalKey<NavigatorState>();
 void main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fintrack_app/Main%20Screens/CreateBudgetPage.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
@@ -39,30 +41,31 @@ class _BudgetScreenState extends State<BudgetScreen> {
     "December"
   ];
 
-  int currentMonthIndex = DateTime.now().month - 1; // Initialize to current month (zero-based index)
- int currentYear = DateTime.now().year;
+  int currentMonthIndex = DateTime.now().month -
+      1; // Initialize to current month (zero-based index)
+  int currentYear = DateTime.now().year;
 
-void previousMonth() {
-  setState(() {
-    if (currentMonthIndex > 0) {
-      currentMonthIndex--;
-    } else {
-      currentMonthIndex = 11; // December (zero-based index)
-      currentYear--;
-    }
-  });
-}
+  void previousMonth() {
+    setState(() {
+      if (currentMonthIndex > 0) {
+        currentMonthIndex--;
+      } else {
+        currentMonthIndex = 11; // December (zero-based index)
+        currentYear--;
+      }
+    });
+  }
 
-void nextMonth() {
-  setState(() {
-    if (currentMonthIndex < 11) {
-      currentMonthIndex++;
-    } else {
-      currentMonthIndex = 0; // January (zero-based index)
-      currentYear++;
-    }
-  });
-}
+  void nextMonth() {
+    setState(() {
+      if (currentMonthIndex < 11) {
+        currentMonthIndex++;
+      } else {
+        currentMonthIndex = 0; // January (zero-based index)
+        currentYear++;
+      }
+    });
+  }
 
   final user = FirebaseAuth.instance.currentUser!;
   final userimg = FirebaseAuth.instance.currentUser!.photoURL;
@@ -97,29 +100,50 @@ void nextMonth() {
           child: Column(
             children: [
               AppBar(
+                flexibleSpace: Container(
+                  decoration: const BoxDecoration(),
+                ),
                 backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
                 elevation: 0,
-                leading: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: user.photoURL != null
-                        ? NetworkImage(user.photoURL!)
-                        : const AssetImage(
-                                "assets/images/icons8-user-48 (1).png")
-                            as ImageProvider,
-                  ),
-                ),
-                title: const Text(
-                  'Budget',
-                  style: TextStyle(
-                    fontFamily: 'inter',
-                    fontSize: 20,
-                  ),
-                ),
-                centerTitle: true,
-              ),
+                title: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsScreen(),
+                            ));
+                      },
+                      icon: CircleAvatar(
+                        radius: 24,
+                        backgroundImage: user.photoURL != null
+                            ? NetworkImage(user.photoURL!)
+                            : const AssetImage(
+                                    "assets/images/icons8-user-48 (1).png")
+                                as ImageProvider,
+                      ),
+                    ),
 
+                    const SizedBox(
+                      width: 90,
+                    ), // To create spacing if needed on the left
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(height: 10), // Moves the text down
+                        Text(
+                          'Budget',
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
               // Month and Year Selector inside AppBar
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
@@ -213,55 +237,74 @@ Widget budgetdetails(Stream? budgetStream) {
               if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
                 ...snapshot.data.docs.map<Widget>((doc) {
                   DocumentSnapshot ds = doc;
-                  return Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                  return Slidable(
+                    endActionPane: ActionPane(
+                      motion: StretchMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: ((context) async {
+                            // delete budget
+                            await Budgetservice().deleteBudget(ds.id);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(' Budget Succesfully deleted')),
+                            );
+                          }),
+                          icon: Icons.delete,
+                          backgroundColor: Colors.red,
+                        ),
+                      ],
                     ),
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Budget cycle: ${ds['cycle']}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Budget cycle: ${ds['cycle']}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              const Icon(Icons.shopping_cart,
-                                  color: Colors.green),
-                              const SizedBox(width: 10),
-                              Text(ds['category'],
-                                  style: const TextStyle(fontSize: 14)),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Remaining: \$0',
-                            style: TextStyle(fontSize: 20, color: Colors.red),
-                          ),
-                          const SizedBox(height: 4),
-                          LinearProgressIndicator(
-                            minHeight: 15,
-                            value: 0.5,
-                            backgroundColor: Colors.grey[300],
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.green),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '₵0 of ${ds['budgetAmount']} spent',
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Icon(Icons.shopping_cart,
+                                    color: Colors.green),
+                                const SizedBox(width: 10),
+                                Text(ds['category'],
+                                    style: const TextStyle(fontSize: 14)),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            const Text(
+                              'Remaining: \$0',
+                              style: TextStyle(fontSize: 20, color: Colors.red),
+                            ),
+                            const SizedBox(height: 4),
+                            LinearProgressIndicator(
+                              minHeight: 15,
+                              value: 0.5,
+                              backgroundColor: Colors.grey[300],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.green),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '₵0 of ${ds['budgetAmount']} spent',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

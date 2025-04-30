@@ -61,6 +61,14 @@ class Transactionservice {
         .orderBy('date', descending: true)
         .snapshots();
   }
+
+  // delete transactions
+  Future deleteTransaction(String docId) async {
+    return await FirebaseFirestore.instance
+        .collection('expenses')
+        .doc(docId)
+        .delete();
+  }
 }
 
 //Database for Budgetpage
@@ -83,6 +91,13 @@ class Budgetservice {
         .collection('Budget')
         .where('userId', isEqualTo: userId)
         .snapshots();
+  }
+
+  Future deleteBudget(String docId) async {
+    return await FirebaseFirestore.instance
+        .collection('Budget')
+        .doc(docId)
+        .delete();
   }
 }
 
