@@ -23,7 +23,7 @@ class ExpenseItem {
       'id': id,
       'category': category.name,
       'amount': expenseAmount,
-      'Date': expenseDate.millisecondsSinceEpoch,
+      'date': expenseDate.millisecondsSinceEpoch,
       'expenseNote': expenseNote,
     };
   }
@@ -40,7 +40,7 @@ class ExpenseItem {
       category: Category(name: map['category'] ?? 'Unknown'),
       expenseAmount: double.tryParse(map['amount'].toString()) ??
           0.0, // Safely parse to double
-      expenseDate: parseDate(map['Date']),
+      expenseDate: parseDate(map['date']),
       expenseNote: map['expenseNote'] ?? "",
     );
   }

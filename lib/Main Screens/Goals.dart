@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -223,14 +224,23 @@ class _GoalsState extends State<Goals> {
         elevation: 0,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 25,
-              backgroundImage: user.photoURL != null
-                  ? NetworkImage(user.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png")
-                      as ImageProvider,
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ));
+              },
+              icon: CircleAvatar(
+                radius: 27,
+                backgroundImage: user.photoURL != null
+                    ? NetworkImage(user.photoURL!)
+                    : const AssetImage("assets/images/icons8-user-48 (1).png")
+                        as ImageProvider,
+              ),
             ),
-            const SizedBox(width: 110),
+            const SizedBox(width: 90),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
