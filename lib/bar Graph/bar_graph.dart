@@ -66,7 +66,7 @@ class MyBarGraph extends StatelessWidget {
                     backDrawRodData: BackgroundBarChartRodData(
                       show: true,
                       toY: maxY,
-                      color: Colors.grey[100],
+                      color: Colors.grey,
                     ))
               ]))
           .toList(),
