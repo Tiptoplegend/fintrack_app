@@ -196,11 +196,15 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                             value: category.name,
                             child: Row(
                               children: [
-                                Icon(category.icon, color: Colors.white),
+                                Icon(category.icon, color: Theme.of(context).brightness==Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black),
                                 const SizedBox(width: 10),
                                 Text(category.name,
                                     style:
-                                        const TextStyle(color: Colors.white)),
+                                        TextStyle(color: Theme.of(context).brightness == Brightness.dark
+                                         ? Colors.white 
+                                         : Colors.black)),
                               ],
                             ),
                           );

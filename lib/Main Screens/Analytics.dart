@@ -119,8 +119,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                 expenseData.addNewExpense(expense);
               }
             }
-            // Notify listeners even when list is cleared
-            expenseData.notifyListeners();
+            // Notify listeners is not needed here as Consumer listens to changes
           });
 
           return ListView(

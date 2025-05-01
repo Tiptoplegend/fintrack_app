@@ -24,7 +24,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset:
-          true, // Ensures the keyboard pushes the content up
+          true, 
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
