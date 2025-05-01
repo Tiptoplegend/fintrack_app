@@ -15,8 +15,26 @@ class _NotificationsState extends State<Notifications> {
         ModalRoute.of(context)?.settings.arguments as RemoteMessage?;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF43A047),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: AppBar(
+            title: const Text('Notifications'),
+            centerTitle: true, 
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+        ),
       ),
       body: message != null
           ? Column(

@@ -132,9 +132,21 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transactions'),
-        centerTitle: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF005341), Color(0xFF43A047)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          ),
+          title: const Text('Transactions'),
+          centerTitle: true,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -153,37 +165,37 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
-  Widget _textfield() {
-    return TextField(
-      controller: _amountController,
-      keyboardType: TextInputType.number,
-      style: TextStyle(fontSize: 30),
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child:
-              Text('GHC', style: TextStyle(fontSize: 25, color: Colors.white)),
-        ),
-        suffixIcon: Icon(Icons.attach_money_outlined),
-        hintText: '0.00',
-        hintStyle: TextStyle(color: Colors.grey, fontSize: 25),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey[200]!),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green),
-        ),
+ Widget _textfield() {
+  return TextField(
+    controller: _amountController,
+    keyboardType: TextInputType.number,
+    style: TextStyle(fontSize: 30),
+    decoration: InputDecoration(
+      prefixIcon: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text('GHC', style: TextStyle(fontSize: 25, color: Colors.white)),
       ),
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-      ],
-    );
-  }
-
+      suffixIcon: Icon(Icons.attach_money_outlined),
+      hintText: '0.00',
+      hintStyle: TextStyle(color: Colors.grey, fontSize: 25),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20), 
+        borderSide: BorderSide(color: Colors.transparent),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20), 
+        borderSide: BorderSide(color: Colors.grey[200]!),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20), 
+        borderSide: BorderSide(color: Colors.green),
+      ),
+    ),
+    inputFormatters: [
+      FilteringTextInputFormatter.digitsOnly,
+    ],
+  );
+}
   Widget _notesection() {
     return TextField(
       controller: _NotesController,

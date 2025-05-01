@@ -26,7 +26,9 @@ class ThemeSettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-          title: const Text("Theme")),
+          title: const Text("Theme"),
+          centerTitle: true,
+          ),
       body: Column(
         children: [
           ListTile(
@@ -180,6 +182,7 @@ class SettingsScreen extends StatelessWidget {
               fontFamily: 'Inter',
             ),
           ),
+          centerTitle: true,
         ),
       ),
       body: ListView(
