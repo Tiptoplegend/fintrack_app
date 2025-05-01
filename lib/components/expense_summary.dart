@@ -146,7 +146,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectedFilter = newValue!;
-                        bool _showFirstHalf = true;
+                        bool showFirstHalf = true;
                       });
                     },
                   ),
