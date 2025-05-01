@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({super.key});
+  const TransactionPage({super.key}); 
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
