@@ -119,7 +119,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                 expenseData.addNewExpense(expense);
               }
             }
-            // Notify listeners even when list is cleared
+            // Notify listeners even when list is cleared 
             expenseData.notifyListeners();
           });
 

@@ -79,7 +79,6 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
 
   @override
   Widget build(BuildContext context) {
-    // Use _currentWeekStart instead of widget.startOfweek
     String sunday = convertDateTimeToString(_currentWeekStart);
     String monday =
         convertDateTimeToString(_currentWeekStart.add(const Duration(days: 1)));
@@ -147,6 +146,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectedFilter = newValue!;
+                        bool _showFirstHalf = true;
                       });
                     },
                   ),
