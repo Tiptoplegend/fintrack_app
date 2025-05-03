@@ -245,10 +245,6 @@ Widget budgetdetails(Stream? budgetStream) {
                           onPressed: ((context) async {
                             // delete budget
                             await Budgetservice().deleteBudget(ds.id);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(' Budget Succesfully deleted')),
-                            );
                           }),
                           icon: Icons.delete,
                           backgroundColor: Colors.red,
