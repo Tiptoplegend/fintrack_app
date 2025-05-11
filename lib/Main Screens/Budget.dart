@@ -281,24 +281,6 @@ Widget budgetdetails(Stream? budgetStream) {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            // const Text(
-                            //   'Remaining: \$0',
-                            //   style: TextStyle(fontSize: 20, color: Colors.red),
-                            // ),
-                            // const SizedBox(height: 4),
-                            // LinearProgressIndicator(
-                            //   minHeight: 15,
-                            //   value: 0.5,
-                            //   backgroundColor: Colors.grey[300],
-                            //   valueColor: const AlwaysStoppedAnimation<Color>(
-                            //       Colors.green),
-                            //   borderRadius: BorderRadius.circular(10),
-                            // ),
-                            // const SizedBox(height: 4),
-                            // Text(
-                            //   '₵0 of ${ds['budgetAmount']} spent',
-                            //   style: const TextStyle(fontSize: 16),
-                            // ),
                             FutureBuilder<double>(
                               future: Budgetservice()
                                   .getTotalSpentForBudget(ds['category']),

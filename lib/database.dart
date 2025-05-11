@@ -106,7 +106,7 @@ class Budgetservice {
     final expenses = await FirebaseFirestore.instance
         .collection('expenses')
         .where('category', isEqualTo: category)
-        .where('linkedToBudget', isEqualTo: true)
+        .where('linktobudget', isEqualTo: true)
         .where('userId', isEqualTo: userId)
         .get();
 
