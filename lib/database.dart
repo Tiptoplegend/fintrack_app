@@ -99,6 +99,24 @@ class Budgetservice {
         .doc(docId)
         .delete();
   }
+
+  Future<double> getTotalSpentForBudget(String category) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    final expenses = await FirebaseFirestore.instance
+        .collection('expenses')
+        .where('category', isEqualTo: category)
+        .where('linkedToBudget', isEqualTo: true)
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    double totalSpent = 0.0;
+    for (var doc in expenses.docs) {
+      totalSpent += double.tryParse(doc['amount'].toString()) ?? 0.0;
+    }
+
+    return totalSpent;
+  }
 }
 
 // Database for Goals
