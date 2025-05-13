@@ -196,15 +196,18 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                             value: category.name,
                             child: Row(
                               children: [
-                                Icon(category.icon, color: Theme.of(context).brightness==Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black),
+                                Icon(category.icon,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black),
                                 const SizedBox(width: 10),
                                 Text(category.name,
-                                    style:
-                                        TextStyle(color: Theme.of(context).brightness == Brightness.dark
-                                         ? Colors.white 
-                                         : Colors.black)),
+                                    style: TextStyle(
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black)),
                               ],
                             ),
                           );
@@ -374,13 +377,18 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                                 builder: (context) => const BudgetSuccessPage(),
                               ),
                             );
+                            final rawAmount = _controller.text.trim();
+                            final cleanedAmount =
+                                rawAmount.replaceAll(RegExp(r'[^\d.]'), '');
 
+                            final amount =
+                                double.tryParse(cleanedAmount) ?? 0.0;
                             // database mapping for budget
                             String userId =
                                 FirebaseAuth.instance.currentUser!.uid;
                             Map<String, dynamic> budgetinfoMap = {
                               "userId": userId,
-                              "budgetAmount": _controller.text,
+                              "budgetAmount": amount,
                               "category": _selectedCategory,
                               "cycle": _selectedBudgetCycle,
                             };

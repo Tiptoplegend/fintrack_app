@@ -30,7 +30,10 @@ class _NavigationState extends State<Navigation> {
   static List<Widget> body = [
     Homepage(),
     Analytics(),
-    Goals(),
+    Goals(
+      title: null,
+      amount: null,
+    ),
     BudgetScreen(),
     CreateBudgetPage(),
   ];

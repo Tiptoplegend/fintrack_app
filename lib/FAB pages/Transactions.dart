@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
+import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,13 +9,18 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({super.key}); 
+  const TransactionPage({super.key});
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  Stream<QuerySnapshot>? GoalsStream;
+
+  bool _isSwitched = false;
+
+  Goals? selectedGoal;
   Category? selectedCategory;
   List<Category> categories = [
     Category(name: "Food", icon: Icons.fastfood),
@@ -32,6 +39,7 @@ class _TransactionPageState extends State<TransactionPage> {
     super.initState();
     _fetchCategories();
     _amountController.addListener(_formatAmount);
+    getontheload();
   }
 
   void _fetchCategories() async {
@@ -54,6 +62,11 @@ class _TransactionPageState extends State<TransactionPage> {
             TextSelection.collapsed(offset: _amountController.text.length),
       );
     }
+  }
+
+  void getontheload() {
+    GoalsStream = GoalsService().getGoalsDetails();
+    setState(() {});
   }
 
   // Function to show the category selection modal
@@ -102,24 +115,59 @@ class _TransactionPageState extends State<TransactionPage> {
 // modal to show goals
   void showgoalmodal() {
     showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            padding: EdgeInsets.all(16),
-            height: MediaQuery.of(context).size.height * 0.6,
-            width: MediaQuery.of(context).size.width * 1.0,
-            child: Column(
-              children: [
-                Text(
-                  'Select Goals',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                )
-                
+      context: context,
+      builder: (context) {
+        return StreamBuilder(
+          stream: GoalsStream,
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No Goals Found'));
+            }
 
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select Goals',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot ds = snapshot.data!.docs[index];
+                      return ListTile(
+                        leading: Icon(Icons.track_changes_sharp,
+                            color: Colors.green),
+                        title: Text(ds['title']),
+                        trailing: Text(
+                          'Target Amount: GHC ${ds['amount'] ?? '0'}',
+                          style: TextStyle(fontSize: 14, color: Colors.green),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedGoal = Goals(
+                              title: ds['title'],
+                              amount: ds['amount'],
+                            );
+                          });
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
               ],
-            ),
-          );
-        });
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -157,6 +205,8 @@ class _TransactionPageState extends State<TransactionPage> {
             _notesection(),
             SizedBox(height: 20),
             _CatGoalsbtn(),
+            SizedBox(height: 30),
+            _addtobudget(),
             Spacer(),
             _Continuebtn(),
           ],
@@ -165,37 +215,39 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
- Widget _textfield() {
-  return TextField(
-    controller: _amountController,
-    keyboardType: TextInputType.number,
-    style: TextStyle(fontSize: 30),
-    decoration: InputDecoration(
-      prefixIcon: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Text('GHC', style: TextStyle(fontSize: 25, color: Colors.white)),
+  Widget _textfield() {
+    return TextField(
+      controller: _amountController,
+      keyboardType: TextInputType.number,
+      style: TextStyle(fontSize: 30),
+      decoration: InputDecoration(
+        prefixIcon: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child:
+              Text('GHC', style: TextStyle(fontSize: 25, color: Colors.white)),
+        ),
+        suffixIcon: Icon(Icons.attach_money_outlined),
+        hintText: '0.00',
+        hintStyle: TextStyle(color: Colors.grey, fontSize: 25),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.grey[200]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.green),
+        ),
       ),
-      suffixIcon: Icon(Icons.attach_money_outlined),
-      hintText: '0.00',
-      hintStyle: TextStyle(color: Colors.grey, fontSize: 25),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20), 
-        borderSide: BorderSide(color: Colors.transparent),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20), 
-        borderSide: BorderSide(color: Colors.grey[200]!),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20), 
-        borderSide: BorderSide(color: Colors.green),
-      ),
-    ),
-    inputFormatters: [
-      FilteringTextInputFormatter.digitsOnly,
-    ],
-  );
-}
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+    );
+  }
+
   Widget _notesection() {
     return TextField(
       controller: _NotesController,
@@ -212,6 +264,7 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Widget _CatGoalsbtn() {
+    // goalsbtn
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -226,10 +279,15 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             backgroundColor: Color(Colors.green.value),
           ),
-          icon:
-              Icon(Icons.track_changes_sharp, color: Color(Colors.white.value)),
-          label: Text('Select Goals', style: TextStyle(color: Colors.white)),
+          icon: selectedGoal != null
+              ? Icon(Icons.track_changes_sharp,
+                  color: Color(Colors.white.value))
+              : Icon(Icons.track_changes_sharp,
+                  color: Color(Colors.white.value)),
+          label: Text(selectedGoal?.title ?? "Select Goal",
+              style: TextStyle(color: Colors.white)),
         ),
+        // categorybtn
         ElevatedButton.icon(
           onPressed: _showCategoryModal,
           style: ElevatedButton.styleFrom(
@@ -249,6 +307,23 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
+  Widget _addtobudget() {
+    return ListTile(
+      leading: Icon(Icons.monetization_on, color: Colors.green),
+      title: Text('Add to Budget'),
+      trailing: Switch(
+        value: _isSwitched,
+        activeColor: Colors.green,
+        onChanged: (value) {
+          // Handle switch change
+          setState(() {
+            _isSwitched = value;
+          });
+        },
+      ),
+    );
+  }
+
   Widget _Continuebtn() {
     return ElevatedButton(
       onPressed: () async {
@@ -261,6 +336,7 @@ class _TransactionPageState extends State<TransactionPage> {
           'notes': _NotesController.text,
           'date': DateTime.now(),
           'userId': FirebaseAuth.instance.currentUser!.uid,
+          'linktobudget': _isSwitched,
         };
         await Transactionservice().addTransaction(expenseInfoMap);
       },

@@ -6,7 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
-  const Goals({super.key});
+  final String? title;
+  final String? amount;
+
+  const Goals({
+    super.key,
+    required this.title,
+    required this.amount,
+  });
 
   @override
   State<Goals> createState() => _GoalsState();
@@ -83,7 +90,7 @@ class _GoalsState extends State<Goals> {
                                 radius: 100,
                                 animationDuration: 1000,
                                 lineWidth: 15,
-                                percent: 0.7, // 70%
+                                percent: 0,
                                 animation: true,
                                 circularStrokeCap: CircularStrokeCap.round,
                                 backgroundColor: Colors.grey,
@@ -179,7 +186,7 @@ class _GoalsState extends State<Goals> {
                                   width: double.infinity,
                                   child: LinearProgressIndicator(
                                     minHeight: 14,
-                                    value: 0.5,
+                                    value: 0,
                                     backgroundColor: Colors.grey[300],
                                     color: Colors.green,
                                     borderRadius: BorderRadius.circular(10),
