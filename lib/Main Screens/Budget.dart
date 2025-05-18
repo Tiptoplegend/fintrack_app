@@ -281,6 +281,7 @@ Widget budgetdetails(Stream? budgetStream) {
                               ],
                             ),
                             const SizedBox(height: 10),
+                            // progress bar
                             FutureBuilder<double>(
                               future: Budgetservice()
                                   .getTotalSpentForBudget(ds['category']),

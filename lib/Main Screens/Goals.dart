@@ -3,6 +3,7 @@ import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class Goals extends StatefulWidget {
@@ -45,14 +46,12 @@ class _GoalsState extends State<Goals> {
           if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
             return Column(
               children: [
-                SizedBox(
-                  height: 120,
-                ),
+                const SizedBox(height: 120),
                 Center(
                   child: Image.asset('assets/images/Goals.png',
                       width: 270, height: 270),
                 ),
-                Text(
+                const Text(
                   "No Goals Have been Added",
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
@@ -70,65 +69,110 @@ class _GoalsState extends State<Goals> {
               children: [
                 // Full-width first goal
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0), // Adjusted padding
                   child: SizedBox(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: SingleChildScrollView(
-                          // Add this
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CircularPercentIndicator(
-                                radius: 100,
-                                animationDuration: 1000,
-                                lineWidth: 15,
-                                percent: 0,
-                                animation: true,
-                                circularStrokeCap: CircularStrokeCap.round,
-                                backgroundColor: Colors.grey,
-                                progressColor: Colors.green,
-                                center: Column(
+                    child: Center(
+                      child: Slidable(
+                        key: ValueKey(firstGoal.id),
+                        endActionPane: ActionPane(
+                          motion: const StretchMotion(),
+                          extentRatio:
+                              0.3, // Limit action pane width to avoid layout shift
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) async {
+                                await GoalsService().deleteGoals(firstGoal.id);
+                              },
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                          ],
+                        ),
+                        closeOnScroll: true, // Close swipe when scrolling
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            width:
+                                double.infinity, // Ensure card takes full width
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0), // Balanced padding
+                            child: FutureBuilder<double>(
+                              future: GoalsService()
+                                  .getTotalSavedForGoal(firstGoal['title']),
+                              builder: (context, snapshot) {
+                                double saved = snapshot.data ?? 0.0;
+                                double targetAmount = double.tryParse(
+                                        firstGoal['amount'].toString()) ??
+                                    1.0;
+                                double progress =
+                                    (saved / targetAmount).clamp(0.0, 1.0);
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    const SizedBox(height: 30),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          firstGoal['title'],
-                                          style: const TextStyle(
-                                            fontSize: 13,
+                                    CircularPercentIndicator(
+                                      radius: 80,
+                                      animationDuration: 1000,
+                                      lineWidth: 12,
+                                      percent: progress,
+                                      animation: true,
+                                      circularStrokeCap:
+                                          CircularStrokeCap.round,
+                                      backgroundColor: Colors.grey,
+                                      progressColor: Colors.green,
+                                      center: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(height: 20),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 4.0),
+                                              child: Text(
+                                                firstGoal['title'],
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '₵${saved.toStringAsFixed(2)} / ₵${targetAmount.toStringAsFixed(2)}',
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            '${(progress * 100).toStringAsFixed(0)}% Saved',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '₵${(firstGoal['amount'])}',
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
+                                      arcType: ArcType.HALF,
+                                      arcBackgroundColor: Colors.white,
                                     ),
                                   ],
-                                ),
-                                arcType: ArcType.HALF,
-                                arcBackgroundColor: Colors.grey,
-                              ),
-                            ],
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -153,48 +197,73 @@ class _GoalsState extends State<Goals> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
+                            child: FutureBuilder<double>(
+                              future: GoalsService()
+                                  .getTotalSavedForGoal(ds['title']),
+                              builder: (context, snapshot) {
+                                double saved = snapshot.data ?? 0.0;
+                                double targetAmount =
+                                    double.tryParse(ds['amount'].toString()) ??
+                                        1.0;
+                                double progress =
+                                    (saved / targetAmount).clamp(0.0, 1.0);
+
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              ds['title'],
+                                              style:
+                                                  const TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        IconButton(
+                                          onPressed: () async {
+                                            await GoalsService()
+                                                .deleteGoals(ds.id);
+                                          },
+                                          icon: const Icon(Icons.delete,
+                                              color: Colors.red),
+                                        ),
+                                      ],
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      ds['title'],
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '₵${saved.toStringAsFixed(2)} / ₵${targetAmount.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                        fontSize: 13,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: LinearProgressIndicator(
+                                        minHeight: 14,
+                                        value: progress,
+                                        backgroundColor: Colors.grey[300],
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  '₵${ds['amount']}',
-                                  style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 8),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: LinearProgressIndicator(
-                                    minHeight: 14,
-                                    value: 0,
-                                    backgroundColor: Colors.grey[300],
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                const Text('0% Saved'),
-                              ],
+                                    const SizedBox(height: 8),
+                                    Text(
+                                        '${(progress * 100).toStringAsFixed(0)}% Saved'),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -380,7 +449,6 @@ Widget _CreateGoalbtn(BuildContext context) {
                                     FirebaseAuth.instance.currentUser!.uid,
                                 'title': TitleController.text,
                                 'amount': AmountController.text,
-                                // 'timestamp': FieldValue.serverTimestamp(),
                               };
                               await GoalsService().addGoals(goalsInfoMap);
 
