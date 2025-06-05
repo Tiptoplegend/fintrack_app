@@ -28,6 +28,7 @@ class _TransactionPageState extends State<TransactionPage> {
     Category(name: "Entertainment", icon: Icons.movie),
     Category(name: "Utilities", icon: Icons.lightbulb),
     Category(name: "Shopping", icon: Icons.shopping_cart),
+    Category(name: "Goals/Savings", icon: Icons.track_changes),
   ];
 
   final TextEditingController _amountController = TextEditingController();
