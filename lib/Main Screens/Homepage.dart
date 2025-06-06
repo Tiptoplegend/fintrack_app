@@ -222,7 +222,7 @@ class _CardsectionState extends State<Cardsection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 170,
+      height: 175,
       width: 300,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -316,24 +316,36 @@ class _CardsectionState extends State<Cardsection> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      SizedBox(
-                        width: 270,
-                        child: LinearProgressIndicator(
-                          minHeight: 14,
-                          value: 0.1,
-                          backgroundColor: Colors.grey[300],
-                          valueColor:
-                              const AlwaysStoppedAnimation<Color>(Colors.green),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        '₵0 of ${ds['budgetAmount']} spent',
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
+                      FutureBuilder<double>(
+                        future: Budgetservice()
+                            .getTotalSpentForBudget(ds['category']),
+                        builder: (context, snapshot) {
+                          double spent = snapshot.data ?? 0.0;
+                          double budgetAmount =
+                              double.tryParse(ds['budgetAmount'].toString()) ??
+                                  1.0;
+                          double progress =
+                              (spent / budgetAmount).clamp(0.0, 1.0);
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              LinearProgressIndicator(
+                                minHeight: 15,
+                                value: progress,
+                                backgroundColor: Colors.grey[300],
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.green),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                '₵${spent.toStringAsFixed(2)} of ₵${budgetAmount.toStringAsFixed(2)} spent',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   );

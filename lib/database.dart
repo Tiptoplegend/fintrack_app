@@ -140,4 +140,31 @@ class GoalsService {
         // .orderBy('timestamp', descending: true)
         .snapshots();
   }
+
+  // delete Goals
+  Future deleteGoals(String docId) async {
+    return await FirebaseFirestore.instance
+        .collection('Goals')
+        .doc(docId)
+        .delete();
+  }
+
+  Future<double> getTotalSavedForGoal(String goalTitle) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+
+    final expenses = await FirebaseFirestore.instance
+        .collection('expenses')
+        .where('linktogoal', isEqualTo: goalTitle)
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    double totalSaved = 0.0;
+    for (var doc in expenses.docs) {
+      totalSaved += doc['amount'] is String
+          ? (double.tryParse(doc['amount']) ?? 0.0)
+          : (doc['amount'] as num?)?.toDouble() ?? 0.0;
+    }
+
+    return totalSaved;
+  }
 }

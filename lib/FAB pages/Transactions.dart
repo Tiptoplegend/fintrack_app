@@ -28,6 +28,7 @@ class _TransactionPageState extends State<TransactionPage> {
     Category(name: "Entertainment", icon: Icons.movie),
     Category(name: "Utilities", icon: Icons.lightbulb),
     Category(name: "Shopping", icon: Icons.shopping_cart),
+    Category(name: "Goals/Savings", icon: Icons.track_changes),
   ];
 
   final TextEditingController _amountController = TextEditingController();
@@ -337,6 +338,7 @@ class _TransactionPageState extends State<TransactionPage> {
           'date': DateTime.now(),
           'userId': FirebaseAuth.instance.currentUser!.uid,
           'linktobudget': _isSwitched,
+          'linktogoal': selectedGoal?.title,
         };
         await Transactionservice().addTransaction(expenseInfoMap);
       },

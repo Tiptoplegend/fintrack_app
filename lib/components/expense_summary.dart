@@ -17,16 +17,21 @@ class ExpenseSummary extends StatefulWidget {
 }
 
 class _ExpenseSummaryState extends State<ExpenseSummary> {
+  // weekly filter
   late DateTime _currentWeekStart;
   String _selectedFilter = 'Weekly';
-
+  // monthly filter
+  DateTime? _currentMonthStart;
+  bool _showFirstHalf = true;
+  // bool _showSecondHalf = true;
   @override
   void initState() {
     super.initState();
     _currentWeekStart = widget.startOfweek;
+    _currentMonthStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   }
 
-  double calculateMax(
+  double calculateWeeklyMax(
       ExpenseData value,
       String sunday,
       String monday,
@@ -108,12 +113,16 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}',
+                      _selectedFilter == 'Weekly'
+                          ? 'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}'
+                          : 'GHC ${calculateMonthTotal(value, _currentMonthStart!.year, _currentMonthStart!.month).toStringAsFixed(2)}',
                       style: const TextStyle(
                           fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Total expense',
+                      _selectedFilter == 'weekly'
+                          ? 'Total expense'
+                          : 'Monthly expense',
                       style: TextStyle(
                         fontSize: 14,
                         color: isDarkMode ? Colors.white : Colors.black,
@@ -146,7 +155,11 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectedFilter = newValue!;
-                        bool showFirstHalf = true;
+                        if (_selectedFilter == 'Monthly') {
+                          _showFirstHalf = true;
+                          _currentMonthStart =
+                              DateTime(_currentMonthStart!.year, 1, 1);
+                        }
                       });
                     },
                   ),
@@ -172,8 +185,16 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        _currentWeekStart =
-                            _currentWeekStart.subtract(const Duration(days: 7));
+                        if (_selectedFilter == 'Weekly') {
+                          _currentWeekStart = _currentWeekStart
+                              .subtract(const Duration(days: 7));
+                        } else if (_selectedFilter == 'Monthly') {
+                          _currentMonthStart = DateTime(
+                            _currentMonthStart!.year,
+                            _showFirstHalf ? 1 : 7,
+                            1,
+                          );
+                        }
                       });
                     },
                     icon: const Icon(Icons.arrow_back_ios_new),
@@ -181,7 +202,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   const SizedBox(width: 20),
                   Expanded(
                     child: Text(
-                      getWeekRange(_currentWeekStart),
+                      _selectedFilter == 'Weekly'
+                          ? getWeekRange(_currentWeekStart)
+                          : getMonthRange(_showFirstHalf),
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 16),
                     ),
@@ -190,8 +213,16 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        _currentWeekStart =
-                            _currentWeekStart.add(const Duration(days: 7));
+                        if (_selectedFilter == 'Weekly') {
+                          _currentWeekStart =
+                              _currentWeekStart.add(const Duration(days: 7));
+                        } else if (_selectedFilter == 'Montly') {
+                          _showFirstHalf = !_showFirstHalf;
+                          _currentMonthStart = DateTime(
+                              _currentMonthStart!.year,
+                              _showFirstHalf ? 1 : 7,
+                              1);
+                        }
                       });
                     },
                     icon: const Icon(Icons.arrow_forward_ios),
@@ -203,18 +234,68 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
           const SizedBox(height: 20),
           SizedBox(
             height: 220,
-            child: MyBarGraph(
-              maxY: calculateMax(value, sunday, monday, tuesday, wednesday,
-                  thursday, friday, saturday),
-              sunAmount: value.calculateDailyExpenseSummary()[sunday] ?? 0,
-              monAmount: value.calculateDailyExpenseSummary()[monday] ?? 0,
-              tueAmount: value.calculateDailyExpenseSummary()[tuesday] ?? 0,
-              wedAmount: value.calculateDailyExpenseSummary()[wednesday] ?? 0,
-              thuAmount: value.calculateDailyExpenseSummary()[thursday] ?? 0,
-              friAmount: value.calculateDailyExpenseSummary()[friday] ?? 0,
-              satAmount: value.calculateDailyExpenseSummary()[saturday] ?? 0,
-              data: {}, // Update if needed based on MyBarGraph implementation
-            ),
+            child: _selectedFilter == 'Weekly'
+                // weekly bar graph ui
+                ? MyBarGraph(
+                    maxY: calculateWeeklyMax(value, sunday, monday, tuesday,
+                        wednesday, thursday, friday, saturday),
+                    sunAmount:
+                        value.calculateDailyExpenseSummary()[sunday] ?? 0,
+                    monAmount:
+                        value.calculateDailyExpenseSummary()[monday] ?? 0,
+                    tueAmount:
+                        value.calculateDailyExpenseSummary()[tuesday] ?? 0,
+                    wedAmount:
+                        value.calculateDailyExpenseSummary()[wednesday] ?? 0,
+                    thuAmount:
+                        value.calculateDailyExpenseSummary()[thursday] ?? 0,
+                    friAmount:
+                        value.calculateDailyExpenseSummary()[friday] ?? 0,
+                    satAmount:
+                        value.calculateDailyExpenseSummary()[saturday] ?? 0,
+                    filter: _selectedFilter, // New
+                    showFirstHalf: _showFirstHalf, // New
+                    data: {},
+                  )
+                // Monthly bar graph ui
+                : MyBarGraph(
+                    maxY: calculateMonthlyMax(
+                        value, _currentMonthStart!.year, _showFirstHalf),
+                    sunAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 1)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 7),
+                    monAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 2)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 8),
+                    tueAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 3)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 9),
+                    wedAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 4)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 10),
+                    thuAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 5)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 11),
+                    friAmount: _showFirstHalf
+                        ? calculateMonthTotal(
+                            value, _currentMonthStart!.year, 6)
+                        : calculateMonthTotal(
+                            value, _currentMonthStart!.year, 12),
+                    satAmount: 0,
+                    filter: _selectedFilter, // New
+                    showFirstHalf: _showFirstHalf, // New
+                    data: {},
+                  ),
           ),
         ],
       ),
@@ -242,5 +323,49 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       "Dec",
     ];
     return months[month - 1];
+  }
+
+// Monthly filter logic
+  double calculateMonthTotal(ExpenseData value, int year, int month) {
+    double total = 0;
+    DateTime startOfMonth = DateTime(year, month, 1);
+    DateTime endOfMonth =
+        DateTime(year, month + 1, 1).subtract(const Duration(days: 1));
+
+    for (var expense in value.getExpenseList()) {
+      if (expense.expenseDate
+              .isAfter(startOfMonth.subtract(const Duration(days: 1))) &&
+          expense.expenseDate
+              .isBefore(endOfMonth.add(const Duration(days: 1)))) {
+        total += expense.expenseAmount;
+      }
+    }
+    return total;
+  }
+
+  double calculateMonthlyMax(ExpenseData value, int year, bool firstHalf) {
+    double max = 100;
+    List<double> values = [];
+
+    int startMonth = firstHalf ? 1 : 7;
+    int endMonth = firstHalf ? 6 : 12;
+
+    for (int month = startMonth; month <= endMonth; month++) {
+      double total = calculateMonthTotal(value, year, month);
+      values.add(total);
+    }
+
+    values.sort();
+    max = values.last * 1.1;
+
+    return max == 0 ? 100 : max;
+  }
+
+  String getMonthRange(bool firstHalf) {
+    if (firstHalf) {
+      return "Jan - Jun ${_currentMonthStart!.year}";
+    } else {
+      return "Jul - Dec ${_currentMonthStart!.year}";
+    }
   }
 }

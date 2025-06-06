@@ -62,7 +62,7 @@ class ExpenseData extends ChangeNotifier {
         return candidate;
       }
     }
-    return today; // Fallback (should never reach here)
+    return today; 
   }
 
   Map<String, double> calculateDailyExpenseSummary() {
