@@ -8,7 +8,9 @@ import 'package:fintrack_app/Main%20Screens/BudgetSuccessPage.dart';
 import 'package:fintrack_app/Main%20Screens/CalendarPage.dart';
 
 class CreateBudgetPage extends StatefulWidget {
-  const CreateBudgetPage({super.key});
+  final int? month;
+  final int? year;
+  const CreateBudgetPage({super.key, this.month, this.year});
 
   @override
   State<CreateBudgetPage> createState() => _CreateBudgetPageState();
@@ -371,12 +373,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               return;
                             }
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const BudgetSuccessPage(),
-                              ),
-                            );
                             final rawAmount = _controller.text.trim();
                             final cleanedAmount =
                                 rawAmount.replaceAll(RegExp(r'[^\d.]'), '');
@@ -391,8 +387,17 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               "budgetAmount": amount,
                               "category": _selectedCategory,
                               "cycle": _selectedBudgetCycle,
+                              "Month": widget.month ?? DateTime.now().month,
+                              "Year": widget.year ?? DateTime.now().year,
+                              "createdAt": DateTime.timestamp(),
                             };
                             await Budgetservice().addbudget(budgetinfoMap);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BudgetSuccessPage(),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),

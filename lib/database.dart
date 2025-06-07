@@ -84,12 +84,15 @@ class Budgetservice {
   }
 
   // get budget from db
-  Stream<QuerySnapshot> getbudgetDetails() {
+  Stream<QuerySnapshot> getbudgetDetails(
+      {required int month, required int year}) {
     var user = FirebaseAuth.instance.currentUser;
     var userId = user!.uid;
     return FirebaseFirestore.instance
         .collection('Budget')
         .where('userId', isEqualTo: userId)
+        .where('Month', isEqualTo: month)
+        .where('Year', isEqualTo: year)
         .snapshots();
   }
 
@@ -100,7 +103,8 @@ class Budgetservice {
         .delete();
   }
 
-  Future<double> getTotalSpentForBudget(String category) async {
+  Future<double> getTotalSpentForBudget(
+      String category, int month, int year) async {
     final userId = FirebaseAuth.instance.currentUser!.uid;
 
     final expenses = await FirebaseFirestore.instance
@@ -108,6 +112,8 @@ class Budgetservice {
         .where('category', isEqualTo: category)
         .where('linktobudget', isEqualTo: true)
         .where('userId', isEqualTo: userId)
+        .where('Month', isEqualTo: month)
+        .where('Year', isEqualTo: year)
         .get();
 
     double totalSpent = 0.0;

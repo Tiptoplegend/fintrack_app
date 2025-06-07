@@ -17,8 +17,17 @@ class _BudgetScreenState extends State<BudgetScreen> {
   Stream<QuerySnapshot>? budgetStream;
 
   void getontheload() {
-    budgetStream = Budgetservice().getbudgetDetails();
+    budgetStream = Budgetservice().getbudgetDetails(
+      month: currentMonthIndex + 1,
+      year: currentYear,
+    );
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getontheload();
+  // }
 
   @override
   void didChangeDependencies() {
@@ -53,6 +62,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         currentMonthIndex = 11; // December (zero-based index)
         currentYear--;
       }
+      getontheload();
     });
   }
 
@@ -64,6 +74,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         currentMonthIndex = 0; // January (zero-based index)
         currentYear++;
       }
+      getontheload();
     });
   }
 
@@ -158,7 +169,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
           ),
         ),
       ),
-      body: budgetdetails(budgetStream),
+      body: budgetdetails(budgetStream, currentMonthIndex, currentYear),
     );
   }
 }
@@ -216,7 +227,8 @@ class MonthYearSelector extends StatelessWidget {
   }
 }
 
-Widget budgetdetails(Stream? budgetStream) {
+Widget budgetdetails(
+    Stream? budgetStream, int currentMonthIndex, int currentYear) {
   return StreamBuilder(
     stream: budgetStream,
     builder: (context, AsyncSnapshot snapshot) {
@@ -224,142 +236,147 @@ Widget budgetdetails(Stream? budgetStream) {
         return const Center(child: CircularProgressIndicator());
       }
 
-      return Expanded(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Column(
-            children: [
-              if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
-                const SizedBox(height: 20),
-                const Center(child: Text("No budgets found.")),
-                const SizedBox(height: 20),
-              ],
-              if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
-                ...snapshot.data.docs.map<Widget>((doc) {
-                  DocumentSnapshot ds = doc;
-                  return Slidable(
-                    endActionPane: ActionPane(
-                      motion: StretchMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: ((context) async {
-                            // delete budget
-                            await Budgetservice().deleteBudget(ds.id);
-                          }),
-                          icon: Icons.delete,
-                          backgroundColor: Colors.red,
-                        ),
-                      ],
-                    ),
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+      return SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 100),
+        child: Column(
+          children: [
+            if (!snapshot.hasData || snapshot.data.docs.isEmpty) ...[
+              const SizedBox(height: 20),
+              const Center(child: Text("No budgets found.")),
+              const SizedBox(height: 20),
+            ],
+            if (snapshot.hasData && snapshot.data.docs.isNotEmpty)
+              ...snapshot.data.docs.map<Widget>((doc) {
+                DocumentSnapshot ds = doc;
+                return Slidable(
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: ((context) async {
+                          // delete budget
+                          await Budgetservice().deleteBudget(ds.id);
+                        }),
+                        icon: Icons.delete,
+                        backgroundColor: Colors.red,
                       ),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Budget cycle: ${ds['cycle']}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                const Icon(Icons.shopping_cart,
-                                    color: Colors.green),
-                                const SizedBox(width: 10),
-                                Text(ds['category'],
-                                    style: const TextStyle(fontSize: 14)),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            // progress bar
-                            FutureBuilder<double>(
-                              future: Budgetservice()
-                                  .getTotalSpentForBudget(ds['category']),
-                              builder: (context, snapshot) {
-                                double spent = snapshot.data ?? 0.0;
-                                double budgetAmount = double.tryParse(
-                                        ds['budgetAmount'].toString()) ??
-                                    1.0;
-                                double progress =
-                                    (spent / budgetAmount).clamp(0.0, 1.0);
-
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Remaining: ₵${(budgetAmount - spent).toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: (budgetAmount - spent) < 0
-                                            ? Colors.red
-                                            : Colors.green,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    LinearProgressIndicator(
-                                      minHeight: 15,
-                                      value: progress,
-                                      backgroundColor: Colors.grey[300],
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.green),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      '₵${spent.toStringAsFixed(2)} of ₵${budgetAmount.toStringAsFixed(2)} spent',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    ],
+                  ),
+                  child: Card(
+                    elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CreateBudgetPage()),
-                    );
-                  },
-                  child: const Text(
-                    "Create Budget",
-                    style: TextStyle(
-                      fontFamily: 'inter',
-                      color: Colors.white,
-                      fontSize: 18,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Budget cycle: ${ds['cycle']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.shopping_cart,
+                                  color: Colors.green),
+                              const SizedBox(width: 10),
+                              Text(ds['category'],
+                                  style: const TextStyle(fontSize: 14)),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          // progress bar
+                          FutureBuilder<double>(
+                            future: Budgetservice().getTotalSpentForBudget(
+                              ds['category'],
+                              ds['Month'],
+                              ds['Year'],
+                            ),
+                            builder: (context, snapshot) {
+                              double spent = snapshot.data ?? 0.0;
+                              double budgetAmount = double.tryParse(
+                                      ds['budgetAmount'].toString()) ??
+                                  1.0;
+                              double progress =
+                                  (spent / budgetAmount).clamp(0.0, 1.0);
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Remaining: ₵${(budgetAmount - spent).toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: (budgetAmount - spent) < 0
+                                          ? Colors.red
+                                          : Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  LinearProgressIndicator(
+                                    minHeight: 15,
+                                    value: progress,
+                                    backgroundColor: Colors.grey[300],
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.green),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '₵${spent.toStringAsFixed(2)} of ₵${budgetAmount.toStringAsFixed(2)} spent',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+                );
+              }).toList(),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  minimumSize: const Size(double.infinity, 50),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CreateBudgetPage(
+                        month: currentMonthIndex + 1,
+                        year: currentYear,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Create Budget",
+                  style: TextStyle(
+                    fontFamily: 'inter',
+                    color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
               ),
-              const SizedBox(height: 60),
-            ],
-          ),
+            ),
+            const SizedBox(height: 60),
+          ],
         ),
       );
     },
