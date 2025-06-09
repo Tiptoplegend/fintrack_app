@@ -1,0 +1,2 @@
+C:/Users/samuel/fintrack_app/android/app/.cxx/RelWithDebInfo/192q2n2v/x86/CMakeFiles/edit_cache.dir
+C:/Users/samuel/fintrack_app/android/app/.cxx/RelWithDebInfo/192q2n2v/x86/CMakeFiles/rebuild_cache.dir

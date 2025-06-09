@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart' as intl;
 
 class CalendarPage extends StatefulWidget {
   final Function(String) onCycleSelected;
@@ -12,8 +13,12 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime? _startDate;
+  DateTime? _endDate;
   String _selectedFrequency = 'Daily';
+
+
+  final intl.DateFormat _dateFormatter = intl.DateFormat('dd-MM-yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,8 @@ class _CalendarPageState extends State<CalendarPage> {
                     onChanged: (value) {
                       setState(() {
                         _selectedFrequency = value!;
+                        _startDate = null;
+                        _endDate = null;
                       });
                     },
                   ),
@@ -67,94 +74,171 @@ class _CalendarPageState extends State<CalendarPage> {
                               firstDay: DateTime.utc(2000, 1, 1),
                               lastDay: DateTime.utc(2100, 12, 31),
                               focusedDay: _focusedDay,
-                              selectedDayPredicate: (day) {
-                                return isSameDay(_selectedDay, day);
-                              },
+                              calendarFormat: CalendarFormat.month,
+                              rangeStartDay: _startDate,
+                              rangeEndDay: _endDate,
                               onDaySelected: (selectedDay, focusedDay) {
                                 setState(() {
-                                  _selectedDay = selectedDay;
-                                  _focusedDay = focusedDay; // update `_focusedDay` here as well
+                                  if (_startDate == null ||
+                                      (_startDate != null && _endDate != null)) {
+                                    _startDate = selectedDay;
+                                    _endDate = null;
+                                  } else if (_startDate != null &&
+                                      _endDate == null) {
+                                    if (selectedDay.isAfter(_startDate!)) {
+                                      _endDate = selectedDay;
+                                    } else {
+                                      _startDate = selectedDay;
+                                    }
+                                  }
+                                  _focusedDay = focusedDay;
                                 });
                               },
-                              calendarFormat: CalendarFormat.month,
-                              onFormatChanged: (format) {
-                                // Handle format change if needed
+                              selectedDayPredicate: (day) {
+                                return (_startDate != null &&
+                                        day.isAtSameMomentAs(_startDate!)) ||
+                                    (_endDate != null &&
+                                        day.isAtSameMomentAs(_endDate!));
                               },
                               onPageChanged: (focusedDay) {
-                                _focusedDay = focusedDay;
+                                setState(() {
+                                  _focusedDay = focusedDay;
+                                });
                               },
                               calendarStyle: CalendarStyle(
-                                defaultTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-                                weekendTextStyle: TextStyle(color: Colors.black, fontSize: 18),
-                                outsideTextStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                                todayTextStyle: TextStyle(color: Colors.white, fontSize: 18),
-                                selectedTextStyle: TextStyle(color: Colors.white, fontSize: 18),
-                                selectedDecoration: BoxDecoration(
+                                rangeHighlightColor:
+                                    Colors.lightGreen.withOpacity(0.5),
+                                defaultTextStyle: const TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                                weekendTextStyle: const TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                                todayTextStyle: const TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                                selectedTextStyle: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                                selectedDecoration: const BoxDecoration(
                                   color: Colors.green,
                                   shape: BoxShape.circle,
                                 ),
-                                todayDecoration: BoxDecoration(
+                                todayDecoration: const BoxDecoration(
                                   color: Colors.green,
                                   shape: BoxShape.circle,
                                 ),
+                                rangeStartDecoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                                rangeEndDecoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                                withinRangeTextStyle: const TextStyle(
+                                    color: Colors.redAccent, fontSize: 18),
                               ),
-                              headerStyle: HeaderStyle(
+                              headerStyle: const HeaderStyle(
                                 formatButtonVisible: false,
                                 titleCentered: true,
-                                titleTextStyle: const TextStyle(
+                                titleTextStyle: TextStyle(
                                   color: Colors.black,
                                   fontSize: 16.0,
                                 ),
-                                leftChevronIcon: const Icon(
+                                leftChevronIcon: Icon(
                                   Icons.chevron_left,
                                   color: Colors.black,
                                 ),
-                                rightChevronIcon: const Icon(
+                                rightChevronIcon: Icon(
                                   Icons.chevron_right,
                                   color: Colors.black,
                                 ),
                               ),
-                              calendarBuilders: CalendarBuilders(
-                                defaultBuilder: (context, day, focusedDay) {
-                                  if (_selectedFrequency == 'Weekly' && _selectedDay != null) {
-                                    final startOfWeek = _selectedDay!.subtract(Duration(days: _selectedDay!.weekday - 1));
-                                    final endOfWeek = startOfWeek.add(Duration(days: 6));
-
-                                    if (day.isAfter(startOfWeek.subtract(Duration(days: 1))) &&
-                                        day.isBefore(endOfWeek.add(Duration(days: 1)))) {
-                                      return Container(
-                                        margin: const EdgeInsets.all(4.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.lightGreen.withOpacity(0.5),
-                                          shape: BoxShape.rectangle,
-                                          borderRadius: BorderRadius.circular(8.0),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '${day.day}',
-                                            style: TextStyle(color: Colors.black),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  }
-                                  return null;
-                                },
-                              ),
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Handle set cycle action
+                                  // For Daily frequency
+                                  if (_selectedFrequency == 'Daily') {
+                                    if (_startDate != null && _endDate != null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            'This action is wrong.',
+                                            style: TextStyle(
+                                              fontFamily: 'inter',
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else if (_startDate == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            'Please select a start date for Daily cycle.',
+                                            style: TextStyle(
+                                              fontFamily: 'inter',
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      final selectedCycle =
+                                          _dateFormatter.format(_startDate!);
+                                      widget.onCycleSelected(selectedCycle);
+                                    }
+                                  }
+                                  // For Weekly or Monthly frequency
+                                  else {
+                                    if (_startDate == null) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            'Please select a start date for Weekly or Monthly.',
+                                            style: TextStyle(
+                                              fontFamily: 'inter',
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else if (_endDate == null) {
+                                      // Require both start and end dates for Weekly/Monthly
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: Colors.white,
+                                          content: Text(
+                                            'Please select both a start date and an end date for Weekly or Monthly.',
+                                            style: TextStyle(
+                                              fontFamily: 'inter',
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      // Both start and end dates are selected for Weekly/Monthly
+                                      final selectedCycle =
+                                          '${_dateFormatter.format(_startDate!)} -> ${_dateFormatter.format(_endDate!)}';
+                                      widget.onCycleSelected(selectedCycle);
+                                    }
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
                                 ),
                                 child: const Text(
                                   'Set cycle',
@@ -188,7 +272,7 @@ Widget _Header(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-          icon: Icon(Icons.close, color: Colors.black),
+          icon: const Icon(Icons.close, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -198,9 +282,10 @@ Widget _Header(BuildContext context) {
   );
 }
 
-Widget _FrequencyDropdown(
-    {required String selectedFrequency,
-    required ValueChanged<String?> onChanged}) {
+Widget _FrequencyDropdown({
+  required String selectedFrequency,
+  required ValueChanged<String?> onChanged,
+}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Row(

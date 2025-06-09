@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/Datetime/date_time_helper.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,16 @@ class ExpenseData extends ChangeNotifier {
 // add expense
   void addNewExpense(ExpenseItem newExpense) {
     overallExpenseList.add(newExpense);
+    notifyListeners();
+  }
+
+  void loadExpensesFromFirestore(QuerySnapshot snapshot) {
+    overallExpenseList.clear(); // Clear previous entries
+    for (var doc in snapshot.docs) {
+      final data = doc.data() as Map<String, dynamic>;
+      final item = ExpenseItem.fromMap(data, doc.id);
+      overallExpenseList.add(item);
+    }
     notifyListeners();
   }
 
@@ -43,18 +54,15 @@ class ExpenseData extends ChangeNotifier {
     }
   }
 
-  // ignore: non_constant_identifier_names
-  DateTime StartOfWeek(DateTime dateTime) {
-    DateTime startOfWeek = DateTime.now(); // Initialize with a default value
-
+  DateTime StartOfWeekDate() {
     DateTime today = DateTime.now();
-
     for (int i = 0; i < 7; i++) {
-      if (getDayName(today.subtract(Duration(days: i))) == 'Sun') {
-        startOfWeek = today.subtract(Duration(days: i));
+      DateTime candidate = today.subtract(Duration(days: i));
+      if (getDayName(candidate) == 'Sun') {
+        return candidate;
       }
     }
-    return startOfWeek;
+    return today; 
   }
 
   Map<String, double> calculateDailyExpenseSummary() {
@@ -62,7 +70,8 @@ class ExpenseData extends ChangeNotifier {
 
     for (var expense in overallExpenseList) {
       String date = convertDateTimeToString(expense.expenseDate);
-      double amount = double.parse(expense.expenseAmount as String);
+      // print('Expense summary key: $date');
+      double amount = expense.expenseAmount;
 
       if (dailyExpenseSummary.containsKey(date)) {
         double currentAmount = dailyExpenseSummary[date]!;
@@ -75,4 +84,6 @@ class ExpenseData extends ChangeNotifier {
 
     return dailyExpenseSummary;
   }
+
+  startOfweekDate() {}
 }

@@ -1,10 +1,16 @@
+import 'package:fintrack_app/FAB%20pages/Categories.dart';
+import 'package:fintrack_app/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:fintrack_app/Main Screens/CalendarPage.dart';
+import 'package:fintrack_app/Main%20Screens/BudgetSuccessPage.dart';
+import 'package:fintrack_app/Main%20Screens/CalendarPage.dart';
 
 class CreateBudgetPage extends StatefulWidget {
-  const CreateBudgetPage({super.key});
+  final int? month;
+  final int? year;
+  const CreateBudgetPage({super.key, this.month, this.year});
 
   @override
   State<CreateBudgetPage> createState() => _CreateBudgetPageState();
@@ -13,26 +19,19 @@ class CreateBudgetPage extends StatefulWidget {
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
   final intl.NumberFormat _formatter = intl.NumberFormat("#,##0.##");
+  final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
   bool _isUpdatingText = false;
 
-  final Map<String, IconData> categoryIcons = {
-    'Food': Icons.fastfood,
-    'Transport': Icons.directions_bus,
-    'Entertainment': Icons.movie,
-    'Health': Icons.local_hospital,
-    'Shopping': Icons.shopping_cart,
-  };
-
-  final Map<String, Color> categoryColors = {
-    'Food': Colors.orange,
-    'Transport': Colors.blue,
-    'Entertainment': Colors.purple,
-    'Health': Colors.red,
-    'Shopping': Colors.green,
-  };
-
+  Category? selectedCategory;
+  List<Category> categories = [
+    Category(name: "Food", icon: Icons.fastfood),
+    Category(name: "Transportation", icon: Icons.directions_car),
+    Category(name: "Entertainment", icon: Icons.movie),
+    Category(name: "Utilities", icon: Icons.lightbulb),
+    Category(name: "Shopping", icon: Icons.shopping_cart),
+  ];
   @override
   void initState() {
     super.initState();
@@ -59,6 +58,19 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
 
       _isUpdatingText = false;
     });
+    _fetchCategories();
+  }
+
+  // Fetch the categories from the database
+  void _fetchCategories() async {
+    var userCategories = await FirestoreService().getCategories();
+    if (userCategories != null && mounted) {
+      setState(() {
+        for (var doc in userCategories) {
+          categories.add(Category(name: doc['name'], icon: Icons.category));
+        }
+      });
+    }
   }
 
   @override
@@ -123,9 +135,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 decoration: InputDecoration(
                   hintText: '₵0',
                   hintStyle: TextStyle(
-                    color: _selectedCategory != null
-                        ? categoryColors[_selectedCategory] ?? Colors.white
-                        : Colors.white,
                     fontSize: 30,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
@@ -174,110 +183,108 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                             borderSide: BorderSide(color: Color(0xFF007D3E)),
                           ),
                         ),
-                        style: const TextStyle(color: Colors.black),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontFamily: 'Inter',
+                        ),
                         icon: const Icon(
                           Icons.arrow_drop_down,
                           color: Colors.black,
                           size: 30,
                         ),
-                        items: categoryIcons.keys.map((category) {
-                          return DropdownMenuItem(
-                            value: category,
+                        items: categories.map((category) {
+                          return DropdownMenuItem<String>(
+                            value: category.name,
                             child: Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: categoryColors[category]!
-                                      .withOpacity(0.2),
-                                  child: Icon(
-                                    categoryIcons[category],
-                                    color: categoryColors[category],
-                                    size: 30,
-                                  ), // Increased icon size
-                                ),
+                                Icon(category.icon,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black),
                                 const SizedBox(width: 10),
-                                Text(
-                                  category,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                ),
+                                Text(category.name,
+                                    style: TextStyle(
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black)),
                               ],
                             ),
                           );
                         }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCategory = value;
-                          });
-                        },
                         selectedItemBuilder: (BuildContext context) {
-                          return categoryIcons.keys.map((category) {
+                          return categories.map((category) {
                             return Row(
                               children: [
-                                CircleAvatar(
-                                  backgroundColor: categoryColors[category]!
-                                      .withOpacity(0.2),
-                                  child: Icon(
-                                    categoryIcons[category],
-                                    color: categoryColors[category],
-                                    size: 30,
-                                  ), // Increased icon size
-                                ),
+                                Icon(category.icon, color: Colors.black),
                                 const SizedBox(width: 10),
                                 Text(
-                                  category,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
+                                  category.name,
+                                  style: TextStyle(color: Colors.black),
                                 ),
                               ],
                             );
                           }).toList();
                         },
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCategory = value;
+                          });
+                        },
+                        value: _selectedCategory,
                       ),
                       const SizedBox(height: 16), // Spacer
-                      Row(
-                        children: [
-                          const Text(
-                            'Budget Cycle:',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              _selectedBudgetCycle ?? 'Select Cycle',
-                              style: const TextStyle(
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Cycle:',
+                              style: TextStyle(
                                 color: Colors.black,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 fontFamily: 'Inter',
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.calendar_month,
-                                color: Colors.black, size: 30),
-                            onPressed: () async {
-                              String? selectedCycle =
-                                  await _CalendarModal(context);
-                              if (selectedCycle != null) {
-                                setState(() {
-                                  _selectedBudgetCycle = selectedCycle;
-                                });
-                              }
-                            },
-                          ),
-                        ],
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                _selectedBudgetCycle ?? 'Select Cycle',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.calendar_month,
+                                  color: Colors.black, size: 30),
+                              onPressed: () async {
+                                String? selectedCycle =
+                                    await _CalendarModal(context);
+                                if (selectedCycle != null) {
+                                  setState(() {
+                                    _selectedBudgetCycle = selectedCycle;
+                                  });
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16), // Spacer
                       SwitchListTile(
                         contentPadding: const EdgeInsets.only(left: 0),
-                        title: Align(
+                        title: const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Receive Alert',
@@ -290,11 +297,11 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                         ),
                         value: true,
                         onChanged: (value) {},
-                        activeColor: Color(0xFF007D3E),
+                        activeColor: const Color(0xFF007D3E),
                       ),
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
+                        child: Text(
                           'Receive alert when it reaches some point',
                           style: TextStyle(
                             fontFamily: 'Inter',
@@ -307,8 +314,90 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                       SizedBox(
                         width: 350,
                         child: ElevatedButton(
-                          onPressed: () {
-                            _CalendarModal(context);
+                          onPressed: () async {
+                            // Validate inputs before proceeding
+                            String budgetText = _controller.text
+                                .replaceAll('₵', '')
+                                .replaceAll(',', '');
+                            double? budgetAmount = double.tryParse(budgetText);
+
+                            if (budgetAmount == null || budgetAmount <= 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please enter budget amount.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (_selectedCategory == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please select a category.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (_selectedBudgetCycle == null ||
+                                _selectedBudgetCycle == 'Select Cycle') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    'Please select a budget cycle.',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            final rawAmount = _controller.text.trim();
+                            final cleanedAmount =
+                                rawAmount.replaceAll(RegExp(r'[^\d.]'), '');
+
+                            final amount =
+                                double.tryParse(cleanedAmount) ?? 0.0;
+                            // database mapping for budget
+                            String userId =
+                                FirebaseAuth.instance.currentUser!.uid;
+                            Map<String, dynamic> budgetinfoMap = {
+                              "userId": userId,
+                              "budgetAmount": amount,
+                              "category": _selectedCategory,
+                              "cycle": _selectedBudgetCycle,
+                              "Month": widget.month ?? DateTime.now().month,
+                              "Year": widget.year ?? DateTime.now().year,
+                              "createdAt": DateTime.timestamp(),
+                            };
+                            await Budgetservice().addbudget(budgetinfoMap);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BudgetSuccessPage(),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),
@@ -337,31 +426,31 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       ),
     );
   }
-}
 
-Future<String?>_CalendarModal(BuildContext context) {
-  return showModalBottomSheet<String>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.9,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
+  Future<String?> _CalendarModal(BuildContext context) {
+    return showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.9,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: CalendarPage(
+            onCycleSelected: (cycle) {
+              Navigator.pop(context, cycle);
+            },
           ),
         ),
-        child: CalendarPage(
-          onCycleSelected: (cycle) {
-            Navigator.pop(context, cycle);
-          },
-        ),
       ),
-    ),
-  );
+    );
+  }
 }

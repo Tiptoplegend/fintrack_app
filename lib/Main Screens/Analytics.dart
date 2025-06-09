@@ -1,7 +1,12 @@
-// Ensure this import is correct
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
+import 'package:fintrack_app/Models/expense_Item.dart';
+import 'package:fintrack_app/components/expense_summary.dart';
+import 'package:fintrack_app/database.dart';
+import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +18,19 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
+  Stream<QuerySnapshot>? expenseStream;
+
+  void getontheload() {
+    expenseStream = Transactionservice().getexpenseDetails();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getontheload();
+    super.initState();
+  }
+
   final user = FirebaseAuth.instance.currentUser!;
   final userimg = FirebaseAuth.instance.currentUser!.photoURL;
 
@@ -36,15 +54,25 @@ class _AnalyticsState extends State<Analytics> {
         elevation: 0,
         title: Row(
           children: [
-            CircleAvatar(
-              radius: 27,
-              backgroundImage: user.photoURL != null
-                  ? NetworkImage(user.photoURL!)
-                  : const AssetImage("assets/images/icons8-user-48 (1).png")
-                      as ImageProvider,
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsScreen(),
+                    ));
+              },
+              icon: CircleAvatar(
+                radius: 24,
+                backgroundImage: user.photoURL != null
+                    ? NetworkImage(user.photoURL!)
+                    : const AssetImage("assets/images/icons8-user-48 (1).png")
+                        as ImageProvider,
+              ),
             ),
+
             const SizedBox(
-              width: 100,
+              width: 80,
             ), // To create spacing if needed on the left
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,38 +89,94 @@ class _AnalyticsState extends State<Analytics> {
           ],
         ),
       ),
-      body: Stack(
-        // widgets will go here
-
-        children: [
-          _TransactionList(),
-        ],
-      ),
+      body: _TransactionList(expenseStream),
     );
   }
 }
 
-Widget _TransactionList() {
+Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
   return Consumer<ExpenseData>(
-    builder: (context, value, child) {
-      return Scaffold(
-        body: ListView.builder(
-          itemCount: value.getExpenseList().length,
-          itemBuilder: (context, index) {
-            final expense = value.getExpenseList()[index];
-            final formattedDate =
-                DateFormat('dd/MM/yyyy').format(expense.expenseDate);
+    builder: (context, expenseData, child) {
+      return StreamBuilder<QuerySnapshot>(
+        stream: expenseStream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
 
-            return ListTile(
-              title: Text(expense.category.name),
-              subtitle: Text(formattedDate), // Updated to use formatted date
-              trailing: Text('GHC${expense.expenseAmount.toStringAsFixed(2)}'),
-            );
-          },
-        ),
+          // Process data after build
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            expenseData.overallExpenseList.clear();
+            if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+              for (var doc in snapshot.data!.docs) {
+                ExpenseItem expense = ExpenseItem.fromMap(
+                  doc.data() as Map<String, dynamic>,
+                  doc.id,
+                );
+                expenseData.addNewExpense(expense);
+              }
+            }
+            // Notify listeners even when list is cleared 
+            expenseData.notifyListeners();
+          });
+
+          return ListView(
+            children: [
+              ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
+
+              const SizedBox(height: 20),
+              const Text(
+                'Transaction History',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 2),
+              // Check if there are transactions
+              (snapshot.hasData && snapshot.data!.docs.isNotEmpty)
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot ds = snapshot.data!.docs[index];
+                        return Slidable(
+                          endActionPane:
+                              ActionPane(motion: StretchMotion(), children: [
+                            SlidableAction(
+                              onPressed: ((context) async {
+                                // delete expense
+                                await Transactionservice()
+                                    .deleteTransaction(ds.id);
+                              }),
+                              icon: Icons.delete,
+                              backgroundColor: Colors.red,
+                            ),
+                          ]),
+                          child: ListTile(
+                            leading:
+                                const CircleAvatar(child: Icon(Icons.grade)),
+                            title: Text(ds['category']),
+                            subtitle: Text(
+                              DateFormat('MMM d yyyy     hh:mm a')
+                                  .format(ds['date'].toDate()),
+                            ),
+                            trailing: Text(ds['amount'].toString()),
+                          ),
+                        );
+                      },
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.0),
+                      child: Center(
+                        child: Text('No Transactions/ History'),
+                      ),
+                    ),
+            ],
+          );
+        },
       );
     },
   );
 }
-
-// we would Create the widgets below

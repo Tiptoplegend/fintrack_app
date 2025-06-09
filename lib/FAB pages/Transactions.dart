@@ -1,13 +1,12 @@
-import 'package:fintrack_app/Data/expense_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fintrack_app/FAB%20pages/Categories.dart';
-import 'package:fintrack_app/Main%20Screens/Analytics.dart';
-import 'package:fintrack_app/Models/expense_Item.dart';
+import 'package:fintrack_app/Main%20Screens/Goals.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -17,6 +16,11 @@ class TransactionPage extends StatefulWidget {
 }
 
 class _TransactionPageState extends State<TransactionPage> {
+  Stream<QuerySnapshot>? GoalsStream;
+
+  bool _isSwitched = false;
+
+  Goals? selectedGoal;
   Category? selectedCategory;
   List<Category> categories = [
     Category(name: "Food", icon: Icons.fastfood),
@@ -24,15 +28,19 @@ class _TransactionPageState extends State<TransactionPage> {
     Category(name: "Entertainment", icon: Icons.movie),
     Category(name: "Utilities", icon: Icons.lightbulb),
     Category(name: "Shopping", icon: Icons.shopping_cart),
+    Category(name: "Goals/Savings", icon: Icons.track_changes),
   ];
 
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _NotesController = TextEditingController();
+  final FirestoreService firestoreService = FirestoreService();
+
   @override
   void initState() {
     super.initState();
     _fetchCategories();
     _amountController.addListener(_formatAmount);
+    getontheload();
   }
 
   void _fetchCategories() async {
@@ -55,6 +63,11 @@ class _TransactionPageState extends State<TransactionPage> {
             TextSelection.collapsed(offset: _amountController.text.length),
       );
     }
+  }
+
+  void getontheload() {
+    GoalsStream = GoalsService().getGoalsDetails();
+    setState(() {});
   }
 
   // Function to show the category selection modal
@@ -87,7 +100,7 @@ class _TransactionPageState extends State<TransactionPage> {
                         setState(() {
                           selectedCategory = categories[index];
                         });
-                        Navigator.pop(context); // Close modal
+                        Navigator.pop(context);
                       },
                     );
                   },
@@ -95,6 +108,64 @@ class _TransactionPageState extends State<TransactionPage> {
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+// modal to show goals
+  void showgoalmodal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StreamBuilder(
+          stream: GoalsStream,
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No Goals Found'));
+            }
+
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select Goals',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot ds = snapshot.data!.docs[index];
+                      return ListTile(
+                        leading: Icon(Icons.track_changes_sharp,
+                            color: Colors.green),
+                        title: Text(ds['title']),
+                        trailing: Text(
+                          'Target Amount: GHC ${ds['amount'] ?? '0'}',
+                          style: TextStyle(fontSize: 14, color: Colors.green),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            selectedGoal = Goals(
+                              title: ds['title'],
+                              amount: ds['amount'],
+                            );
+                          });
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -110,9 +181,21 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transactions'),
-        centerTitle: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF005341), Color(0xFF43A047)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+            ),
+          ),
+          title: const Text('Transactions'),
+          centerTitle: true,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,6 +206,8 @@ class _TransactionPageState extends State<TransactionPage> {
             _notesection(),
             SizedBox(height: 20),
             _CatGoalsbtn(),
+            SizedBox(height: 30),
+            _addtobudget(),
             Spacer(),
             _Continuebtn(),
           ],
@@ -146,13 +231,15 @@ class _TransactionPageState extends State<TransactionPage> {
         hintText: '0.00',
         hintStyle: TextStyle(color: Colors.grey, fontSize: 25),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: Colors.transparent),
         ),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: Colors.grey[200]!),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(color: Colors.green),
         ),
       ),
@@ -178,11 +265,14 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   Widget _CatGoalsbtn() {
+    // goalsbtn
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            showgoalmodal();
+          },
           style: ElevatedButton.styleFrom(
             minimumSize: Size(150, 60),
             shape: RoundedRectangleBorder(
@@ -190,10 +280,15 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             backgroundColor: Color(Colors.green.value),
           ),
-          icon:
-              Icon(Icons.track_changes_sharp, color: Color(Colors.white.value)),
-          label: Text('Select Goals', style: TextStyle(color: Colors.white)),
+          icon: selectedGoal != null
+              ? Icon(Icons.track_changes_sharp,
+                  color: Color(Colors.white.value))
+              : Icon(Icons.track_changes_sharp,
+                  color: Color(Colors.white.value)),
+          label: Text(selectedGoal?.title ?? "Select Goal",
+              style: TextStyle(color: Colors.white)),
         ),
+        // categorybtn
         ElevatedButton.icon(
           onPressed: _showCategoryModal,
           style: ElevatedButton.styleFrom(
@@ -213,10 +308,41 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
+  Widget _addtobudget() {
+    return ListTile(
+      leading: Icon(Icons.monetization_on, color: Colors.green),
+      title: Text('Add to Budget'),
+      trailing: Switch(
+        value: _isSwitched,
+        activeColor: Colors.green,
+        onChanged: (value) {
+          // Handle switch change
+          setState(() {
+            _isSwitched = value;
+          });
+        },
+      ),
+    );
+  }
+
   Widget _Continuebtn() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         _saveExpense();
+
+        Map<String, dynamic> expenseInfoMap = {
+          'amount': _amountController.text,
+          'category': selectedCategory!.name,
+          'icon': selectedCategory!.icon?.codePoint,
+          'notes': _NotesController.text,
+          'date': DateTime.now(),
+          'userId': FirebaseAuth.instance.currentUser!.uid,
+          'linktobudget': _isSwitched,
+          'linktogoal': selectedGoal?.title,
+          'Month': DateTime.now().month,
+          'Year': DateTime.now().year,
+        };
+        await Transactionservice().addTransaction(expenseInfoMap);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(Colors.green.value),
@@ -241,17 +367,6 @@ class _TransactionPageState extends State<TransactionPage> {
       );
       return;
     }
-
-    ExpenseItem newExpense = ExpenseItem(
-      category: selectedCategory!,
-      expenseAmount: double.parse(_amountController.text.replaceAll(',', '')),
-      expenseDate: DateTime.now(),
-      expenseNote: _NotesController.text,
-    );
-
-    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
-
-    // Navigate back to Navigation page, showing Analytics tab (index 1)
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(

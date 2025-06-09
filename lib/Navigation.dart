@@ -30,9 +30,12 @@ class _NavigationState extends State<Navigation> {
   static List<Widget> body = [
     Homepage(),
     Analytics(),
-    const Goals(),
-    const BudgetScreen(),
-    const CreateBudgetPage(),
+    Goals(
+      title: null,
+      amount: null,
+    ),
+    BudgetScreen(),
+    CreateBudgetPage(month: DateTime.now().month, year: DateTime.now().year),
   ];
 
   @override
