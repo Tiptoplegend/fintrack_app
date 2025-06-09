@@ -216,7 +216,10 @@ class _CardsectionState extends State<Cardsection> {
   }
 
   void getontheload() {
-    budgetStream = Budgetservice().getbudgetDetails();
+    budgetStream = Budgetservice().getbudgetDetails(
+      month: DateTime.now().month,
+      year: DateTime.now().year,
+    );
   }
 
   @override
@@ -317,8 +320,10 @@ class _CardsectionState extends State<Cardsection> {
                       ),
                       const SizedBox(height: 8),
                       FutureBuilder<double>(
-                        future: Budgetservice()
-                            .getTotalSpentForBudget(ds['category']),
+                        future: Budgetservice().getTotalSpentForBudget(
+                            ds['category'],
+                            DateTime.now().month,
+                            DateTime.now().year),
                         builder: (context, snapshot) {
                           double spent = snapshot.data ?? 0.0;
                           double budgetAmount =
