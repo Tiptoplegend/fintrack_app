@@ -35,7 +35,7 @@ class _NavigationState extends State<Navigation> {
       amount: null,
     ),
     BudgetScreen(),
-    CreateBudgetPage(),
+    CreateBudgetPage(month: DateTime.now().month, year: DateTime.now().year),
   ];
 
   @override

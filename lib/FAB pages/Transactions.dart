@@ -339,6 +339,8 @@ class _TransactionPageState extends State<TransactionPage> {
           'userId': FirebaseAuth.instance.currentUser!.uid,
           'linktobudget': _isSwitched,
           'linktogoal': selectedGoal?.title,
+          'Month': DateTime.now().month,
+          'Year': DateTime.now().year,
         };
         await Transactionservice().addTransaction(expenseInfoMap);
       },
