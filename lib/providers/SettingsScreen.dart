@@ -208,7 +208,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const HelpScreen()),
+                  builder: (context) =>  HelpScreen()),
             ),  
           ),
           SettingsOption(
