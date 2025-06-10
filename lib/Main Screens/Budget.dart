@@ -302,11 +302,9 @@ Widget budgetdetails(
                             builder: (context, snapshot) {
                               double spent = snapshot.data ?? 0.0;
                               double budgetAmount = double.tryParse(
-                                      ds['budgetAmount'].toString()) ??
-                                  1.0;
+                                      ds['budgetAmount'].toString()) ?? 1.0;
                               double progress =
                                   (spent / budgetAmount).clamp(0.0, 1.0);
-
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
