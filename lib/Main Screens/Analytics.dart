@@ -5,6 +5,7 @@ import 'package:fintrack_app/components/expense_summary.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +20,8 @@ class Analytics extends StatefulWidget {
 
 class _AnalyticsState extends State<Analytics> {
   Stream<QuerySnapshot>? expenseStream;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   void getontheload() {
     expenseStream = Transactionservice().getexpenseDetails();
@@ -29,6 +32,17 @@ class _AnalyticsState extends State<Analytics> {
   void initState() {
     getontheload();
     super.initState();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   final user = FirebaseAuth.instance.currentUser!;
@@ -70,14 +84,11 @@ class _AnalyticsState extends State<Analytics> {
                         as ImageProvider,
               ),
             ),
-
-            const SizedBox(
-              width: 80,
-            ), // To create spacing if needed on the left
+            const SizedBox(width: 80),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: const [
-                SizedBox(height: 10), // Moves the text down
+                SizedBox(height: 10),
                 Text(
                   'Analytics',
                   style: TextStyle(
@@ -89,12 +100,13 @@ class _AnalyticsState extends State<Analytics> {
           ],
         ),
       ),
-      body: _TransactionList(expenseStream),
+      body: _TransactionList(expenseStream, _searchController, _searchQuery),
     );
   }
 }
 
-Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
+Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
+    TextEditingController searchController, String searchQuery) {
   return Consumer<ExpenseData>(
     builder: (context, expenseData, child) {
       return StreamBuilder<QuerySnapshot>(
@@ -119,34 +131,50 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                 expenseData.addNewExpense(expense);
               }
             }
-            // Notify listeners even when list is cleared 
             expenseData.notifyListeners();
           });
+
+          // Filter transactions based on search query
+          List<DocumentSnapshot> filteredDocs = snapshot.hasData
+              ? snapshot.data!.docs.where((doc) {
+                  String category = doc['category'].toString().toLowerCase();
+                  String date = DateFormat('MMM d yyyy     hh:mm a')
+                      .format(doc['date'].toDate())
+                      .toLowerCase();
+                  return category.contains(searchQuery) ||
+                      date.contains(searchQuery);
+                }).toList()
+              : [];
 
           return ListView(
             children: [
               ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
-
               const SizedBox(height: 20),
               const Text(
                 'Transaction History',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 2),
-              // Check if there are transactions
-              (snapshot.hasData && snapshot.data!.docs.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: CupertinoSearchTextField(
+                  controller: searchController,
+                  placeholder: 'Search by category or date',
+                ),
+              ),
+              // Check if there are filtered transactions
+              filteredDocs.isNotEmpty
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: filteredDocs.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot ds = snapshot.data!.docs[index];
+                        DocumentSnapshot ds = filteredDocs[index];
                         return Slidable(
                           endActionPane:
                               ActionPane(motion: StretchMotion(), children: [
                             SlidableAction(
                               onPressed: ((context) async {
-                                // delete expense
                                 await Transactionservice()
                                     .deleteTransaction(ds.id);
                               }),
@@ -170,7 +198,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream) {
                   : const Padding(
                       padding: EdgeInsets.symmetric(vertical: 20.0),
                       child: Center(
-                        child: Text('No Transactions/ History'),
+                        child: Text('No Transactions Found'),
                       ),
                     ),
             ],
