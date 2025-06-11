@@ -22,8 +22,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
     String username = user.displayName ?? "User";
 
     return Scaffold(
-      resizeToAvoidBottomInset:
-          true, 
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
