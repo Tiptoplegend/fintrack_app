@@ -77,6 +77,11 @@ class _CalendarPageState extends State<CalendarPage> {
                               calendarFormat: CalendarFormat.month,
                               rangeStartDay: _startDate,
                               rangeEndDay: _endDate,
+                              enabledDayPredicate: (day) {
+                                // Only allow today and future dates to be selected
+                                final now = DateTime.now();
+                                return !day.isBefore(DateTime(now.year, now.month, now.day));
+                              },
                               onDaySelected: (selectedDay, focusedDay) {
                                 setState(() {
                                   if (_startDate == null ||
