@@ -18,7 +18,7 @@ class CreateBudgetPage extends StatefulWidget {
 
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
-  final intl.NumberFormat _formatter = intl.NumberFormat("#,##0.##");
+  final intl.NumberFormat _formatter = intl.NumberFormat("#,####");
   final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
@@ -35,8 +35,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
   @override
   void initState() {
     super.initState();
-    _controller.text = "₵";
-
+    _controller.text = "₵0.00";
     _controller.addListener(() {
       if (_isUpdatingText) return;
       _isUpdatingText = true;
@@ -52,7 +51,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
           );
         }
       } else {
-        _controller.text = "₵";
+        _controller.text = "₵0.00";
         _controller.selection = const TextSelection.collapsed(offset: 1);
       }
 
@@ -133,7 +132,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                   FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
                 ],
                 decoration: InputDecoration(
-                  hintText: '₵0',
+                  hintText: '₵',
                   hintStyle: TextStyle(
                     fontSize: 30,
                     fontFamily: 'Inter',
@@ -392,12 +391,24 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               "createdAt": DateTime.timestamp(),
                             };
                             await Budgetservice().addbudget(budgetinfoMap);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const BudgetSuccessPage(),
-                              ),
-                            );
+                      
+                              Navigator.push(
+                               context,
+                              PageRouteBuilder(
+                              transitionDuration: const Duration(milliseconds: 500), // slower transition
+                              pageBuilder: (context, animation, secondaryAnimation) => const BudgetSuccessPage(),
+                               transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0); // Slide from right
+                                const end = Offset.zero;
+                                 const curve = Curves.ease;
+                                final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                return SlideTransition(
+                                position: animation.drive(tween),
+                                  child: child,
+                              );
+                            },
+                            ),
+                           );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),
