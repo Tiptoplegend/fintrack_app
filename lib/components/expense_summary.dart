@@ -1,7 +1,7 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/Datetime/date_time_helper.dart';
-import 'package:fintrack_app/Models/expense_Item.dart';
 import 'package:fintrack_app/bar%20Graph/bar_graph.dart';
+import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
   // monthly filter
   DateTime? _currentMonthStart;
   bool _showFirstHalf = true;
-  // bool _showSecondHalf = true;
+
   @override
   void initState() {
     super.initState();
@@ -115,14 +115,14 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     Text(
                       _selectedFilter == 'Weekly'
                           ? 'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}'
-                          : 'GHC ${calculateMonthTotal(value, _currentMonthStart!.year, _currentMonthStart!.month).toStringAsFixed(2)}',
+                          : 'GHC ${calculateHalfYearTotal(value, _currentMonthStart!.year, _showFirstHalf).toStringAsFixed(2)}',
                       style: const TextStyle(
                           fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      _selectedFilter == 'weekly'
+                      _selectedFilter == 'Weekly'
                           ? 'Total expense'
-                          : 'Monthly expense',
+                          : 'Total Monthly expenses',
                       style: TextStyle(
                         fontSize: 14,
                         color: isDarkMode ? Colors.white : Colors.black,
@@ -189,6 +189,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                           _currentWeekStart = _currentWeekStart
                               .subtract(const Duration(days: 7));
                         } else if (_selectedFilter == 'Monthly') {
+                          _showFirstHalf = !_showFirstHalf;
                           _currentMonthStart = DateTime(
                             _currentMonthStart!.year,
                             _showFirstHalf ? 1 : 7,
@@ -216,7 +217,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                         if (_selectedFilter == 'Weekly') {
                           _currentWeekStart =
                               _currentWeekStart.add(const Duration(days: 7));
-                        } else if (_selectedFilter == 'Montly') {
+                        } else if (_selectedFilter == 'Monthly') {
                           _showFirstHalf = !_showFirstHalf;
                           _currentMonthStart = DateTime(
                               _currentMonthStart!.year,
@@ -292,8 +293,8 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                         : calculateMonthTotal(
                             value, _currentMonthStart!.year, 12),
                     satAmount: 0,
-                    filter: _selectedFilter, // New
-                    showFirstHalf: _showFirstHalf, // New
+                    filter: _selectedFilter,
+                    showFirstHalf: _showFirstHalf,
                     data: {},
                   ),
           ),
@@ -367,5 +368,17 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     } else {
       return "Jul - Dec ${_currentMonthStart!.year}";
     }
+  }
+
+  double calculateHalfYearTotal(ExpenseData value, int year, bool firstHalf) {
+    double total = 0;
+    int startMonth = firstHalf ? 1 : 7;
+    int endMonth = firstHalf ? 6 : 12;
+
+    for (int month = startMonth; month <= endMonth; month++) {
+      total += calculateMonthTotal(value, year, month);
+    }
+
+    return total;
   }
 }
