@@ -62,7 +62,7 @@ class ExpenseData extends ChangeNotifier {
         return candidate;
       }
     }
-    return today; 
+    return today;
   }
 
   Map<String, double> calculateDailyExpenseSummary() {
@@ -83,6 +83,35 @@ class ExpenseData extends ChangeNotifier {
     }
 
     return dailyExpenseSummary;
+  }
+
+  String calculateWeekTotal(DateTime weekStart) {
+    double total = 0;
+    Map<String, double> dailyExpenseSummary = calculateDailyExpenseSummary();
+
+    String sunday = convertDateTimeToString(weekStart);
+    String monday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 1)));
+    String tuesday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 2)));
+    String wednesday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 3)));
+    String thursday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 4)));
+    String friday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 5)));
+    String saturday =
+        convertDateTimeToString(weekStart.add(const Duration(days: 6)));
+
+    total += (dailyExpenseSummary[sunday] ?? 0);
+    total += (dailyExpenseSummary[monday] ?? 0);
+    total += (dailyExpenseSummary[tuesday] ?? 0);
+    total += (dailyExpenseSummary[wednesday] ?? 0);
+    total += (dailyExpenseSummary[thursday] ?? 0);
+    total += (dailyExpenseSummary[friday] ?? 0);
+    total += (dailyExpenseSummary[saturday] ?? 0);
+
+    return total.toStringAsFixed(2);
   }
 
   startOfweekDate() {}

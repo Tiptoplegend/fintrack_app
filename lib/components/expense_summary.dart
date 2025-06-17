@@ -1,7 +1,6 @@
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/Datetime/date_time_helper.dart';
 import 'package:fintrack_app/bar%20Graph/bar_graph.dart';
-import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,29 +57,29 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     return max == 0 ? 100 : max;
   }
 
-  String calculateWeekTotal(
-    ExpenseData value,
-    String sunday,
-    String monday,
-    String tuesday,
-    String wednesday,
-    String thursday,
-    String friday,
-    String saturday,
-  ) {
-    List<double> values = [
-      value.calculateDailyExpenseSummary()[sunday] ?? 0,
-      value.calculateDailyExpenseSummary()[monday] ?? 0,
-      value.calculateDailyExpenseSummary()[tuesday] ?? 0,
-      value.calculateDailyExpenseSummary()[wednesday] ?? 0,
-      value.calculateDailyExpenseSummary()[thursday] ?? 0,
-      value.calculateDailyExpenseSummary()[friday] ?? 0,
-      value.calculateDailyExpenseSummary()[saturday] ?? 0,
-    ];
+  // String calculateWeekTotal(
+  //   ExpenseData value,
+  //   String sunday,
+  //   String monday,
+  //   String tuesday,
+  //   String wednesday,
+  //   String thursday,
+  //   String friday,
+  //   String saturday,
+  // ) {
+  //   List<double> values = [
+  //     value.calculateDailyExpenseSummary()[sunday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[monday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[tuesday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[wednesday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[thursday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[friday] ?? 0,
+  //     value.calculateDailyExpenseSummary()[saturday] ?? 0,
+  //   ];
 
-    double total = values.reduce((a, b) => a + b);
-    return total.toStringAsFixed(2);
-  }
+  //   double total = values.reduce((a, b) => a + b);
+  //   return total.toStringAsFixed(2);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +113,15 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   children: [
                     Text(
                       _selectedFilter == 'Weekly'
-                          ? 'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}'
+                          // ? 'GHC ${calculateWeekTotal(value, sunday, monday, tuesday, wednesday, thursday, friday, saturday)}'
+                          ? 'GHC ${value.calculateWeekTotal(_currentWeekStart)}'
                           : 'GHC ${calculateHalfYearTotal(value, _currentMonthStart!.year, _showFirstHalf).toStringAsFixed(2)}',
                       style: const TextStyle(
                           fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       _selectedFilter == 'Weekly'
-                          ? 'Total expense'
+                          ? 'Total Weekly expense'
                           : 'Total Monthly expenses',
                       style: TextStyle(
                         fontSize: 14,
