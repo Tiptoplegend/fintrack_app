@@ -159,7 +159,7 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: CupertinoSearchTextField(
                   controller: searchController,
-                  placeholder: 'Search by category or date',
+                  placeholder: 'Search by Category or Date',
                 ),
               ),
               // Check if there are filtered transactions

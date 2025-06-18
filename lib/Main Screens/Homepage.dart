@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/database.dart';
 import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/SettingsScreen.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -244,7 +246,7 @@ class _CardsectionState extends State<Cardsection> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'This Months Spendings',
+              'This Weeks Spendings',
               style: TextStyle(
                 color: Colors.black,
                 fontFamily: 'inter',
@@ -252,13 +254,24 @@ class _CardsectionState extends State<Cardsection> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Text(
-              'GHC 0',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF005341),
-              ),
+            // const Text(
+            //   'GHC 0',
+            //   style: TextStyle(
+            //     fontSize: 30,
+            //     fontWeight: FontWeight.bold,
+            //     color: Color(0xFF005341),
+            //   ),
+            // ),
+            Consumer<ExpenseData>(
+              builder: (context, value, child) {
+                String weeklyExpenseTotal =
+                    value.calculateWeekTotal(value.StartOfWeekDate());
+                return Text('GHC $weeklyExpenseTotal',
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF005341)));
+              },
             ),
             const SizedBox(height: 10),
             Expanded(
