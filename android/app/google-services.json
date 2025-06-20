@@ -12,28 +12,7 @@
           "package_name": "com.example.fintrack_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "296412863207-955ddept32a9ovlhu598b53rijl9475j.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fintrack_app",
-            "certificate_hash": "291d09a717685429413e8273f385bf181860b462"
-          }
-        },
-        {
-          "client_id": "296412863207-oaqionpts34nnr26kkec37rr5jlshp9u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fintrack_app",
-            "certificate_hash": "b4555a7776a6a4151c716a29c2940350a64ca933"
-          }
-        },
-        {
-          "client_id": "296412863207-ldv6tqaqia4ec5vf3dhh98viiapavbed.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyBbKyMeb4_ckq6lM5ju1DhHBzDTEKORWGg"
@@ -41,19 +20,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "296412863207-ldv6tqaqia4ec5vf3dhh98viiapavbed.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "296412863207-sdi6tkb697mn2fiib7h1k3igrmssbmdg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.fintrackApp"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
