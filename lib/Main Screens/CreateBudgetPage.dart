@@ -18,7 +18,7 @@ class CreateBudgetPage extends StatefulWidget {
 
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
-  final intl.NumberFormat _formatter = intl.NumberFormat("#,####");
+  final intl.NumberFormat _formatter = intl.NumberFormat("#,###"); // <-- Use this format
   final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
@@ -32,6 +32,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
     Category(name: "Utilities", icon: Icons.lightbulb),
     Category(name: "Shopping", icon: Icons.shopping_cart),
   ];
+
   @override
   void initState() {
     super.initState();
@@ -40,19 +41,36 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       if (_isUpdatingText) return;
       _isUpdatingText = true;
 
-      String text = _controller.text.replaceAll('₵', '').replaceAll(',', '');
-      if (text.isNotEmpty) {
-        double? value = double.tryParse(text);
-        if (value != null) {
+      // Always keep the cedi sign at the start
+      String text = _controller.text;
+      if (!text.startsWith('₵')) {
+        text = '₵' + text.replaceAll('₵', '');
+      }
+
+
+      String numeric = text.replaceAll('₵', '').replaceAll(',', '');
+
+      if (numeric.isNotEmpty) {
+        int? value = int.tryParse(numeric);
+        if (value != null && value != 0) {
           String formattedText = '₵${_formatter.format(value)}';
           _controller.value = TextEditingValue(
             text: formattedText,
             selection: TextSelection.collapsed(offset: formattedText.length),
           );
+        } else {
+          // If value is 0 or invalid, just keep the cedi sign
+          _controller.value = const TextEditingValue(
+            text: '₵',
+            selection: TextSelection.collapsed(offset: 1),
+          );
         }
       } else {
-        _controller.text = "₵0.00";
-        _controller.selection = const TextSelection.collapsed(offset: 1);
+        
+        _controller.value = const TextEditingValue(
+          text: '₵',
+          selection: TextSelection.collapsed(offset: 1),
+        );
       }
 
       _isUpdatingText = false;
@@ -137,6 +155,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                     fontSize: 30,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
+                    color:Colors.grey
                   ),
                   border: InputBorder.none,
                 ),
