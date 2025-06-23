@@ -174,21 +174,68 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                           endActionPane:
                               ActionPane(motion: StretchMotion(), children: [
                             SlidableAction(
-                              onPressed: ((context) async {
-                                await Transactionservice()
-                                    .deleteTransaction(ds.id);
-                              }),
+                              onPressed: (context) async {
+                                try {
+                                  await Transactionservice()
+                                      .deleteTransaction(ds.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Transaction deleted successfully')),
+                                  );
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Error deleting transaction: $e')),
+                                  );
+                                }
+                              },
                               icon: Icons.delete,
                               backgroundColor: Colors.red,
                             ),
                             SlidableAction(
-                              onPressed: ((context) {
-                                // Handle edit action
-                                // You can implement your edit logic here
-                              }),
+                              onPressed: (context) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'Expense Info',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Category: ${ds['category']}'),
+                                          Text('Amount: ${ds['amount']}'),
+                                          Text(
+                                            'Date: ${DateFormat('MMM d yyyy hh:mm a').format(ds['date'].toDate())}',
+                                          ),
+                                          Text(
+                                              'Notes: ${ds['notes'] ?? 'No notes'}'),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               icon: Icons.info,
                               backgroundColor: Colors.blue,
-                            )
+                            ),
                           ]),
                           child: ListTile(
                             leading:

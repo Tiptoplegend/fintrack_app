@@ -61,14 +61,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
     }
   }
 
-  // void _addCategory(String categoryName) {
-  //   FirestoreService().addCategory(categoryName);
-  //   setState(() {
-  //     categories.add(
-  //       Category(name: categoryName, isUserCreated: true, isEnabled: true),
-  //     );
-  //   });
-  // }
   void _addCategory(String categoryName) async {
     try {
       final docRef = await FirestoreService().addCategory(categoryName);
