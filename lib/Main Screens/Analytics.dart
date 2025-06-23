@@ -240,7 +240,10 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                           child: ListTile(
                             leading:
                                 const CircleAvatar(child: Icon(Icons.grade)),
-                            title: Text(ds['category']),
+                            title: Text(
+                              ds['category'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                             subtitle: Text(
                               DateFormat('MMM d yyyy     hh:mm a')
                                   .format(ds['date'].toDate()),
