@@ -245,7 +245,13 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                               DateFormat('MMM d yyyy     hh:mm a')
                                   .format(ds['date'].toDate()),
                             ),
-                            trailing: Text(ds['amount'].toString()),
+                            trailing: Text(
+                              "GHC ${ds['amount'].toString()}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                  fontSize: 14),
+                            ),
                           ),
                         );
                       },
