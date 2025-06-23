@@ -2,12 +2,14 @@ import 'package:fintrack_app/database.dart';
 import 'package:flutter/material.dart';
 
 class Category {
+  String? docId;
   String name;
   bool isUserCreated;
   bool isEnabled;
   IconData? icon;
 
   Category({
+    this.docId,
     required this.name,
     this.isUserCreated = false,
     this.isEnabled = true,
@@ -46,6 +48,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         var data = snap.data() as Map<String, dynamic>;
         // log(data.toString());
         return Category(
+          docId: snap.id,
           name: data['name'],
           isUserCreated: true,
           isEnabled: true,
@@ -58,13 +61,32 @@ class _CategoriesPageState extends State<CategoriesPage> {
     }
   }
 
-  void _addCategory(String categoryName) {
-    FirestoreService().addCategory(categoryName);
-    setState(() {
-      categories.add(
-        Category(name: categoryName, isUserCreated: true, isEnabled: true),
+  // void _addCategory(String categoryName) {
+  //   FirestoreService().addCategory(categoryName);
+  //   setState(() {
+  //     categories.add(
+  //       Category(name: categoryName, isUserCreated: true, isEnabled: true),
+  //     );
+  //   });
+  // }
+  void _addCategory(String categoryName) async {
+    try {
+      final docRef = await FirestoreService().addCategory(categoryName);
+      setState(() {
+        categories.add(
+          Category(
+            docId: docRef.id,
+            name: categoryName,
+            isUserCreated: true,
+            isEnabled: true,
+          ),
+        );
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding category: $e')),
       );
-    });
+    }
   }
 
   void _addCategoryDialog() {
@@ -163,10 +185,27 @@ class _CategoriesPageState extends State<CategoriesPage> {
               //         activeColor: Colors.green,
               //       )
               //     : null,
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () {},
-              ),
+              trailing: category.isUserCreated
+                  ? IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () async {
+                        if (category.docId != null) {
+                          try {
+                            await FirestoreService()
+                                .deleteCategory(category.docId!);
+                            setState(() {
+                              categories.removeAt(index);
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Error deleting category: $e')),
+                            );
+                          }
+                        }
+                      },
+                    )
+                  : null,
             ),
           ),
         );

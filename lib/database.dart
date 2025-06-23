@@ -36,7 +36,7 @@ class FirestoreService {
     return query.docs;
   }
 
-  Future deletecategories(String docId) async {
+  Future deleteCategory(String docId) async {
     return await FirebaseFirestore.instance
         .collection('categories')
         .doc(docId)
