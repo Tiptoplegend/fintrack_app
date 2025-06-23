@@ -44,7 +44,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
       // Always keep the cedi sign at the start
       String text = _controller.text;
       if (!text.startsWith('₵')) {
-        text = '₵' + text.replaceAll('₵', '');
+        text = '₵${text.replaceAll('₵', '')}';
       }
 
 

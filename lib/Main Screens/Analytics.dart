@@ -181,6 +181,14 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                               icon: Icons.delete,
                               backgroundColor: Colors.red,
                             ),
+                            SlidableAction(
+                              onPressed: ((context) {
+                                // Handle edit action
+                                // You can implement your edit logic here
+                              }),
+                              icon: Icons.info,
+                              backgroundColor: Colors.blue,
+                            )
                           ]),
                           child: ListTile(
                             leading:

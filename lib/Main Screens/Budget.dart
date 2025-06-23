@@ -302,7 +302,8 @@ Widget budgetdetails(
                             builder: (context, snapshot) {
                               double spent = snapshot.data ?? 0.0;
                               double budgetAmount = double.tryParse(
-                                      ds['budgetAmount'].toString()) ?? 1.0;
+                                      ds['budgetAmount'].toString()) ??
+                                  1.0;
                               double progress =
                                   (spent / budgetAmount).clamp(0.0, 1.0);
                               return Column(
@@ -331,6 +332,22 @@ Widget budgetdetails(
                                     '₵${spent.toStringAsFixed(2)} of ₵${budgetAmount.toStringAsFixed(2)} spent',
                                     style: TextStyle(fontSize: 16),
                                   ),
+                                  if (progress >= 0.5)
+                                    Text(
+                                      'You have spent more than 50% of your budget!',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    )
+                                  else if (progress >= 0.8)
+                                    Text(
+                                      'You have spent more than 80% of your budget!',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                 ],
                               );
                             },

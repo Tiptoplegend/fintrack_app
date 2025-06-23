@@ -35,6 +35,13 @@ class FirestoreService {
         await categoriesCollection.where('userId', isEqualTo: userId).get();
     return query.docs;
   }
+
+  Future deletecategories(String docId) async {
+    return await FirebaseFirestore.instance
+        .collection('categories')
+        .doc(docId)
+        .delete();
+  }
 }
 
 // DATABASE FOR TransactionPage

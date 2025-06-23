@@ -152,17 +152,21 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 ),
               ),
               // Only the user-created categories will get the toggle switch.
-              trailing: category.isUserCreated
-                  ? Switch(
-                      value: category.isEnabled,
-                      onChanged: (value) {
-                        setState(() {
-                          category.isEnabled = value;
-                        });
-                      },
-                      activeColor: Colors.green,
-                    )
-                  : null,
+              // trailing: category.isUserCreated
+              //     ? Switch(
+              //         value: category.isEnabled,
+              //         onChanged: (value) {
+              //           setState(() {
+              //             category.isEnabled = value;
+              //           });
+              //         },
+              //         activeColor: Colors.green,
+              //       )
+              //     : null,
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {},
+              ),
             ),
           ),
         );
@@ -177,8 +181,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF005341),
-               Color(0xFF00A86B)],
+              colors: [Color(0xFF005341), Color(0xFF00A86B)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
