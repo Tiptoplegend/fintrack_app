@@ -188,9 +188,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                     ),
                     Text(
                       _selectedFilter == 'Weekly'
-                          ? 'Weekly expense'
+                          ? 'Total Weekly expense'
                           : _selectedFilter == 'Monthly'
-                              ? 'Half-Year expense'
+                              ? 'Monthly expense'
                               : 'Five-Year expense',
                       style: TextStyle(
                         fontSize: 14,
