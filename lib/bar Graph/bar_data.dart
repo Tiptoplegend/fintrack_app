@@ -9,6 +9,7 @@ class BarData {
   final double friAmount;
   final double satAmount;
   final String filter;
+
   BarData({
     required this.sunAmount,
     required this.monAmount,
@@ -23,25 +24,16 @@ class BarData {
   List<IndividualBar> barData = [];
 
   void initializedBarData() {
-    if (filter == 'Monthly') {
-      barData = [
-        IndividualBar(x: 0, y: sunAmount),
-        IndividualBar(x: 1, y: monAmount),
-        IndividualBar(x: 2, y: tueAmount),
-        IndividualBar(x: 3, y: wedAmount),
-        IndividualBar(x: 4, y: thuAmount),
-        IndividualBar(x: 5, y: friAmount),
-      ];
-    } else {
-      barData = [
-        IndividualBar(x: 0, y: sunAmount),
-        IndividualBar(x: 1, y: monAmount),
-        IndividualBar(x: 2, y: tueAmount),
-        IndividualBar(x: 3, y: wedAmount),
-        IndividualBar(x: 4, y: thuAmount),
+    barData = [
+      IndividualBar(x: 0, y: sunAmount),
+      IndividualBar(x: 1, y: monAmount),
+      IndividualBar(x: 2, y: tueAmount),
+      IndividualBar(x: 3, y: wedAmount),
+      IndividualBar(x: 4, y: thuAmount),
+      if (filter != 'Yearly') ...[
         IndividualBar(x: 5, y: friAmount),
         IndividualBar(x: 6, y: satAmount),
-      ];
-    }
+      ],
+    ];
   }
 }

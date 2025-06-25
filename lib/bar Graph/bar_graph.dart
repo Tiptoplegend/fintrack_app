@@ -13,6 +13,7 @@ class MyBarGraph extends StatelessWidget {
   final double satAmount;
   final String filter;
   final bool showFirstHalf;
+  final Map<String, dynamic> data;
 
   const MyBarGraph({
     super.key,
@@ -26,7 +27,7 @@ class MyBarGraph extends StatelessWidget {
     required this.satAmount,
     required this.filter,
     required this.showFirstHalf,
-    required Map<int, double> data,
+    required this.data,
   });
 
   @override
@@ -47,18 +48,19 @@ class MyBarGraph extends StatelessWidget {
     return BarChart(BarChartData(
       maxY: maxY,
       minY: 0,
-      gridData: FlGridData(show: false),
+      gridData: const FlGridData(show: false),
       borderData: FlBorderData(show: false),
       titlesData: FlTitlesData(
         show: true,
-        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: (value, meta) =>
-                getBottomTitles(value, meta, filter, showFirstHalf),
+                getBottomTitles(value, meta, filter, showFirstHalf, data),
           ),
         ),
       ),
@@ -80,15 +82,21 @@ class MyBarGraph extends StatelessWidget {
   }
 }
 
-Widget getBottomTitles(
-    double value, TitleMeta meta, String filter, bool showFirstHalf) {
+Widget getBottomTitles(double value, TitleMeta meta, String filter,
+    bool showFirstHalf, Map<String, dynamic> data) {
   const style = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold,
-    fontSize: 14,
+    fontSize: 12, // Reduced for better fit
   );
   Widget text;
-  if (filter == 'Monthly') {
+  if (filter == 'Yearly') {
+    final years =
+        data['years'] as List<String>? ?? ['', '', '', '', '', '', ''];
+    text = value.toInt() < years.length
+        ? Text("'${years[value.toInt()].substring(2)}", style: style)
+        : const Text('', style: style);
+  } else if (filter == 'Monthly') {
     final months = showFirstHalf
         ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         : ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -96,6 +104,7 @@ Widget getBottomTitles(
         ? Text(months[value.toInt()], style: style)
         : const Text('', style: style);
   } else {
+    // Weekly
     switch (value.toInt()) {
       case 0:
         text = const Text('Sun', style: style);
@@ -125,6 +134,7 @@ Widget getBottomTitles(
   }
 
   return SideTitleWidget(
+    space: 8.0,
     meta: meta,
     child: text,
   );

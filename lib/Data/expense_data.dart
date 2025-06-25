@@ -114,5 +114,22 @@ class ExpenseData extends ChangeNotifier {
     return total.toStringAsFixed(2);
   }
 
+  // calculate yearly total
+  double calculateYearTotal(int year) {
+    double total = 0;
+    DateTime startOfYear = DateTime(year, 1, 1);
+    DateTime endOfYear = DateTime(year, 12, 31);
+
+    for (var expense in overallExpenseList) {
+      if (expense.expenseDate
+              .isAfter(startOfYear.subtract(const Duration(days: 1))) &&
+          expense.expenseDate
+              .isBefore(endOfYear.add(const Duration(days: 1)))) {
+        total += expense.expenseAmount;
+      }
+    }
+    return total;
+  }
+
   startOfweekDate() {}
 }
