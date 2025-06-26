@@ -170,8 +170,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     SizedBox(height: 30),
                     _PasswordField(),
                     SizedBox(height: 30),
-                    _TermsCheckbox(),
-                    SizedBox(height: 30),
+                    // _TermsCheckbox(),
+                    // SizedBox(height: 30),
                     _SignUpButton(),
                     SizedBox(height: 30),
                     _LoginLink(),
@@ -225,28 +225,28 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _TermsCheckbox() {
-    return Row(
-      children: [
-        Checkbox(
-          value: _isChecked,
-          onChanged: (value) => setState(() => _isChecked = value ?? false),
-          activeColor: Colors.black,
-        ),
-        Expanded(
-          child: Text(
-              "By signing up, you agree to the Terms of Service and Privacy Policy."),
-        ),
-      ],
-    );
-  }
+  // Widget _TermsCheckbox() {
+  //   return Row(
+  //     children: [
+  //       Checkbox(
+  //         value: _isChecked,
+  //         onChanged: (value) => setState(() => _isChecked = value ?? false),
+  //         activeColor: Colors.black,
+  //       ),
+  //       Expanded(
+  //         child: Text(
+  //             "By signing up, you agree to the Terms of Service and Privacy Policy."),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _SignUpButton() {
     return ElevatedButton(
       onPressed: _isLoading
           ? null
           : () {
-              if (_formKey.currentState!.validate() && _isChecked) {
+              if (_formKey.currentState!.validate() ) {
                 email = emailController.text.trim();
                 password = passwordController.text.trim();
                 name = nameController.text.trim();
