@@ -18,7 +18,8 @@ class CreateBudgetPage extends StatefulWidget {
 
 class _CreateBudgetPageState extends State<CreateBudgetPage> {
   final TextEditingController _controller = TextEditingController();
-  final intl.NumberFormat _formatter = intl.NumberFormat("#,###"); // <-- Use this format
+  final intl.NumberFormat _formatter =
+      intl.NumberFormat("#,###"); // <-- Use this format
   final FirestoreService firestoreService = FirestoreService();
   String? _selectedCategory;
   String? _selectedBudgetCycle = 'Daily';
@@ -47,7 +48,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
         text = '₵${text.replaceAll('₵', '')}';
       }
 
-
       String numeric = text.replaceAll('₵', '').replaceAll(',', '');
 
       if (numeric.isNotEmpty) {
@@ -66,7 +66,6 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
           );
         }
       } else {
-        
         _controller.value = const TextEditingValue(
           text: '₵',
           selection: TextSelection.collapsed(offset: 1),
@@ -132,7 +131,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Text(
-                'How much do you want to spend?',
+                'How much do you want to budget?',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -140,7 +139,7 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 1), // Spacer
+            const SizedBox(height: 1),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
@@ -152,11 +151,10 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                 decoration: InputDecoration(
                   hintText: '₵',
                   hintStyle: TextStyle(
-                    fontSize: 30,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.bold,
-                    color:Colors.grey
-                  ),
+                      fontSize: 30,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey),
                   border: InputBorder.none,
                 ),
                 style: const TextStyle(
@@ -299,33 +297,34 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16), // Spacer
-                      SwitchListTile(
+                      const SizedBox(height: 14), // Spacer
+                      ListTile(
                         contentPadding: const EdgeInsets.only(left: 0),
                         title: const Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Receive Alert',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.warning_rounded,
+                                color: Colors.amber,
+                              ),
+                              Text(
+                                'Alerts',
+                                style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
                           ),
                         ),
-                        value: true,
-                        onChanged: (value) {},
-                        activeColor: const Color(0xFF007D3E),
-                      ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Receive alert when it reaches some point',
+                        subtitle: Text(
+                          'You will be Alerted when you exceed specific threshholds in your budget(ie 50%,80% of your budget)',
                           style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 15,
-                            color: Colors.black,
-                          ),
+                              fontFamily: 'Inter',
+                              fontSize: 15,
+                              color: Colors.black),
                         ),
                       ),
                       const SizedBox(height: 10), // Spacer
@@ -410,24 +409,30 @@ class _CreateBudgetPageState extends State<CreateBudgetPage> {
                               "createdAt": DateTime.timestamp(),
                             };
                             await Budgetservice().addbudget(budgetinfoMap);
-                      
-                              Navigator.push(
-                               context,
+
+                            Navigator.push(
+                              context,
                               PageRouteBuilder(
-                              transitionDuration: const Duration(milliseconds: 500), // slower transition
-                              pageBuilder: (context, animation, secondaryAnimation) => const BudgetSuccessPage(),
-                               transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              const begin = Offset(1.0, 0.0); // Slide from right
-                                const end = Offset.zero;
-                                 const curve = Curves.ease;
-                                final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                return SlideTransition(
-                                position: animation.drive(tween),
-                                  child: child,
-                              );
-                            },
-                            ),
-                           );
+                                transitionDuration: const Duration(
+                                    milliseconds: 500), // slower transition
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const BudgetSuccessPage(),
+                                transitionsBuilder: (context, animation,
+                                    secondaryAnimation, child) {
+                                  const begin =
+                                      Offset(1.0, 0.0); // Slide from right
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+                                  final tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve));
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF007D3E),

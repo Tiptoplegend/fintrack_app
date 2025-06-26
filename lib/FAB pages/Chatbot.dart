@@ -11,71 +11,61 @@ class ChatbotPage extends StatefulWidget {
 
 class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
-  final GeminiService _geminiService =
-      GeminiService(); // <--- Instantiate your service
+  final GeminiService _geminiService = GeminiService();
 
-  final List<Map<String, String>> _messages = []; // role: user/bot, message
-  bool _isLoading = false; // <--- This needs to be mutable
+  final List<Map<String, String>> _messages = [];
+  bool _isLoading = false;
   bool hasStartedChat = false;
 
   final user = FirebaseAuth.instance.currentUser!;
 
-  // Add a ScrollController to automatically scroll to the bottom of the chat list
   final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
     _controller.dispose();
-    _scrollController
-        .dispose(); // Don't forget to dispose the scroll controller!
+    _scrollController.dispose();
     super.dispose();
   }
 
-  /// Sends the user's message to FinBot and handles the response.
   Future<void> _sendMessage() async {
     final text = _controller.text.trim();
-    _controller.clear(); // Clear the input field immediately
+    _controller.clear();
 
-    if (text.isEmpty) return; // Don't send empty messages
+    if (text.isEmpty) return;
 
     setState(() {
       // Add the user's message to the list
       _messages.add({'role': 'user', 'message': text});
-      _isLoading = true; // Show loading indicator
-      hasStartedChat = true; // Transition to chat history view if not already
+      _isLoading = true;
+      hasStartedChat = true;
     });
 
-    // Scroll to the bottom immediately after adding the user's message
     _scrollToBottom();
 
     try {
-      // Send the message to the GeminiService and await the bot's response
       final botResponse = await _geminiService.sendMessage(text);
 
       setState(() {
-        // Add FinBot's response to the list
         _messages.add({'role': 'bot', 'message': botResponse});
-        _isLoading = false; // Hide loading indicator
+        _isLoading = false;
       });
-      // Scroll to the bottom after FinBot responds
+
       _scrollToBottom();
     } catch (e) {
-      // Handle any errors that occur during the API call
       setState(() {
         _messages.add({
           'role': 'bot',
           'message':
               'Oops! FinBot encountered an error. Please try again or check your internet connection.'
         });
-        _isLoading = false; // Hide loading indicator
+        _isLoading = false;
       });
       _scrollToBottom();
-      print(
-          'Error sending message to FinBot: $e'); // Log the error for debugging
+      print('Error sending message to FinBot: $e');
     }
   }
 
-  /// Scrolls the ListView to the bottom to show the latest message.
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -90,7 +80,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
   @override
   Widget build(BuildContext context) {
-    String username = user.displayName ?? "User"; // Get the user's display name
+    String username = user.displayName ?? "User";
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -111,11 +101,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
               size: 30,
             ),
             onPressed: () {
-              // Action for the clock icon button: Clear chat history
               setState(() {
-                _messages.clear(); // Clear messages displayed in UI
-                _geminiService.clearChat(); // Clear Gemini's session history
-                hasStartedChat = false; // Show welcome message again
+                _messages.clear();
+                _geminiService.clearChat();
+                hasStartedChat = false;
               });
             },
           ),
@@ -123,15 +112,13 @@ class _ChatbotPageState extends State<ChatbotPage> {
       ),
       body: SafeArea(
         child: Column(
-          // Use Column instead of Stack for better flow
           children: [
-            // Conditionally display either the welcome message or the chat messages
             Expanded(
               child: _messages.isEmpty && !hasStartedChat
-                  ? _buildWelcomeMessage(username) // Initial welcome UI
-                  : _buildChatMessages(), // Actual chat messages UI
+                  ? _buildWelcomeMessage(username)
+                  : _buildChatMessages(),
             ),
-            _buildMessageInput(), // The message input field at the bottom
+            _buildMessageInput(), //
           ],
         ),
       ),
@@ -149,7 +136,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/chat.png', // Ensure this path is correct
+                'assets/images/chat.png',
                 width: 150,
                 height: 150,
               ),
@@ -163,7 +150,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 10), // Added a small space
+              const SizedBox(height: 10),
               Text(
                 'Ask me about any financial tip or advice you want, I am here to assist you',
                 style: const TextStyle(
@@ -182,13 +169,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
   /// Builds the ListView for displaying chat messages.
   Widget _buildChatMessages() {
     return ListView.builder(
-      controller: _scrollController, // Attach the scroll controller
+      controller: _scrollController,
       padding: const EdgeInsets.all(16.0),
-      // Add 1 to itemCount if loading, to reserve space for the loading indicator
       itemCount: _messages.length + (_isLoading ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == _messages.length) {
-          // This is the loading indicator at the end of the list
           return const Padding(
             padding: EdgeInsets.symmetric(vertical: 8.0),
             child: Row(
@@ -246,12 +231,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
                   borderSide: const BorderSide(color: Colors.white),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  // Style when not focused
                   borderRadius: BorderRadius.circular(25),
                   borderSide: const BorderSide(color: Colors.white),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  // Style when focused
                   borderRadius: BorderRadius.circular(25),
                   borderSide:
                       const BorderSide(color: Colors.lightGreen, width: 2),
@@ -262,19 +245,16 @@ class _ChatbotPageState extends State<ChatbotPage> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               style: const TextStyle(color: Colors.white),
-              onSubmitted: (_) =>
-                  _sendMessage(), // Send message when Enter is pressed
+              onSubmitted: (_) => _sendMessage(),
             ),
           ),
           const SizedBox(width: 10),
           GestureDetector(
-            // Disable the send button if a message is currently being processed
             onTap: _isLoading ? null : _sendMessage,
             child: CircleAvatar(
               backgroundColor: Colors.black,
               child: Icon(
                 Icons.send,
-                // Change icon color based on loading state
                 color: _isLoading ? Colors.grey : Colors.lightGreen,
                 size: 30,
               ),

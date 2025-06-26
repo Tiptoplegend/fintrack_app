@@ -15,21 +15,21 @@ class ThemeSettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF005341),
-                  Color(0xFF00A86B),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005341),
+                Color(0xFF00A86B),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
           ),
-          title: const Text("Theme"),
-          centerTitle: true,
-          ),
+        ),
+        title: const Text("Theme"),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           ListTile(
@@ -207,16 +207,15 @@ class SettingsScreen extends StatelessWidget {
             backgroundColor: Colors.orange,
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) =>  HelpScreen()),
-            ),  
+              MaterialPageRoute(builder: (context) => HelpScreen()),
+            ),
           ),
-          SettingsOption(
-            icon: Icons.upload_file,
-            title: "Export Data",
-            backgroundColor: Colors.purple,
-            onTap: () {},
-          ),
+          // SettingsOption(
+          //   icon: Icons.upload_file,
+          //   title: "Export Data",
+          //   backgroundColor: Colors.purple,
+          //   onTap: () {},
+          // ),
           SettingsOption(
             icon: Icons.notifications,
             title: "Notifications",
@@ -364,16 +363,16 @@ class UserProfileSection extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.shade200,
-              shape: BoxShape.circle,
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.edit, color: Colors.black),
-              onPressed: () => _updatedialog(context),
-            ),
-          ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Colors.grey.shade200,
+          //     shape: BoxShape.circle,
+          //   ),
+          //   child: IconButton(
+          //     icon: const Icon(Icons.edit, color: Colors.black),
+          //     onPressed: () => _updatedialog(context),
+          //   ),
+          // ),
         ],
       ),
     );
