@@ -100,13 +100,22 @@ class _AnalyticsState extends State<Analytics> {
           ],
         ),
       ),
-      body: _TransactionList(expenseStream, _searchController, _searchQuery),
+      body: _TransactionList(
+        context, // Pass the stable context
+        expenseStream,
+        _searchController,
+        _searchQuery,
+      ),
     );
   }
 }
 
-Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
-    TextEditingController searchController, String searchQuery) {
+Widget _TransactionList(
+  BuildContext stableContext,
+  Stream<QuerySnapshot>? expenseStream,
+  TextEditingController searchController,
+  String searchQuery,
+) {
   return Consumer<ExpenseData>(
     builder: (context, expenseData, child) {
       return StreamBuilder<QuerySnapshot>(
@@ -178,13 +187,17 @@ Widget _TransactionList(Stream<QuerySnapshot>? expenseStream,
                                 try {
                                   await Transactionservice()
                                       .deleteTransaction(ds.id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  ScaffoldMessenger.of(stableContext)
+                                      .showSnackBar(
+                                    // Use stableContext
                                     const SnackBar(
                                         content: Text(
                                             'Transaction deleted successfully')),
                                   );
                                 } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  ScaffoldMessenger.of(stableContext)
+                                      .showSnackBar(
+                                    // Use stableContext
                                     SnackBar(
                                         content: Text(
                                             'Error deleting transaction: $e')),

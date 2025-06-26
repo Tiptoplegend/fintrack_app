@@ -110,15 +110,28 @@ class _ChatbotPageState extends State<ChatbotPage> {
           ),
         ],
       ),
+      // body: SafeArea(
+      //   child: Column(
+      //     children: [
+      //       Expanded(
+      //         child: _messages.isEmpty && !hasStartedChat
+      //             ? _buildWelcomeMessage(username)
+      //             : _buildChatMessages(),
+      //       ),
+      //       _buildMessageInput(), //
+      //     ],
+      //   ),
+      // ),
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(
+            Flexible(
               child: _messages.isEmpty && !hasStartedChat
                   ? _buildWelcomeMessage(username)
                   : _buildChatMessages(),
             ),
-            _buildMessageInput(), //
+            // Input field
+            _buildMessageInput(),
           ],
         ),
       ),
@@ -217,7 +230,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
   /// Builds the input field and send button for messages.
   Widget _buildMessageInput() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+      padding: EdgeInsets.only(
+        left: 15.0,
+        right: 15.0,
+        bottom: 10,
+        top: 20.0,
+      ),
       child: Row(
         children: [
           Expanded(
