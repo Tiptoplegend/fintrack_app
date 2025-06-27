@@ -336,7 +336,7 @@ Widget budgetdetails(
                                     Text(
                                       'You have spent more than 50% of your budget!',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: Colors.red,
                                       ),
                                     )
@@ -344,7 +344,7 @@ Widget budgetdetails(
                                     Text(
                                       'You have spent more than 80% of your budget!',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         color: Colors.red,
                                       ),
                                     ),
