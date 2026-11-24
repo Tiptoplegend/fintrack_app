@@ -2,6 +2,7 @@ import 'package:fintrack_app/Forgetpassword.dart';
 import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignUp.dart';
 import 'package:fintrack_app/auth.dart';
+import 'package:fintrack_app/debug_log.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -51,10 +52,11 @@ class _SigninState extends State<Signin> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Navigation()));
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e, st) {
       if (!mounted) return;
 
       _stopLoading(); // Stop loading if error occurs
+      appLog('Email login failed', error: '${e.code}: ${e.message}', stackTrace: st);
 
       String errorMessage = "An error occurred, please try again.";
 
@@ -88,10 +90,11 @@ class _SigninState extends State<Signin> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Navigation()));
       }
-    } catch (e) {
+    } catch (e, st) {
       if (!mounted) return;
 
       _stopLoading(); // Stop loading if error occurs
+      appLog('Google sign-in UI error', error: e, stackTrace: st);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

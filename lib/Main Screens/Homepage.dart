@@ -226,15 +226,17 @@ class _CardsectionState extends State<Cardsection> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       height: 175,
       width: 300,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color ?? colorScheme.surface,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -245,10 +247,10 @@ class _CardsectionState extends State<Cardsection> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'This Weeks Spendings',
               style: TextStyle(
-                color: Colors.black,
+                color: colorScheme.onSurface,
                 fontFamily: 'inter',
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
@@ -382,6 +384,7 @@ class _tips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     List<String> financialTips = [
       "Track your spending to know where your money goes.",
       "Save at least 10% of your income each month.",
@@ -399,8 +402,13 @@ class _tips extends StatelessWidget {
       width: 330,
       padding: const EdgeInsets.all(9),
       decoration: BoxDecoration(
-        color: Colors.green[200],
+        color: isDark
+            ? const Color(0xFF1E3D32)
+            : Colors.green.shade200,
         borderRadius: BorderRadius.circular(15),
+        border: isDark
+            ? Border.all(color: const Color(0xFF43A047).withValues(alpha: 0.35))
+            : null,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start, // Aligns text at the top
@@ -450,9 +458,9 @@ class _History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       'History',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 18),
     );
   }
 }
@@ -499,7 +507,7 @@ class _ExpensecardsState extends State<_Expensecards> {
                 ),
                 Text(
                   "No Transaction/Expense History",
-                  style: TextStyle(fontSize: 12),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),

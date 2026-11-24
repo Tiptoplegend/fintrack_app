@@ -179,7 +179,10 @@ class _GoalsState extends State<Goals> {
                                           ],
                                         ),
                                         arcType: ArcType.HALF,
-                                        arcBackgroundColor: Colors.white,
+                                        arcBackgroundColor:
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .surfaceContainerHighest,
                                       ),
                                     ],
                                   );
@@ -213,6 +216,11 @@ class _GoalsState extends State<Goals> {
                                 future: GoalsService()
                                     .getTotalSavedForGoal(ds['title']),
                                 builder: (context, snapshot) {
+                                  final trackColor =
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.grey.shade800
+                                          : Colors.grey.shade300;
                                   double saved = snapshot.data ?? 0.0;
                                   double targetAmount = double.tryParse(
                                           ds['amount'].toString()) ??
@@ -267,7 +275,7 @@ class _GoalsState extends State<Goals> {
                                         child: LinearProgressIndicator(
                                           minHeight: 14,
                                           value: progress,
-                                          backgroundColor: Colors.grey[300],
+                                          backgroundColor: trackColor,
                                           color: Colors.green,
                                           borderRadius:
                                               BorderRadius.circular(10),

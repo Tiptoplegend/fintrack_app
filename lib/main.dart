@@ -2,8 +2,11 @@ import 'package:fintrack_app/Api/firebase_api.dart';
 import 'package:fintrack_app/Data/expense_data.dart';
 import 'package:fintrack_app/notifications.dart';
 import 'package:fintrack_app/providers/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fintrack_app/debug_log.dart';
+import 'package:fintrack_app/firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +18,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
-  await Firebase.initializeApp();
+  appLog('App: initializing Firebase (${defaultTargetPlatform.name})');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  appLog('App: Firebase ready');
   await FirebaseApi().initNotifications();
   final prefs = await SharedPreferences.getInstance();
 

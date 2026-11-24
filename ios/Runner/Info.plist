@@ -45,5 +45,22 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.296412863207-sdi6tkb697mn2fiib7h1k3igrmssbmdg</string>
+			</array>
+		</dict>
+	</array>
+	<key>GIDClientID</key>
+	<string>296412863207-sdi6tkb697mn2fiib7h1k3igrmssbmdg.apps.googleusercontent.com</string>
 </dict>
 </plist>

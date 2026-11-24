@@ -1,23 +1,25 @@
-// import Flutter
-// import UIKit
+import Flutter
+import UIKit
+import flutter_local_notifications
 
+@main
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { registry in
+      GeneratedPluginRegistrant.register(with: registry)
+    }
 
-// import flutter_local_notifications
-// @main
-// @objc class AppDelegate: FlutterAppDelegate {
-//   override func application(
-//     _ application: UIApplication,
-//     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-//   ) -> Bool {
+    GeneratedPluginRegistrant.register(with: self)
 
-//     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback {(registry) in 
-//     GeneratedPluginRegistrant.register(with: registry)}
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
 
-//     GeneratedPluginRegistrant.register(with: self)
+    application.registerForRemoteNotifications()
 
-//     if #available(ioS 10.0, *){
-//       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenter
-//     }
-//     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-//   }
-// }
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}

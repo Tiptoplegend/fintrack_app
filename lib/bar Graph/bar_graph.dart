@@ -32,6 +32,9 @@ class MyBarGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final rodTrack = isDark ? Colors.grey.shade800 : Colors.grey.shade100;
+
     BarData myBarData = BarData(
       sunAmount: sunAmount,
       monAmount: monAmount,
@@ -59,8 +62,14 @@ class MyBarGraph extends StatelessWidget {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            getTitlesWidget: (value, meta) =>
-                getBottomTitles(value, meta, filter, showFirstHalf, data),
+            getTitlesWidget: (value, meta) => getBottomTitles(
+              value,
+              meta,
+              filter,
+              showFirstHalf,
+              data,
+              Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+            ),
           ),
         ),
       ),
@@ -74,7 +83,7 @@ class MyBarGraph extends StatelessWidget {
                     backDrawRodData: BackgroundBarChartRodData(
                       show: true,
                       toY: maxY,
-                      color: Colors.grey[100],
+                      color: rodTrack,
                     ))
               ]))
           .toList(),
@@ -82,12 +91,18 @@ class MyBarGraph extends StatelessWidget {
   }
 }
 
-Widget getBottomTitles(double value, TitleMeta meta, String filter,
-    bool showFirstHalf, Map<String, dynamic> data) {
-  const style = TextStyle(
-    color: Colors.grey,
+Widget getBottomTitles(
+  double value,
+  TitleMeta meta,
+  String filter,
+  bool showFirstHalf,
+  Map<String, dynamic> data,
+  Color labelColor,
+) {
+  final style = TextStyle(
+    color: labelColor,
     fontWeight: FontWeight.bold,
-    fontSize: 12, // Reduced for better fit
+    fontSize: 12,
   );
   Widget text;
   if (filter == 'Yearly') {
@@ -95,40 +110,40 @@ Widget getBottomTitles(double value, TitleMeta meta, String filter,
         data['years'] as List<String>? ?? ['', '', '', '', '', '', ''];
     text = value.toInt() < years.length
         ? Text("'${years[value.toInt()].substring(2)}", style: style)
-        : const Text('', style: style);
+        : Text('', style: style);
   } else if (filter == 'Monthly') {
     final months = showFirstHalf
         ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         : ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     text = value.toInt() < months.length
         ? Text(months[value.toInt()], style: style)
-        : const Text('', style: style);
+        : Text('', style: style);
   } else {
     // Weekly
     switch (value.toInt()) {
       case 0:
-        text = const Text('Sun', style: style);
+        text = Text('Sun', style: style);
         break;
       case 1:
-        text = const Text('Mon', style: style);
+        text = Text('Mon', style: style);
         break;
       case 2:
-        text = const Text('Tue', style: style);
+        text = Text('Tue', style: style);
         break;
       case 3:
-        text = const Text('Wed', style: style);
+        text = Text('Wed', style: style);
         break;
       case 4:
-        text = const Text('Thu', style: style);
+        text = Text('Thu', style: style);
         break;
       case 5:
-        text = const Text('Fri', style: style);
+        text = Text('Fri', style: style);
         break;
       case 6:
-        text = const Text('Sat', style: style);
+        text = Text('Sat', style: style);
         break;
       default:
-        text = const Text('', style: style);
+        text = Text('', style: style);
         break;
     }
   }

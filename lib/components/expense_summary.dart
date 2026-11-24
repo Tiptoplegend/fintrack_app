@@ -183,8 +183,11 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                           : _selectedFilter == 'Monthly'
                               ? 'GHC ${calculateHalfYearTotal(value, _currentMonthStart!.year, _showFirstHalf).toStringAsFixed(2)}'
                               : 'GHC ${calculateFiveYearTotal(value, _currentYearStart!).toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          fontSize: 23, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                     Text(
                       _selectedFilter == 'Weekly'

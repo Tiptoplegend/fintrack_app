@@ -3,6 +3,7 @@ import 'package:fintrack_app/Navigation.dart';
 import 'package:fintrack_app/Onboarding/SignIn.dart';
 import 'package:fintrack_app/Onboarding/Welcome.dart';
 import 'package:fintrack_app/auth.dart';
+import 'package:fintrack_app/debug_log.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -72,9 +73,10 @@ class _SignUpPageState extends State<SignUpPage> {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => Navigation()));
         }
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException catch (e, st) {
         if (!mounted) return;
         _stopLoading();
+        appLog('Email sign-up failed', error: '${e.code}: ${e.message}', stackTrace: st);
 
         String errorMessage = "An error occurred, please try again.";
 
@@ -111,9 +113,10 @@ class _SignUpPageState extends State<SignUpPage> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Navigation()));
       }
-    } catch (e) {
+    } catch (e, st) {
       if (!mounted) return;
       _stopLoading();
+      appLog('Google sign-up UI error', error: e, stackTrace: st);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

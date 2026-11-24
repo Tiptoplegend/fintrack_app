@@ -159,9 +159,12 @@ Widget _TransactionList(
             children: [
               ExpenseSummary(startOfweek: expenseData.StartOfWeekDate()),
               const SizedBox(height: 20),
-              const Text(
-                'Transaction History',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  'Transaction History',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
               const SizedBox(height: 2),
               Padding(

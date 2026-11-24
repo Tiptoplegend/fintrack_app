@@ -236,6 +236,9 @@ Widget budgetdetails(
         return const Center(child: CircularProgressIndicator());
       }
 
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      final trackColor = isDark ? Colors.grey.shade800 : Colors.grey.shade300;
+
       return SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 100),
         child: Column(
@@ -322,7 +325,7 @@ Widget budgetdetails(
                                   LinearProgressIndicator(
                                     minHeight: 15,
                                     value: progress,
-                                    backgroundColor: Colors.grey[300],
+                                    backgroundColor: trackColor,
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                         Colors.green),
                                     borderRadius: BorderRadius.circular(10),
